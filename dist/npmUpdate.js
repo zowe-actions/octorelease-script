@@ -8476,8 +8476,11 @@ function npmUpdate_default(context) {
         yield exec.exec("git", ["checkout", "package-lock.json"]);
         yield exec.exec("npm", ["install"]);
       }
-      import_git.utils.gitAdd(...changedFiles);
-      import_git.utils.gitCommit("Update dependencies [ci skip]\n\n" + updateDetails.join("\n"));
+      if (context.env.GIT_COMMITTER_NAME !== null && context.env.GIT_COMMITTER_EMAIL !== null) {
+        import_git.utils.gitConfig(context);
+        import_git.utils.gitAdd(...changedFiles);
+        import_git.utils.gitCommit("Update dependencies [ci skip]\n\n" + updateDetails.join("\n"));
+      }
     }
   });
 }

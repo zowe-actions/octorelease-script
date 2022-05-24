@@ -111,7 +111,10 @@ export default async function (context: IContext): Promise<void> {
             await exec.exec("npm", ["install"]);
         }
 
-        gitUtils.gitAdd(...changedFiles);
-        gitUtils.gitCommit("Update dependencies [ci skip]\n\n" + updateDetails.join("\n"));
+        if (context.env.GIT_COMMITTER_NAME !== null && context.env.GIT_COMMITTER_EMAIL !== null) {
+            gitUtils.gitConfig(context);
+            gitUtils.gitAdd(...changedFiles);
+            gitUtils.gitCommit("Update dependencies [ci skip]\n\n" + updateDetails.join("\n"));
+        }
     }
 }
