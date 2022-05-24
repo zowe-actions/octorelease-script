@@ -1,0 +1,20 @@
+name: 'run-script'
+description: 'GitHub action to run scripts in Octorelease context'
+author: 't1m0thyj'
+inputs:
+  artifact-name:
+    description: 'Name of artifact to create for sharing data between jobs'
+    required: false
+    default: ''
+  script:
+    description: 'Name of script to run from the scripts directory'
+    required: true
+    default: ''
+  working-dir:
+    description: 'Custom working directory to use instead of the project root'
+    required: false
+    default: ''
+# outputs:
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
