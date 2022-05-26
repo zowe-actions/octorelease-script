@@ -19,6 +19,16 @@ import * as os from "os";
 import * as path from "path";
 import * as artifact from "@actions/artifact";
 import * as core from "@actions/core";
+import * as github from "@actions/github";
+
+export async function findCurrentPr(): Promise<any | undefined> {
+    const octokit = github.getOctokit(process.env.GITHUB_TOKEN as string);
+    const result = await octokit.rest.repos.listPullRequestsAssociatedWithCommit({
+        ...github.context.repo,
+        commit_sha: github.context.sha
+    });
+    return result.data.find(pr => pr.state === "open" && github.context.payload.ref === `refs/heads/${pr.head.ref}`);
+}
 
 export function getArtifactName(defaultName?: string): string {
     const scriptName = path.basename(core.getInput("script"), ".js");

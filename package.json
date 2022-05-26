@@ -29,7 +29,8 @@
     "@actions/artifact": "^1.1.0",
     "@actions/core": "^1.8.2",
     "@actions/exec": "^1.1.0",
-    "@octorelease/core": "^0.1.0",
+    "@actions/github": "^5.0.3",
+    "@octorelease/core": "file:../octorelease/packages/core",
     "@octorelease/git": "^0.0.1",
     "pluralize": "^8.0.0"
   },

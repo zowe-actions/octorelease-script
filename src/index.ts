@@ -18,7 +18,8 @@
 
 import * as path from "path";
 import * as core from "@actions/core";
-import { utils } from "@octorelease/core";
+import { utils as coreUtils } from "@octorelease/core";
+import * as utils from "./utils";
 
 async function run(): Promise<void> {
     try {
@@ -27,10 +28,10 @@ async function run(): Promise<void> {
             process.chdir(path.resolve(workingDir));
         }
 
-        const context = await utils.buildContext();
-        // TODO Need to run on PRs that target a release branch?
+        const prBranch = (await utils.findCurrentPr())?.head.ref;
+        const context = await coreUtils.buildContext({ branch: prBranch });
         if (context == null) {
-            core.info("Current branch is not a release branch, exiting now");
+            core.info("Current branch is not targeting a release branch, exiting now");
             process.exit();
         }
 
