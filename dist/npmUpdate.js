@@ -13585,7 +13585,7 @@ function readArtifactJson(name) {
     const artifactClient = artifact.create();
     try {
       const downloadResponse = yield artifactClient.downloadArtifact(name);
-      return JSON.parse(fs.readFileSync(downloadResponse.downloadPath, "utf-8"));
+      return JSON.parse(fs.readFileSync(path.join(downloadResponse.downloadPath, name), "utf-8"));
     } catch (err) {
       core.error(err);
     }
