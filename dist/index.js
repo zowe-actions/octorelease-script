@@ -19873,14 +19873,7 @@ var require_utils6 = __commonJS({
         }
         const micromatch = require_micromatch();
         const branches = config.config.branches.map((branch) => typeof branch === "string" ? { name: branch } : branch);
-        let branchIndex = branches.findIndex((branch) => micromatch.isMatch(envCi.branch, branch.name));
-        if (branchIndex == -1 && (opts === null || opts === void 0 ? void 0 : opts.allowPRBuilds) && envCi.prBranch != null) {
-          const prBranchIndex = branches.findIndex((branch) => micromatch.isMatch(envCi.prBranch, branch.name));
-          if (prBranchIndex != -1) {
-            branchIndex = prBranchIndex;
-            branches[branchIndex].prBranchName = envCi.branch;
-          }
-        }
+        const branchIndex = branches.findIndex((branch) => micromatch.isMatch((opts === null || opts === void 0 ? void 0 : opts.branch) || envCi.branch, branch.name));
         if (branchIndex == -1) {
           return;
         } else if (branchIndex > 0 && branches[branchIndex].channel == null) {
@@ -19977,10 +19970,6 @@ var require_utils6 = __commonJS({
         if (envCi.commit == null) {
           const cmdOutput = yield exec.getExecOutput("git", ["rev-parse", "HEAD"]);
           envCi.commit = cmdOutput.stdout.trim();
-        }
-        if (envCi.prBuild == null) {
-          const cmdOutput = yield exec.getExecOutput("sh", ["-c", `git show-branch | sed "s/].*//" | grep "\\*" | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -n1 | sed "s/^.*\\[//"`]);
-          envCi.prBuild = cmdOutput.stdout.trim() || envCi.prBuild;
         }
         if (envCi.slug == null) {
           const cmdOutput = yield exec.getExecOutput("git", ["config", "--get", "remote.origin.url"]);
