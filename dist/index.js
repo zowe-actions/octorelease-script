@@ -30259,7 +30259,7 @@ function run() {
         core2.info("Current branch is not targeting a release branch, exiting now");
         process.exit();
       }
-      const script = yield import(path.join(__dirname, core2.getInput("script")));
+      const script = yield import(path.join(__dirname, core2.getInput("script") + ".js"));
       yield script(context2);
     } catch (error2) {
       if (error2 instanceof Error) {
