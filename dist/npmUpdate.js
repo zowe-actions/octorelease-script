@@ -13609,7 +13609,7 @@ function getDependencies(branch, dev) {
   }
   const dependencyMap = {};
   for (const pkgName of dependencies) {
-    dependencyMap[pkgName] = branch.tag;
+    dependencyMap[pkgName] = branch.channel;
   }
   return dependencyMap;
 }

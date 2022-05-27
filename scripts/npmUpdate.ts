@@ -37,7 +37,7 @@ function getDependencies(branch: IProtectedBranchWithDeps, dev: boolean) {
 
     const dependencyMap = {};
     for (const pkgName of dependencies) {
-        dependencyMap[pkgName] = branch.tag;
+        dependencyMap[pkgName] = branch.channel;
     }
 
     return dependencyMap;
