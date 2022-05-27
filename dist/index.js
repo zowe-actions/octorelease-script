@@ -19925,7 +19925,7 @@ var require_utils6 = __commonJS({
           if (pluginName.startsWith("@octorelease/") && !fs.existsSync(pluginPath)) {
             pluginPath = pluginName.replace("@octorelease", __dirname);
           }
-          pluginsLoaded[pluginName] = yield Promise.resolve().then(() => __importStar(require(path2.resolve(pluginPath))));
+          pluginsLoaded[pluginName] = require(path2.resolve(pluginPath));
         }
         return pluginsLoaded;
       });
@@ -30259,7 +30259,7 @@ function run() {
         core2.info("Current branch is not targeting a release branch, exiting now");
         process.exit();
       }
-      const script = yield import(path.join(__dirname, core2.getInput("script") + ".js"));
+      const script = require(path.join(__dirname, core2.getInput("script")));
       yield script.default(context2);
     } catch (error2) {
       if (error2 instanceof Error) {

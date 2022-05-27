@@ -35,7 +35,7 @@ async function run(): Promise<void> {
             process.exit();
         }
 
-        const script = await import(path.join(__dirname, core.getInput("script") + ".js"));
+        const script = require(path.join(__dirname, core.getInput("script")));
         await script.default(context);
     } catch (error) {
         if (error instanceof Error) {
