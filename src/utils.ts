@@ -47,5 +47,5 @@ export async function writeArtifactJson<T>(name: string, value: T): Promise<void
     const filePath = path.join(os.tmpdir(), name);
     fs.writeFileSync(filePath, JSON.stringify(value));
     const artifactClient = artifact.create();
-    await artifactClient.uploadArtifact(name, [filePath], os.tmpdir());
+    await artifactClient.uploadArtifact(name, [filePath], os.tmpdir(), { retentionDays: 1 });
 }

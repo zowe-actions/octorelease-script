@@ -13595,7 +13595,7 @@ function writeArtifactJson(name, value) {
     const filePath = path.join(os.tmpdir(), name);
     fs.writeFileSync(filePath, JSON.stringify(value));
     const artifactClient = artifact.create();
-    yield artifactClient.uploadArtifact(name, [filePath], os.tmpdir());
+    yield artifactClient.uploadArtifact(name, [filePath], os.tmpdir(), { retentionDays: 1 });
   });
 }
 
