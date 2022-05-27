@@ -845,7 +845,7 @@ var require_toolrunner = __commonJS({
               this._debug(`STDIO streams have closed for tool '${this.toolPath}'`);
               state.CheckComplete();
             });
-            state.on("done", (error, exitCode) => {
+            state.on("done", (error2, exitCode) => {
               if (stdbuffer.length > 0) {
                 this.emit("stdline", stdbuffer);
               }
@@ -853,8 +853,8 @@ var require_toolrunner = __commonJS({
                 this.emit("errline", errbuffer);
               }
               cp.removeAllListeners();
-              if (error) {
-                reject(error);
+              if (error2) {
+                reject(error2);
               } else {
                 resolve(exitCode);
               }
@@ -949,14 +949,14 @@ var require_toolrunner = __commonJS({
         this.emit("debug", message);
       }
       _setResult() {
-        let error;
+        let error2;
         if (this.processExited) {
           if (this.processError) {
-            error = new Error(`There was an error when attempting to execute the process '${this.toolPath}'. This may indicate the process failed to start. Error: ${this.processError}`);
+            error2 = new Error(`There was an error when attempting to execute the process '${this.toolPath}'. This may indicate the process failed to start. Error: ${this.processError}`);
           } else if (this.processExitCode !== 0 && !this.options.ignoreReturnCode) {
-            error = new Error(`The process '${this.toolPath}' failed with exit code ${this.processExitCode}`);
+            error2 = new Error(`The process '${this.toolPath}' failed with exit code ${this.processExitCode}`);
           } else if (this.processStderr && this.options.failOnStdErr) {
-            error = new Error(`The process '${this.toolPath}' failed because one or more lines were written to the STDERR stream`);
+            error2 = new Error(`The process '${this.toolPath}' failed because one or more lines were written to the STDERR stream`);
           }
         }
         if (this.timeout) {
@@ -964,7 +964,7 @@ var require_toolrunner = __commonJS({
           this.timeout = null;
         }
         this.done = true;
-        this.emit("done", error, this.processExitCode);
+        this.emit("done", error2, this.processExitCode);
       }
       static HandleTimeout(state) {
         if (state.done) {
@@ -1806,18 +1806,18 @@ var require_tunnel = __commonJS({
         if (res.statusCode !== 200) {
           debug("tunneling socket could not be established, statusCode=%d", res.statusCode);
           socket.destroy();
-          var error = new Error("tunneling socket could not be established, statusCode=" + res.statusCode);
-          error.code = "ECONNRESET";
-          options.request.emit("error", error);
+          var error2 = new Error("tunneling socket could not be established, statusCode=" + res.statusCode);
+          error2.code = "ECONNRESET";
+          options.request.emit("error", error2);
           self.removeSocket(placeholder);
           return;
         }
         if (head.length > 0) {
           debug("got illegal response body from proxy");
           socket.destroy();
-          var error = new Error("got illegal response body from proxy");
-          error.code = "ECONNRESET";
-          options.request.emit("error", error);
+          var error2 = new Error("got illegal response body from proxy");
+          error2.code = "ECONNRESET";
+          options.request.emit("error", error2);
           self.removeSocket(placeholder);
           return;
         }
@@ -1828,9 +1828,9 @@ var require_tunnel = __commonJS({
       function onError(cause) {
         connectReq.removeAllListeners();
         debug("tunneling socket could not be established, cause=%s\n", cause.message, cause.stack);
-        var error = new Error("tunneling socket could not be established, cause=" + cause.message);
-        error.code = "ECONNRESET";
-        options.request.emit("error", error);
+        var error2 = new Error("tunneling socket could not be established, cause=" + cause.message);
+        error2.code = "ECONNRESET";
+        options.request.emit("error", error2);
         self.removeSocket(placeholder);
       }
     };
@@ -2622,12 +2622,12 @@ var require_oidc_utils = __commonJS({
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
           const httpclient = OidcClient.createHttpClient();
-          const res = yield httpclient.getJson(id_token_url).catch((error) => {
+          const res = yield httpclient.getJson(id_token_url).catch((error2) => {
             throw new Error(`Failed to get ID Token. 
  
-        Error Code : ${error.statusCode}
+        Error Code : ${error2.statusCode}
  
-        Error Message: ${error.result.message}`);
+        Error Message: ${error2.result.message}`);
           });
           const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
           if (!id_token) {
@@ -2648,8 +2648,8 @@ var require_oidc_utils = __commonJS({
             const id_token = yield OidcClient.getCall(id_token_url);
             core_1.setSecret(id_token);
             return id_token;
-          } catch (error) {
-            throw new Error(`Error message: ${error.message}`);
+          } catch (error2) {
+            throw new Error(`Error message: ${error2.message}`);
           }
         });
       }
@@ -2961,7 +2961,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     exports.setCommandEcho = setCommandEcho;
     function setFailed(message) {
       process.exitCode = ExitCode.Failure;
-      error(message);
+      error2(message);
     }
     exports.setFailed = setFailed;
     function isDebug() {
@@ -2972,10 +2972,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issueCommand("debug", {}, message);
     }
     exports.debug = debug;
-    function error(message, properties = {}) {
+    function error2(message, properties = {}) {
       command_1.issueCommand("error", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
-    exports.error = error;
+    exports.error = error2;
     function warning(message, properties = {}) {
       command_1.issueCommand("warning", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
@@ -4742,10 +4742,10 @@ var require_sync = __commonJS({
           var abs = this._makeAbs(f);
           this.cache[abs] = "FILE";
           if (abs === this.cwdAbs) {
-            var error = new Error(er.code + " invalid cwd " + this.cwd);
-            error.path = this.cwd;
-            error.code = er.code;
-            throw error;
+            var error2 = new Error(er.code + " invalid cwd " + this.cwd);
+            error2.path = this.cwd;
+            error2.code = er.code;
+            throw error2;
           }
           break;
         case "ENOENT":
@@ -5392,10 +5392,10 @@ var require_glob = __commonJS({
           var abs = this._makeAbs(f);
           this.cache[abs] = "FILE";
           if (abs === this.cwdAbs) {
-            var error = new Error(er.code + " invalid cwd " + this.cwd);
-            error.path = this.cwd;
-            error.code = er.code;
-            this.emit("error", error);
+            var error2 = new Error(er.code + " invalid cwd " + this.cwd);
+            error2.path = this.cwd;
+            error2.code = er.code;
+            this.emit("error", error2);
             this.abort();
           }
           break;
@@ -6113,14 +6113,14 @@ var require_tmp = __commonJS({
           throw new Error(`${option} option must be relative to "${tmpDir}", found "${resolvedPath}".`);
       }
     }
-    function _isEBADF(error) {
-      return _isExpectedError(error, -EBADF, "EBADF");
+    function _isEBADF(error2) {
+      return _isExpectedError(error2, -EBADF, "EBADF");
     }
-    function _isENOENT(error) {
-      return _isExpectedError(error, -ENOENT, "ENOENT");
+    function _isENOENT(error2) {
+      return _isExpectedError(error2, -ENOENT, "ENOENT");
     }
-    function _isExpectedError(error, errno, code) {
-      return IS_WIN32 ? error.code === code : error.code === code && error.errno === errno;
+    function _isExpectedError(error2, errno, code) {
+      return IS_WIN32 ? error2.code === code : error2.code === code && error2.errno === errno;
     }
     function setGracefulCleanup() {
       _gracefulCleanup = true;
@@ -6991,8 +6991,8 @@ var require_upload_gzip = __commonJS({
             const size = (yield stat(tempFilePath)).size;
             resolve(size);
           }));
-          outputStream.on("error", (error) => {
-            console.log(error);
+          outputStream.on("error", (error2) => {
+            console.log(error2);
             reject;
           });
         });
@@ -7115,9 +7115,9 @@ var require_requestUtils = __commonJS({
             }
             isRetryable = utils_1.isRetryableStatusCode(statusCode);
             errorMessage = `Artifact service responded with ${statusCode}`;
-          } catch (error) {
+          } catch (error2) {
             isRetryable = true;
-            errorMessage = error.message;
+            errorMessage = error2.message;
           }
           if (!isRetryable) {
             core2.info(`${name} - Error is not retryable`);
@@ -7453,9 +7453,9 @@ var require_upload_http_client = __commonJS({
             let response;
             try {
               response = yield uploadChunkRequest();
-            } catch (error) {
+            } catch (error2) {
               core2.info(`An error has been caught http-client index ${httpClientIndex}, retrying the upload`);
-              console.log(error);
+              console.log(error2);
               if (incrementAndCheckRetryLimit()) {
                 return false;
               }
@@ -7629,8 +7629,8 @@ var require_download_http_client = __commonJS({
               }
               this.statusReporter.incrementProcessedCount();
             }
-          }))).catch((error) => {
-            throw new Error(`Unable to download the artifact: ${error}`);
+          }))).catch((error2) => {
+            throw new Error(`Unable to download the artifact: ${error2}`);
           }).finally(() => {
             this.statusReporter.stop();
             this.downloadHttpManager.disposeAndReplaceAllClients();
@@ -7683,9 +7683,9 @@ var require_download_http_client = __commonJS({
             let response;
             try {
               response = yield makeDownloadRequest();
-            } catch (error) {
+            } catch (error2) {
               core2.info("An error occurred while attempting to download a file");
-              console.log(error);
+              console.log(error2);
               yield backOff();
               continue;
             }
@@ -7699,7 +7699,7 @@ var require_download_http_client = __commonJS({
                 } else {
                   forceRetry = true;
                 }
-              } catch (error) {
+              } catch (error2) {
                 forceRetry = true;
               }
             }
@@ -7719,31 +7719,31 @@ var require_download_http_client = __commonJS({
           yield new Promise((resolve, reject) => {
             if (isGzip) {
               const gunzip = zlib.createGunzip();
-              response.message.on("error", (error) => {
+              response.message.on("error", (error2) => {
                 core2.error(`An error occurred while attempting to read the response stream`);
                 gunzip.close();
                 destinationStream.close();
-                reject(error);
-              }).pipe(gunzip).on("error", (error) => {
+                reject(error2);
+              }).pipe(gunzip).on("error", (error2) => {
                 core2.error(`An error occurred while attempting to decompress the response stream`);
                 destinationStream.close();
-                reject(error);
+                reject(error2);
               }).pipe(destinationStream).on("close", () => {
                 resolve();
-              }).on("error", (error) => {
+              }).on("error", (error2) => {
                 core2.error(`An error occurred while writing a downloaded file to ${destinationStream.path}`);
-                reject(error);
+                reject(error2);
               });
             } else {
-              response.message.on("error", (error) => {
+              response.message.on("error", (error2) => {
                 core2.error(`An error occurred while attempting to read the response stream`);
                 destinationStream.close();
-                reject(error);
+                reject(error2);
               }).pipe(destinationStream).on("close", () => {
                 resolve();
-              }).on("error", (error) => {
+              }).on("error", (error2) => {
                 core2.error(`An error occurred while writing a downloaded file to ${destinationStream.path}`);
-                reject(error);
+                reject(error2);
               });
             }
           });
@@ -8213,8 +8213,8 @@ var require_add = __commonJS({
       }
       if (kind === "error") {
         hook = function(method, options) {
-          return Promise.resolve().then(method.bind(null, options)).catch(function(error) {
-            return orig(error, options);
+          return Promise.resolve().then(method.bind(null, options)).catch(function(error2) {
+            return orig(error2, options);
           });
         };
       }
@@ -8896,21 +8896,21 @@ var require_tr46 = __commonJS({
         label = punycode.toUnicode(label);
         processing_option = PROCESSING_OPTIONS.NONTRANSITIONAL;
       }
-      var error = false;
+      var error2 = false;
       if (normalize(label) !== label || label[3] === "-" && label[4] === "-" || label[0] === "-" || label[label.length - 1] === "-" || label.indexOf(".") !== -1 || label.search(combiningMarksRegex) === 0) {
-        error = true;
+        error2 = true;
       }
       var len = countSymbols(label);
       for (var i = 0; i < len; ++i) {
         var status = findStatus(label.codePointAt(i));
         if (processing === PROCESSING_OPTIONS.TRANSITIONAL && status[1] !== "valid" || processing === PROCESSING_OPTIONS.NONTRANSITIONAL && status[1] !== "valid" && status[1] !== "deviation") {
-          error = true;
+          error2 = true;
           break;
         }
       }
       return {
         label,
-        error
+        error: error2
       };
     }
     function processing(domain_name, useSTD3, processing_option) {
@@ -10560,8 +10560,8 @@ var require_lib4 = __commonJS({
       this.timeout = timeout;
       if (body instanceof Stream) {
         body.on("error", function(err) {
-          const error = err.name === "AbortError" ? err : new FetchError(`Invalid response body while trying to fetch ${_this.url}: ${err.message}`, "system", err);
-          _this[INTERNALS].error = error;
+          const error2 = err.name === "AbortError" ? err : new FetchError(`Invalid response body while trying to fetch ${_this.url}: ${err.message}`, "system", err);
+          _this[INTERNALS].error = error2;
         });
       }
     }
@@ -11288,14 +11288,14 @@ var require_lib4 = __commonJS({
         const signal = request.signal;
         let response = null;
         const abort = function abort2() {
-          let error = new AbortError("The user aborted a request.");
-          reject(error);
+          let error2 = new AbortError("The user aborted a request.");
+          reject(error2);
           if (request.body && request.body instanceof Stream.Readable) {
-            request.body.destroy(error);
+            request.body.destroy(error2);
           }
           if (!response || !response.body)
             return;
-          response.body.emit("error", error);
+          response.body.emit("error", error2);
         };
         if (signal && signal.aborted) {
           abort();
@@ -11611,7 +11611,7 @@ var require_dist_node5 = __commonJS({
         }
         if (status >= 400) {
           const data = await getResponseData(response);
-          const error = new requestError.RequestError(toErrorMessage(data), status, {
+          const error2 = new requestError.RequestError(toErrorMessage(data), status, {
             response: {
               url,
               status,
@@ -11620,7 +11620,7 @@ var require_dist_node5 = __commonJS({
             },
             request: requestOptions
           });
-          throw error;
+          throw error2;
         }
         return getResponseData(response);
       }).then((data) => {
@@ -11630,10 +11630,10 @@ var require_dist_node5 = __commonJS({
           headers,
           data
         };
-      }).catch((error) => {
-        if (error instanceof requestError.RequestError)
-          throw error;
-        throw new requestError.RequestError(error.message, 500, {
+      }).catch((error2) => {
+        if (error2 instanceof requestError.RequestError)
+          throw error2;
+        throw new requestError.RequestError(error2.message, 500, {
           request: requestOptions
         });
       });
@@ -13061,9 +13061,9 @@ var require_dist_node10 = __commonJS({
               return {
                 value: normalizedResponse
               };
-            } catch (error) {
-              if (error.status !== 409)
-                throw error;
+            } catch (error2) {
+              if (error2.status !== 409)
+                throw error2;
               url = "";
               return {
                 value: {
@@ -13586,7 +13586,8 @@ function readArtifactJson(name) {
     try {
       const downloadResponse = yield artifactClient.downloadArtifact(name);
       return JSON.parse(fs.readFileSync(downloadResponse.downloadPath, "utf-8"));
-    } catch (e) {
+    } catch (err) {
+      core.error(err);
     }
   });
 }
