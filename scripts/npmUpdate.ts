@@ -111,9 +111,9 @@ export default async function (context: IContext): Promise<void> {
         }
 
         if (context.env.GIT_COMMITTER_NAME !== null && context.env.GIT_COMMITTER_EMAIL !== null) {
-            gitUtils.gitConfig(context);
-            gitUtils.gitAdd(...changedFiles);
-            gitUtils.gitCommit("Update dependencies [ci skip]\n\n" + updateDetails.join("\n"));
+            await gitUtils.gitConfig(context);
+            await gitUtils.gitAdd(...changedFiles);
+            await gitUtils.gitCommit("Update dependencies [ci skip]\n\n" + updateDetails.join("\n"));
         }
     }
 }

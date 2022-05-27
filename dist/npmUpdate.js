@@ -13679,9 +13679,9 @@ function npmUpdate_default(context2) {
         yield exec.exec("npm", ["install"]);
       }
       if (context2.env.GIT_COMMITTER_NAME !== null && context2.env.GIT_COMMITTER_EMAIL !== null) {
-        import_git.utils.gitConfig(context2);
-        import_git.utils.gitAdd(...changedFiles);
-        import_git.utils.gitCommit("Update dependencies [ci skip]\n\n" + updateDetails.join("\n"));
+        yield import_git.utils.gitConfig(context2);
+        yield import_git.utils.gitAdd(...changedFiles);
+        yield import_git.utils.gitCommit("Update dependencies [ci skip]\n\n" + updateDetails.join("\n"));
       }
     }
   });
