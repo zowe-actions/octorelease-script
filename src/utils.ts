@@ -40,7 +40,7 @@ export async function readArtifactJson<T>(name: string): Promise<T | undefined> 
     try {
         const downloadResponse = await artifactClient.downloadArtifact(name);
         return JSON.parse(fs.readFileSync(path.join(downloadResponse.downloadPath, name), "utf-8"));
-    } catch (err) { core.error(err as any); /* Do nothing */ }
+    } catch (err) { /* Do nothing */ }
 }
 
 export async function writeArtifactJson<T>(name: string, value: T): Promise<void> {

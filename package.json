@@ -1,7 +1,7 @@
 {
   "name": "@octorelease/run-script",
   "version": "0.1.0",
-  "description": "Octorelease plugin to publish VS Code extensions.",
+  "description": "GitHub action to run scripts in Octorelease context.",
   "main": "lib/index.js",
   "files": [
     "lib",
@@ -15,16 +15,11 @@
     "watch": "tsc -w"
   },
   "keywords": [
-    "octorelease",
-    "plugin",
-    "publish",
-    "vsce"
+    "octorelease"
   ],
   "author": "t1m0thyj",
   "license": "Apache-2.0",
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "dependencies": {
     "@actions/artifact": "^1.1.0",
     "@actions/core": "^1.8.2",

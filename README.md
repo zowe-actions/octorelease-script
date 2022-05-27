@@ -1,45 +1,33 @@
 # Sample plugin
 
-**TODO:** Update readme for Run Script action
+GitHub action to run scripts in [Octorelease](https://github.com/octorelease/octorelease) context.
 
-[Octorelease](https://github.com/octorelease/octorelease) sample plugin.
+<!-- [![Build Status](https://github.com/octorelease/run-script/workflows/Test/badge.svg)](https://github.com/octorelease/run-script/actions?query=workflow%3ATest+branch%3Amaster)
+[![npm latest version](https://img.shields.io/npm/v/@octorelease/run-script/latest.svg)](https://www.npmjs.com/package/@octorelease/run-script)
+[![npm next version](https://img.shields.io/npm/v/@octorelease/run-script/next.svg)](https://www.npmjs.com/package/@octorelease/run-script) -->
 
-[![Build Status](https://github.com/octorelease/sample-plugin/workflows/Test/badge.svg)](https://github.com/octorelease/sample-plugin/actions?query=workflow%3ATest+branch%3Amaster)
-[![npm latest version](https://img.shields.io/npm/v/@octorelease/sample-plugin/latest.svg)](https://www.npmjs.com/package/@octorelease/sample-plugin)
-<!-- [![npm next version](https://img.shields.io/npm/v/@octorelease/sample-plugin/next.svg)](https://www.npmjs.com/package/@octorelease/sample-plugin) -->
+## Inputs
 
-| Step | Description |
-|------|-------------|
-| `init` | Validate plugin configuration. |
-| `version` | Print hello message if project version has changed. |
-| `publish` | Add already published package to list of released packages. |
-| `success` | Print happy message. |
-| `fail` | Print sad message. |
+### `artifact-name`
 
-## Install
+Name of artifact to create for sharing data between jobs.
 
-```bash
-$ npm install @octorelease/sample-plugin -D
+### `github-token`
+
+Personal access token for authentication to GitHub APIs. Default `github.token`.
+
+### `script`
+
+**Required** Name of script to run from the [scripts](scripts) directory.
+
+### `working-dir`
+
+Custom working directory to use instead of the project root.
+
+## Example usage
+
+```yaml
+- uses: octorelease/run-script@master
+  with:
+    script: npmUpdate
 ```
-
-## Usage
-
-The plugin can be configured in the [Octorelease configuration file](https://github.com/octorelease/octorelease/blob/master/docs/usage.md#configuration):
-
-```json
-{
-  "plugins": [
-    ["@octorelease/sample-plugin", {
-      "name": "world"
-    }]
-  ]
-}
-```
-
-## Configuration
-
-### Options
-
-| Options | Description | Default |
-| ------- | ----------- | ------- |
-| `name`  | Name to say hello to. | (required) |
