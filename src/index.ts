@@ -28,7 +28,7 @@ async function run(): Promise<void> {
             process.chdir(path.resolve(workingDir));
         }
 
-        const prBranch = (await utils.findCurrentPr())?.head.ref;
+        const prBranch = (await utils.findCurrentPr())?.base.ref;
         const context = await coreUtils.buildContext({ branch: prBranch });
         if (context == null) {
             core.info("Current branch is not targeting a release branch, exiting now");

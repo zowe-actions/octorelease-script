@@ -30264,7 +30264,7 @@ function run() {
       if (workingDir) {
         process.chdir(path.resolve(workingDir));
       }
-      const prBranch = (_a = yield findCurrentPr()) == null ? void 0 : _a.head.ref;
+      const prBranch = (_a = yield findCurrentPr()) == null ? void 0 : _a.base.ref;
       const context2 = yield import_core.utils.buildContext({ branch: prBranch });
       if (context2 == null) {
         core2.info("Current branch is not targeting a release branch, exiting now");
