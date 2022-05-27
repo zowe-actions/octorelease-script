@@ -30247,7 +30247,7 @@ var core = __toESM(require_core());
 var github = __toESM(require_github2());
 function findCurrentPr() {
   return __async(this, null, function* () {
-    const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+    const octokit = github.getOctokit(core.getInput("github-token") || process.env.GITHUB_TOKEN);
     const result = yield octokit.rest.repos.listPullRequestsAssociatedWithCommit(__spreadProps(__spreadValues({}, github.context.repo), {
       commit_sha: github.context.sha
     }));

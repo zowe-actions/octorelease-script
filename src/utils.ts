@@ -22,7 +22,7 @@ import * as core from "@actions/core";
 import * as github from "@actions/github";
 
 export async function findCurrentPr(): Promise<any | undefined> {
-    const octokit = github.getOctokit(process.env.GITHUB_TOKEN as string);
+    const octokit = github.getOctokit(core.getInput("github-token") || process.env.GITHUB_TOKEN as string);
     const result = await octokit.rest.repos.listPullRequestsAssociatedWithCommit({
         ...github.context.repo,
         commit_sha: github.context.sha
