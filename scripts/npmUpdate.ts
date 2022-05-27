@@ -24,7 +24,6 @@ const updateDetails: string[] = [];
 let resolutions: Record<string, string> = {};
 
 interface IProtectedBranchWithDeps extends IProtectedBranch {
-    tag: string;
     dependencies: string[] | Record<string, string>;
     devDependencies: string[] | Record<string, string>;
 }
@@ -37,7 +36,7 @@ function getDependencies(branch: IProtectedBranchWithDeps, dev: boolean) {
 
     const dependencyMap = {};
     for (const pkgName of dependencies) {
-        dependencyMap[pkgName] = branch.channel;
+        dependencyMap[pkgName] = branch.channel || "latest";
     }
 
     return dependencyMap;
