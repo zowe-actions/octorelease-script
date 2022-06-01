@@ -100,7 +100,7 @@ export default async function (context: IContext): Promise<void> {
     }
 
     if (updateDetails.length > 0) {
-        if (context.workspaces != null) {
+        if (fs.existsSync("lerna.json")) {
             changedFiles.push("**/package.json");
             const dependencyList = [...Object.keys(dependencies), ...Object.keys(devDependencies)];
 
