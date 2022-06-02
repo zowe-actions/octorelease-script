@@ -13662,7 +13662,7 @@ function npmUpdate_default(context2) {
       yield writeArtifactJson(artifactName, resolutions);
     }
     if (updateDetails.length > 0) {
-      if (context2.workspaces != null) {
+      if (fs2.existsSync("lerna.json")) {
         changedFiles.push("**/package.json");
         const dependencyList = [...Object.keys(dependencies), ...Object.keys(devDependencies)];
         yield exec.exec("npx", [
