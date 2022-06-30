@@ -1760,6 +1760,16 @@ var require_inputs = __commonJS({
     var path2 = __importStar(require("path"));
     var core3 = __importStar(require_core());
     var Inputs = class {
+      static get ciSkip() {
+        try {
+          return core3.getBooleanInput("ci-skip");
+        } catch (error2) {
+          if (error2 instanceof TypeError) {
+            return true;
+          }
+          throw error2;
+        }
+      }
       static get configDir() {
         const input = core3.getInput("config-dir");
         return input ? path2.resolve(this.rootDir, input) : void 0;
@@ -1912,7 +1922,6 @@ var require_stages = __commonJS({
     exports.version = exports.success = exports.publish = exports.init = exports.fail = void 0;
     var core3 = __importStar(require_core());
     var inputs_1 = require_inputs();
-    var logger_1 = require_logger();
     function fail(context2, pluginsLoaded) {
       return __awaiter(this, void 0, void 0, function* () {
         if (shouldSkipStage("fail"))
@@ -1920,7 +1929,12 @@ var require_stages = __commonJS({
         for (const [pluginName, pluginModule] of Object.entries(pluginsLoaded)) {
           if (pluginModule.fail != null) {
             context2.logger.info(`Running "fail" stage for plugin ${pluginName}`);
-            yield pluginModule.fail(Object.assign(Object.assign({}, context2), { logger: new logger_1.Logger(pluginName) }), context2.plugins[pluginName] || {});
+            context2.logger.pluginName = pluginName;
+            try {
+              yield pluginModule.fail(context2, context2.plugins[pluginName] || {});
+            } finally {
+              context2.logger.pluginName = void 0;
+            }
           }
         }
       });
@@ -1931,7 +1945,12 @@ var require_stages = __commonJS({
         for (const [pluginName, pluginModule] of Object.entries(pluginsLoaded)) {
           if (pluginModule.init != null) {
             context2.logger.info(`Running "init" stage for plugin ${pluginName}`);
-            yield pluginModule.init(Object.assign(Object.assign({}, context2), { logger: new logger_1.Logger(pluginName) }), context2.plugins[pluginName] || {});
+            context2.logger.pluginName = pluginName;
+            try {
+              yield pluginModule.init(context2, context2.plugins[pluginName] || {});
+            } finally {
+              context2.logger.pluginName = void 0;
+            }
           }
         }
       });
@@ -1944,7 +1963,12 @@ var require_stages = __commonJS({
         for (const [pluginName, pluginModule] of Object.entries(pluginsLoaded)) {
           if (pluginModule.publish != null) {
             context2.logger.info(`Running "publish" stage for plugin ${pluginName}`);
-            yield pluginModule.publish(Object.assign(Object.assign({}, context2), { logger: new logger_1.Logger(pluginName) }), context2.plugins[pluginName] || {});
+            context2.logger.pluginName = pluginName;
+            try {
+              yield pluginModule.publish(context2, context2.plugins[pluginName] || {});
+            } finally {
+              context2.logger.pluginName = void 0;
+            }
           }
         }
       });
@@ -1957,7 +1981,12 @@ var require_stages = __commonJS({
         for (const [pluginName, pluginModule] of Object.entries(pluginsLoaded)) {
           if (pluginModule.success != null) {
             context2.logger.info(`Running "success" stage for plugin ${pluginName}`);
-            yield pluginModule.success(Object.assign(Object.assign({}, context2), { logger: new logger_1.Logger(pluginName) }), context2.plugins[pluginName] || {});
+            context2.logger.pluginName = pluginName;
+            try {
+              yield pluginModule.success(context2, context2.plugins[pluginName] || {});
+            } finally {
+              context2.logger.pluginName = void 0;
+            }
           }
         }
       });
@@ -1970,7 +1999,12 @@ var require_stages = __commonJS({
         for (const [pluginName, pluginModule] of Object.entries(pluginsLoaded)) {
           if (pluginModule.version != null) {
             context2.logger.info(`Running "version" stage for plugin ${pluginName}`);
-            yield pluginModule.version(Object.assign(Object.assign({}, context2), { logger: new logger_1.Logger(pluginName) }), context2.plugins[pluginName] || {});
+            context2.logger.pluginName = pluginName;
+            try {
+              yield pluginModule.version(context2, context2.plugins[pluginName] || {});
+            } finally {
+              context2.logger.pluginName = void 0;
+            }
           }
         }
       });
@@ -18626,7 +18660,7 @@ var require_utils5 = __commonJS({
       });
     };
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.verifyConditions = exports.loadPlugins = exports.dryRunTask = exports.buildContext = void 0;
+    exports.getLastCommitMessage = exports.verifyConditions = exports.loadPlugins = exports.dryRunTask = exports.buildContext = void 0;
     var fs = __importStar(require("fs"));
     var path2 = __importStar(require("path"));
     var exec = __importStar(require_exec());
@@ -18645,8 +18679,11 @@ var require_utils5 = __commonJS({
         const branchIndex = branches.findIndex((branch) => micromatch.isMatch((opts === null || opts === void 0 ? void 0 : opts.branch) || envCi.branch, branch.name));
         if (branchIndex == -1) {
           return;
-        } else if (branchIndex > 0 && branches[branchIndex].channel == null) {
-          branches[branchIndex].channel = branches[branchIndex].name;
+        } else {
+          branches[branchIndex].name = envCi.branch;
+          if (branchIndex > 0 && branches[branchIndex].channel == null) {
+            branches[branchIndex].channel = branches[branchIndex].name;
+          }
         }
         const pluginConfig = {};
         for (const pc of config.config.plugins || []) {
@@ -18659,7 +18696,7 @@ var require_utils5 = __commonJS({
         const tagPrefix = config.config.tagPrefix || "v";
         const versionInfo = yield buildVersionInfo(branches[branchIndex], tagPrefix);
         return {
-          branch: Object.assign(Object.assign({}, branches[branchIndex]), { name: envCi.branch }),
+          branch: branches[branchIndex],
           changedFiles: [],
           ci: envCi,
           dryRun: inputs_1.Inputs.dryRun,
@@ -18726,6 +18763,13 @@ var require_utils5 = __commonJS({
         return { old: oldVersion, new: oldVersion, prerelease };
       });
     }
+    function getLastCommitMessage() {
+      return __awaiter(this, void 0, void 0, function* () {
+        const cmdOutput = yield exec.getExecOutput("git", ["log", "-1", "--pretty=format:%s"], { ignoreReturnCode: true });
+        return cmdOutput.exitCode === 0 && cmdOutput.stdout.trim() || void 0;
+      });
+    }
+    exports.getLastCommitMessage = getLastCommitMessage;
     function loadCiEnv() {
       return __awaiter(this, void 0, void 0, function* () {
         const envCi = require_env_ci()();
