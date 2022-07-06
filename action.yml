@@ -18,7 +18,9 @@ inputs:
     description: 'Custom working directory to use instead of the project root'
     required: false
     default: ''
-# outputs:
+outputs:
+  result:
+    description: 'The output of the script for other steps to reference'
 runs:
   using: 'node16'
   main: 'dist/index.js'
