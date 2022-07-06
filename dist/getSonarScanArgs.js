@@ -11895,20 +11895,21 @@ function getSonarScanArgs_default(context2) {
       context2.logger.warn("Skipping Sonar scan because it already ran");
       return;
     }
-    const sonarArgs = {};
+    const sonarProps = {};
     const packageJson = JSON.parse(fs2.readFileSync("package.json", "utf-8"));
-    sonarArgs["sonar.projectVersion"] = packageJson.version;
-    sonarArgs["sonar.links.ci"] = `https://github.com/${context2.ci.slug}/actions/runs/${context2.ci.build}`;
+    sonarProps["sonar.projectVersion"] = packageJson.version;
+    sonarProps["sonar.links.ci"] = `https://github.com/${context2.ci.slug}/actions/runs/${context2.ci.build}`;
     const pr = yield findCurrentPr();
     if (pr != null) {
-      sonarArgs["sonar.pullrequest.key"] = pr.number;
-      sonarArgs["sonar.pullrequest.branch"] = pr.head.ref;
-      sonarArgs["sonar.pullrequest.base"] = pr.base.ref;
+      sonarProps["sonar.pullrequest.key"] = pr.number;
+      sonarProps["sonar.pullrequest.branch"] = pr.head.ref;
+      sonarProps["sonar.pullrequest.base"] = pr.base.ref;
     } else {
-      sonarArgs["sonar.branch.name"] = context2.ci.branch;
+      sonarProps["sonar.branch.name"] = context2.ci.branch;
     }
-    context2.logger.info("Sonar scan arguments:\n" + JSON.stringify(sonarArgs, null, 2));
-    core2.setOutput("result", Object.entries(sonarArgs).map(([k, v]) => `-D${k}=${v}`).join("\n"));
+    context2.logger.info("Sonar scan properties:\n" + JSON.stringify(sonarProps, null, 2));
+    const sonarArgs = Object.entries(sonarProps).map(([k, v]) => `-D${k}=${v}`);
+    core2.setOutput("result", sonarArgs.join("\n"));
   });
 }
 // Annotate the CommonJS export names for ESM import in node:

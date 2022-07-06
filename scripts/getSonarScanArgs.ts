@@ -20,6 +20,7 @@ import { IContext } from "@octorelease/core";
 import * as utils from "../src/utils";
 
 export default async function (context: IContext): Promise<void> {
+    // Skip the Sonar scan if another job in same matrix already ran it
     const artifactName = utils.getArtifactName("lock");
     const lockFile = await utils.readArtifactJson(artifactName);
     if (lockFile == null) {
@@ -29,21 +30,25 @@ export default async function (context: IContext): Promise<void> {
         return;
     }
 
-    const sonarArgs: { [key: string]: any } = {};
+    // Define Sonar properties in addition to sonar-project.properties file
+    const sonarProps: { [key: string]: any } = {};
     const packageJson = JSON.parse(fs.readFileSync("package.json", "utf-8"));
-    sonarArgs["sonar.projectVersion"] = packageJson.version;
-    sonarArgs["sonar.links.ci"] =
+    sonarProps["sonar.projectVersion"] = packageJson.version;
+    sonarProps["sonar.links.ci"] =
         `https://github.com/${(context.ci as any).slug}/actions/runs/${(context.ci as any).build}`;
 
+    // Set properties for pull request or branch scanning
     const pr = await utils.findCurrentPr();
     if (pr != null) {
-        sonarArgs["sonar.pullrequest.key"] = pr.number;
-        sonarArgs["sonar.pullrequest.branch"] = pr.head.ref;
-        sonarArgs["sonar.pullrequest.base"] = pr.base.ref;
+        sonarProps["sonar.pullrequest.key"] = pr.number;
+        sonarProps["sonar.pullrequest.branch"] = pr.head.ref;
+        sonarProps["sonar.pullrequest.base"] = pr.base.ref;
     } else {
-        sonarArgs["sonar.branch.name"] = context.ci.branch as string;
+        sonarProps["sonar.branch.name"] = context.ci.branch as string;
     }
 
-    context.logger.info("Sonar scan arguments:\n" + JSON.stringify(sonarArgs, null, 2));
-    core.setOutput("result", Object.entries(sonarArgs).map(([k, v]) => `-D${k}=${v}`).join("\n"));
+    // Convert properties to argument string and store it in output
+    context.logger.info("Sonar scan properties:\n" + JSON.stringify(sonarProps, null, 2));
+    const sonarArgs = Object.entries(sonarProps).map(([k, v]) => `-D${k}=${v}`);
+    core.setOutput("result", sonarArgs.join("\n"));
 }
