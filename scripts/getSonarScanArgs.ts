@@ -25,6 +25,7 @@ export default async function (context: IContext): Promise<void> {
     if (lockFile == null) {
         await utils.writeArtifactJson(artifactName, {});
     } else {
+        context.logger.warn("Skipping Sonar scan because it already ran");
         return;
     }
 
@@ -43,5 +44,6 @@ export default async function (context: IContext): Promise<void> {
         sonarArgs["sonar.branch.name"] = context.ci.branch as string;
     }
 
+    context.logger.info("Sonar scan arguments:\n" + JSON.stringify(sonarArgs, null, 2));
     core.setOutput("result", Object.entries(sonarArgs).map(([k, v]) => `-D${k}=${v}`).join("\n"));
 }

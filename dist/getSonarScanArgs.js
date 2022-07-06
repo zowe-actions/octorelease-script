@@ -11892,6 +11892,7 @@ function getSonarScanArgs_default(context2) {
     if (lockFile == null) {
       yield writeArtifactJson(artifactName, {});
     } else {
+      context2.logger.warn("Skipping Sonar scan because it already ran");
       return;
     }
     const sonarArgs = {};
@@ -11906,6 +11907,7 @@ function getSonarScanArgs_default(context2) {
     } else {
       sonarArgs["sonar.branch.name"] = context2.ci.branch;
     }
+    context2.logger.info("Sonar scan arguments:\n" + JSON.stringify(sonarArgs, null, 2));
     core2.setOutput("result", Object.entries(sonarArgs).map(([k, v]) => `-D${k}=${v}`).join("\n"));
   });
 }
