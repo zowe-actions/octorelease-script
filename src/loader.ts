@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-import * as fs from "fs";
-import { loadScript } from "../src/loader";
+import { IContext } from "@octorelease/core";
 
-describe("Run Script action", () => {
-    const scriptNames = fs.readdirSync(__dirname + "/../scripts").map(s => s.slice(0, s.lastIndexOf(".")));
+const SCRIPTS: { [key: string]: any } = {
+    getSonarScanArgs: require("../scripts/getSonarScanArgs"),
+    npmUpdate: require("../scripts/npmUpdate")
+};
 
-    for (const scriptName of scriptNames) {
-        it("should load script " + scriptName, () => {
-            expect(typeof loadScript(scriptName)).toBe("function");
-        });
+export function loadScript(scriptName: string): (context: IContext) => Promise<void> {
+    if (!Object.keys(SCRIPTS).includes(scriptName)) {
+        throw new Error(`Could not find script to run: ${scriptName}`);
     }
-});
+    return SCRIPTS[scriptName].default;
+}

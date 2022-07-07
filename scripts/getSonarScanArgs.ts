@@ -17,7 +17,26 @@
 import * as fs from "fs";
 import * as core from "@actions/core";
 import { IContext } from "@octorelease/core";
+import * as properties from "java-properties";
 import * as utils from "../src/utils";
+
+function rewriteCoverageReports(context: IContext) {
+    // Workaround for https://community.sonarsource.com/t/code-coverage-doesnt-work-with-github-action/16747
+    if (context.ci.service as any !== "github") {
+        return;
+    }
+    const sonarProps = properties.of("sonar-project.properties");
+    const reportPaths = sonarProps.get("sonar.javascript.lcov.reportPaths");
+    if (typeof reportPaths !== "string") {
+        return;
+    }
+    context.logger.info("Fixing coverage paths for SonarCloud");
+    const pattern = new RegExp(context.env.GITHUB_WORKSPACE, "g");
+    for (const reportPath of reportPaths.split(",")) {
+        const reportText = fs.readFileSync(reportPath, "utf-8");
+        fs.writeFileSync(reportPath, reportText.replace(pattern, "/github/workspace"));
+    }
+}
 
 export default async function (context: IContext): Promise<void> {
     // Skip the Sonar scan if another job in same matrix already ran it
@@ -51,4 +70,5 @@ export default async function (context: IContext): Promise<void> {
     context.logger.info("Sonar scan properties:\n" + JSON.stringify(sonarProps, null, 2));
     const sonarArgs = Object.entries(sonarProps).map(([k, v]) => `-D${k}=${v}`);
     core.setOutput("result", sonarArgs.join("\n"));
+    rewriteCoverageReports(context);
 }

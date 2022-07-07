@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc && npm run lint",
     "lint": "eslint **/*.ts",
-    "pack": "bash scripts/pack.sh",
+    "pack": "esbuild src/index.ts --bundle --outfile=dist/index.js --platform=node",
     "test": "jest",
     "watch": "tsc -w"
   },
@@ -27,6 +27,7 @@
     "@actions/github": "^5.0.3",
     "@octorelease/core": "^0.1.4",
     "@octorelease/git": "^0.0.1",
+    "java-properties": "^1.0.2",
     "pluralize": "^8.0.0"
   },
   "devDependencies": {
