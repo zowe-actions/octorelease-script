@@ -34,7 +34,7 @@ function getDependencies(branch: IProtectedBranchWithDeps, dev: boolean) {
         return dependencies || {};
     }
 
-    const dependencyMap = {};
+    const dependencyMap: { [key: string]: string } = {};
     for (const pkgName of dependencies) {
         dependencyMap[pkgName] = branch.channel || "latest";
     }

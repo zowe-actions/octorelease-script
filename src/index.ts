@@ -19,6 +19,7 @@
 import * as path from "path";
 import * as core from "@actions/core";
 import { utils as coreUtils } from "@octorelease/core";
+import { loadScript } from "./loader";
 import * as utils from "./utils";
 
 async function run(): Promise<void> {
@@ -35,8 +36,7 @@ async function run(): Promise<void> {
             process.exit();
         }
 
-        const script = require(path.join(__dirname, core.getInput("script")));
-        await script.default(context);
+        await loadScript(core.getInput("script"))(context);
     } catch (error) {
         if (error instanceof Error) {
             core.error(error.stack || error.message);

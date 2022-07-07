@@ -22,8 +22,15 @@ var __spreadValues = (a, b) => {
   return a;
 };
 var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
+var __esm = (fn, res) => function __init() {
+  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+};
 var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+};
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
@@ -34,6 +41,7 @@ var __copyProps = (to, from, except, desc) => {
   return to;
 };
 var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var __async = (__this, __arguments, generator) => {
   return new Promise((resolve2, reject) => {
     var fulfilled = (value) => {
@@ -121,11 +129,11 @@ var require_command = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.issue = exports.issueCommand = void 0;
-    var os = __importStar(require("os"));
+    var os2 = __importStar(require("os"));
     var utils_1 = require_utils();
-    function issueCommand(command, properties, message) {
-      const cmd = new Command(command, properties, message);
-      process.stdout.write(cmd.toString() + os.EOL);
+    function issueCommand(command, properties2, message) {
+      const cmd = new Command(command, properties2, message);
+      process.stdout.write(cmd.toString() + os2.EOL);
     }
     exports.issueCommand = issueCommand;
     function issue(name, message = "") {
@@ -134,12 +142,12 @@ var require_command = __commonJS({
     exports.issue = issue;
     var CMD_STRING = "::";
     var Command = class {
-      constructor(command, properties, message) {
+      constructor(command, properties2, message) {
         if (!command) {
           command = "missing.command";
         }
         this.command = command;
-        this.properties = properties;
+        this.properties = properties2;
         this.message = message;
       }
       toString() {
@@ -208,18 +216,18 @@ var require_file_command = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.issueCommand = void 0;
-    var fs = __importStar(require("fs"));
-    var os = __importStar(require("os"));
+    var fs4 = __importStar(require("fs"));
+    var os2 = __importStar(require("os"));
     var utils_1 = require_utils();
     function issueCommand(command, message) {
       const filePath = process.env[`GITHUB_${command}`];
       if (!filePath) {
         throw new Error(`Unable to find environment variable for file command ${command}`);
       }
-      if (!fs.existsSync(filePath)) {
+      if (!fs4.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
       }
-      fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
+      fs4.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os2.EOL}`, {
         encoding: "utf8"
       });
     }
@@ -1489,8 +1497,8 @@ var require_core = __commonJS({
     var command_1 = require_command();
     var file_command_1 = require_file_command();
     var utils_1 = require_utils();
-    var os = __importStar(require("os"));
-    var path2 = __importStar(require("path"));
+    var os2 = __importStar(require("os"));
+    var path3 = __importStar(require("path"));
     var oidc_utils_1 = require_oidc_utils();
     var ExitCode;
     (function(ExitCode2) {
@@ -1503,7 +1511,7 @@ var require_core = __commonJS({
       const filePath = process.env["GITHUB_ENV"] || "";
       if (filePath) {
         const delimiter = "_GitHubActionsFileCommandDelimeter_";
-        const commandValue = `${name}<<${delimiter}${os.EOL}${convertedVal}${os.EOL}${delimiter}`;
+        const commandValue = `${name}<<${delimiter}${os2.EOL}${convertedVal}${os2.EOL}${delimiter}`;
         file_command_1.issueCommand("ENV", commandValue);
       } else {
         command_1.issueCommand("set-env", { name }, convertedVal);
@@ -1521,7 +1529,7 @@ var require_core = __commonJS({
       } else {
         command_1.issueCommand("add-path", {}, inputPath);
       }
-      process.env["PATH"] = `${inputPath}${path2.delimiter}${process.env["PATH"]}`;
+      process.env["PATH"] = `${inputPath}${path3.delimiter}${process.env["PATH"]}`;
     }
     exports.addPath = addPath;
     function getInput3(name, options) {
@@ -1552,11 +1560,11 @@ var require_core = __commonJS({
 Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     exports.getBooleanInput = getBooleanInput;
-    function setOutput(name, value) {
-      process.stdout.write(os.EOL);
+    function setOutput2(name, value) {
+      process.stdout.write(os2.EOL);
       command_1.issueCommand("set-output", { name }, value);
     }
-    exports.setOutput = setOutput;
+    exports.setOutput = setOutput2;
     function setCommandEcho(enabled) {
       command_1.issue("echo", enabled ? "on" : "off");
     }
@@ -1574,20 +1582,20 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issueCommand("debug", {}, message);
     }
     exports.debug = debug;
-    function error2(message, properties = {}) {
-      command_1.issueCommand("error", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+    function error2(message, properties2 = {}) {
+      command_1.issueCommand("error", utils_1.toCommandProperties(properties2), message instanceof Error ? message.toString() : message);
     }
     exports.error = error2;
-    function warning(message, properties = {}) {
-      command_1.issueCommand("warning", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+    function warning(message, properties2 = {}) {
+      command_1.issueCommand("warning", utils_1.toCommandProperties(properties2), message instanceof Error ? message.toString() : message);
     }
     exports.warning = warning;
-    function notice(message, properties = {}) {
-      command_1.issueCommand("notice", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+    function notice(message, properties2 = {}) {
+      command_1.issueCommand("notice", utils_1.toCommandProperties(properties2), message instanceof Error ? message.toString() : message);
     }
     exports.notice = notice;
     function info2(message) {
-      process.stdout.write(message + os.EOL);
+      process.stdout.write(message + os2.EOL);
     }
     exports.info = info2;
     function startGroup(name) {
@@ -1757,12 +1765,12 @@ var require_inputs = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Inputs = void 0;
-    var path2 = __importStar(require("path"));
-    var core3 = __importStar(require_core());
+    var path3 = __importStar(require("path"));
+    var core4 = __importStar(require_core());
     var Inputs = class {
       static get ciSkip() {
         try {
-          return core3.getBooleanInput("ci-skip");
+          return core4.getBooleanInput("ci-skip");
         } catch (error2) {
           if (error2 instanceof TypeError) {
             return true;
@@ -1771,12 +1779,12 @@ var require_inputs = __commonJS({
         }
       }
       static get configDir() {
-        const input = core3.getInput("config-dir");
-        return input ? path2.resolve(this.rootDir, input) : void 0;
+        const input = core4.getInput("config-dir");
+        return input ? path3.resolve(this.rootDir, input) : void 0;
       }
       static get dryRun() {
         try {
-          return core3.getBooleanInput("dry-run");
+          return core4.getBooleanInput("dry-run");
         } catch (error2) {
           if (error2 instanceof TypeError) {
             return false;
@@ -1785,14 +1793,14 @@ var require_inputs = __commonJS({
         }
       }
       static get newVersion() {
-        return core3.getInput("new-version") || void 0;
+        return core4.getInput("new-version") || void 0;
       }
       static get skipStages() {
-        const input = core3.getInput("skip-stages");
+        const input = core4.getInput("skip-stages");
         return input ? input.split(",").map((s) => s.trim()) : [];
       }
       static get workingDir() {
-        return core3.getInput("working-dir") || void 0;
+        return core4.getInput("working-dir") || void 0;
       }
     };
     exports.Inputs = Inputs;
@@ -1834,22 +1842,22 @@ var require_logger = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Logger = void 0;
-    var core3 = __importStar(require_core());
+    var core4 = __importStar(require_core());
     var Logger = class {
       constructor(pluginName) {
         this.pluginName = pluginName;
       }
       debug(message) {
-        core3.debug(this.prependPluginName(message));
+        core4.debug(this.prependPluginName(message));
       }
       error(message) {
-        core3.error(this.prependPluginName(message));
+        core4.error(this.prependPluginName(message));
       }
       info(message) {
-        core3.info(this.prependPluginName(message));
+        core4.info(this.prependPluginName(message));
       }
       warn(message) {
-        core3.warning(this.prependPluginName(message));
+        core4.warning(this.prependPluginName(message));
       }
       prependPluginName(message) {
         return this.pluginName ? `[${this.pluginName}] ${message}` : message;
@@ -1920,7 +1928,7 @@ var require_stages = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.version = exports.success = exports.publish = exports.init = exports.fail = void 0;
-    var core3 = __importStar(require_core());
+    var core4 = __importStar(require_core());
     var inputs_1 = require_inputs();
     function fail(context2, pluginsLoaded) {
       return __awaiter(this, void 0, void 0, function* () {
@@ -2012,7 +2020,7 @@ var require_stages = __commonJS({
     exports.version = version;
     function shouldSkipStage(name) {
       if (inputs_1.Inputs.skipStages.includes(name)) {
-        core3.info(`Skipping "${name}" stage`);
+        core4.info(`Skipping "${name}" stage`);
         return true;
       }
       return false;
@@ -2082,9 +2090,9 @@ var require_io_util = __commonJS({
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getCmdPath = exports.tryGetExecutablePath = exports.isRooted = exports.isDirectory = exports.exists = exports.IS_WINDOWS = exports.unlink = exports.symlink = exports.stat = exports.rmdir = exports.rename = exports.readlink = exports.readdir = exports.mkdir = exports.lstat = exports.copyFile = exports.chmod = void 0;
-    var fs = __importStar(require("fs"));
-    var path2 = __importStar(require("path"));
-    _a = fs.promises, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.readdir = _a.readdir, exports.readlink = _a.readlink, exports.rename = _a.rename, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
+    var fs4 = __importStar(require("fs"));
+    var path3 = __importStar(require("path"));
+    _a = fs4.promises, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.readdir = _a.readdir, exports.readlink = _a.readlink, exports.rename = _a.rename, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
     exports.IS_WINDOWS = process.platform === "win32";
     function exists(fsPath) {
       return __awaiter(this, void 0, void 0, function* () {
@@ -2130,7 +2138,7 @@ var require_io_util = __commonJS({
         }
         if (stats && stats.isFile()) {
           if (exports.IS_WINDOWS) {
-            const upperExt = path2.extname(filePath).toUpperCase();
+            const upperExt = path3.extname(filePath).toUpperCase();
             if (extensions.some((validExt) => validExt.toUpperCase() === upperExt)) {
               return filePath;
             }
@@ -2154,11 +2162,11 @@ var require_io_util = __commonJS({
           if (stats && stats.isFile()) {
             if (exports.IS_WINDOWS) {
               try {
-                const directory = path2.dirname(filePath);
-                const upperName = path2.basename(filePath).toUpperCase();
+                const directory = path3.dirname(filePath);
+                const upperName = path3.basename(filePath).toUpperCase();
                 for (const actualName of yield exports.readdir(directory)) {
                   if (upperName === actualName.toUpperCase()) {
-                    filePath = path2.join(directory, actualName);
+                    filePath = path3.join(directory, actualName);
                     break;
                   }
                 }
@@ -2259,10 +2267,10 @@ var require_io = __commonJS({
     exports.findInPath = exports.which = exports.mkdirP = exports.rmRF = exports.mv = exports.cp = void 0;
     var assert_1 = require("assert");
     var childProcess = __importStar(require("child_process"));
-    var path2 = __importStar(require("path"));
+    var path3 = __importStar(require("path"));
     var util_1 = require("util");
     var ioUtil = __importStar(require_io_util());
-    var exec = util_1.promisify(childProcess.exec);
+    var exec3 = util_1.promisify(childProcess.exec);
     var execFile = util_1.promisify(childProcess.execFile);
     function cp(source, dest, options = {}) {
       return __awaiter(this, void 0, void 0, function* () {
@@ -2271,7 +2279,7 @@ var require_io = __commonJS({
         if (destStat && destStat.isFile() && !force) {
           return;
         }
-        const newDest = destStat && destStat.isDirectory() && copySourceDirectory ? path2.join(dest, path2.basename(source)) : dest;
+        const newDest = destStat && destStat.isDirectory() && copySourceDirectory ? path3.join(dest, path3.basename(source)) : dest;
         if (!(yield ioUtil.exists(source))) {
           throw new Error(`no such file or directory: ${source}`);
         }
@@ -2283,7 +2291,7 @@ var require_io = __commonJS({
             yield cpDirRecursive(source, newDest, 0, force);
           }
         } else {
-          if (path2.relative(source, newDest) === "") {
+          if (path3.relative(source, newDest) === "") {
             throw new Error(`'${newDest}' and '${source}' are the same file`);
           }
           yield copyFile(source, newDest, force);
@@ -2296,7 +2304,7 @@ var require_io = __commonJS({
         if (yield ioUtil.exists(dest)) {
           let destExists = true;
           if (yield ioUtil.isDirectory(dest)) {
-            dest = path2.join(dest, path2.basename(source));
+            dest = path3.join(dest, path3.basename(source));
             destExists = yield ioUtil.exists(dest);
           }
           if (destExists) {
@@ -2307,7 +2315,7 @@ var require_io = __commonJS({
             }
           }
         }
-        yield mkdirP(path2.dirname(dest));
+        yield mkdirP(path3.dirname(dest));
         yield ioUtil.rename(source, dest);
       });
     }
@@ -2321,11 +2329,11 @@ var require_io = __commonJS({
           try {
             const cmdPath = ioUtil.getCmdPath();
             if (yield ioUtil.isDirectory(inputPath, true)) {
-              yield exec(`${cmdPath} /s /c "rd /s /q "%inputPath%""`, {
+              yield exec3(`${cmdPath} /s /c "rd /s /q "%inputPath%""`, {
                 env: { inputPath }
               });
             } else {
-              yield exec(`${cmdPath} /s /c "del /f /a "%inputPath%""`, {
+              yield exec3(`${cmdPath} /s /c "del /f /a "%inputPath%""`, {
                 env: { inputPath }
               });
             }
@@ -2395,7 +2403,7 @@ var require_io = __commonJS({
         }
         const extensions = [];
         if (ioUtil.IS_WINDOWS && process.env["PATHEXT"]) {
-          for (const extension of process.env["PATHEXT"].split(path2.delimiter)) {
+          for (const extension of process.env["PATHEXT"].split(path3.delimiter)) {
             if (extension) {
               extensions.push(extension);
             }
@@ -2408,12 +2416,12 @@ var require_io = __commonJS({
           }
           return [];
         }
-        if (tool.includes(path2.sep)) {
+        if (tool.includes(path3.sep)) {
           return [];
         }
         const directories = [];
         if (process.env.PATH) {
-          for (const p of process.env.PATH.split(path2.delimiter)) {
+          for (const p of process.env.PATH.split(path3.delimiter)) {
             if (p) {
               directories.push(p);
             }
@@ -2421,7 +2429,7 @@ var require_io = __commonJS({
         }
         const matches = [];
         for (const directory of directories) {
-          const filePath = yield ioUtil.tryGetExecutablePath(path2.join(directory, tool), extensions);
+          const filePath = yield ioUtil.tryGetExecutablePath(path3.join(directory, tool), extensions);
           if (filePath) {
             matches.push(filePath);
           }
@@ -2539,10 +2547,10 @@ var require_toolrunner = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.argStringToArray = exports.ToolRunner = void 0;
-    var os = __importStar(require("os"));
+    var os2 = __importStar(require("os"));
     var events = __importStar(require("events"));
     var child = __importStar(require("child_process"));
-    var path2 = __importStar(require("path"));
+    var path3 = __importStar(require("path"));
     var io = __importStar(require_io());
     var ioUtil = __importStar(require_io_util());
     var timers_1 = require("timers");
@@ -2594,12 +2602,12 @@ var require_toolrunner = __commonJS({
       _processLineBuffer(data, strBuffer, onLine) {
         try {
           let s = strBuffer + data.toString();
-          let n = s.indexOf(os.EOL);
+          let n = s.indexOf(os2.EOL);
           while (n > -1) {
             const line = s.substring(0, n);
             onLine(line);
-            s = s.substring(n + os.EOL.length);
-            n = s.indexOf(os.EOL);
+            s = s.substring(n + os2.EOL.length);
+            n = s.indexOf(os2.EOL);
           }
           return s;
         } catch (err) {
@@ -2748,7 +2756,7 @@ var require_toolrunner = __commonJS({
       exec() {
         return __awaiter(this, void 0, void 0, function* () {
           if (!ioUtil.isRooted(this.toolPath) && (this.toolPath.includes("/") || IS_WINDOWS && this.toolPath.includes("\\"))) {
-            this.toolPath = path2.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
+            this.toolPath = path3.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
           }
           this.toolPath = yield io.which(this.toolPath, true);
           return new Promise((resolve2, reject) => __awaiter(this, void 0, void 0, function* () {
@@ -2759,7 +2767,7 @@ var require_toolrunner = __commonJS({
             }
             const optionsNonNull = this._cloneExecOptions(this.options);
             if (!optionsNonNull.silent && optionsNonNull.outStream) {
-              optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os.EOL);
+              optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os2.EOL);
             }
             const state = new ExecState(optionsNonNull, this.toolPath);
             state.on("debug", (message) => {
@@ -3021,7 +3029,7 @@ var require_exec = __commonJS({
     exports.getExecOutput = exports.exec = void 0;
     var string_decoder_1 = require("string_decoder");
     var tr = __importStar(require_toolrunner());
-    function exec(commandLine, args, options) {
+    function exec3(commandLine, args, options) {
       return __awaiter(this, void 0, void 0, function* () {
         const commandArgs = tr.argStringToArray(commandLine);
         if (commandArgs.length === 0) {
@@ -3033,8 +3041,8 @@ var require_exec = __commonJS({
         return runner.exec();
       });
     }
-    exports.exec = exec;
-    function getExecOutput(commandLine, args, options) {
+    exports.exec = exec3;
+    function getExecOutput2(commandLine, args, options) {
       var _a, _b;
       return __awaiter(this, void 0, void 0, function* () {
         let stdout = "";
@@ -3056,7 +3064,7 @@ var require_exec = __commonJS({
           }
         };
         const listeners = Object.assign(Object.assign({}, options === null || options === void 0 ? void 0 : options.listeners), { stdout: stdOutListener, stderr: stdErrListener });
-        const exitCode = yield exec(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
+        const exitCode = yield exec3(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
         stdout += stdoutDecoder.end();
         stderr += stderrDecoder.end();
         return {
@@ -3066,7 +3074,7 @@ var require_exec = __commonJS({
         };
       });
     }
-    exports.getExecOutput = getExecOutput;
+    exports.getExecOutput = getExecOutput2;
   }
 });
 
@@ -3074,9 +3082,9 @@ var require_exec = __commonJS({
 var require_resolve_from = __commonJS({
   "node_modules/resolve-from/index.js"(exports, module2) {
     "use strict";
-    var path2 = require("path");
+    var path3 = require("path");
     var Module = require("module");
-    var fs = require("fs");
+    var fs4 = require("fs");
     var resolveFrom = (fromDir, moduleId, silent) => {
       if (typeof fromDir !== "string") {
         throw new TypeError(`Expected \`fromDir\` to be of type \`string\`, got \`${typeof fromDir}\``);
@@ -3085,17 +3093,17 @@ var require_resolve_from = __commonJS({
         throw new TypeError(`Expected \`moduleId\` to be of type \`string\`, got \`${typeof moduleId}\``);
       }
       try {
-        fromDir = fs.realpathSync(fromDir);
+        fromDir = fs4.realpathSync(fromDir);
       } catch (err) {
         if (err.code === "ENOENT") {
-          fromDir = path2.resolve(fromDir);
+          fromDir = path3.resolve(fromDir);
         } else if (silent) {
           return null;
         } else {
           throw err;
         }
       }
-      const fromFile = path2.join(fromDir, "noop.js");
+      const fromFile = path3.join(fromDir, "noop.js");
       const resolveFileName = () => Module._resolveFilename(moduleId, {
         id: fromFile,
         filename: fromFile,
@@ -3167,7 +3175,7 @@ var require_parent_module = __commonJS({
 var require_import_fresh = __commonJS({
   "node_modules/import-fresh/index.js"(exports, module2) {
     "use strict";
-    var path2 = require("path");
+    var path3 = require("path");
     var resolveFrom = require_resolve_from();
     var parentModule = require_parent_module();
     module2.exports = (moduleId) => {
@@ -3175,7 +3183,7 @@ var require_import_fresh = __commonJS({
         throw new TypeError("Expected a string");
       }
       const parentPath = parentModule(__filename);
-      const cwd = parentPath ? path2.dirname(parentPath) : __dirname;
+      const cwd = parentPath ? path3.dirname(parentPath) : __dirname;
       const filePath = resolveFrom(cwd, moduleId);
       const oldModule = require.cache[filePath];
       if (oldModule && oldModule.parent) {
@@ -3212,9 +3220,9 @@ var require_error_ex = __commonJS({
     "use strict";
     var util = require("util");
     var isArrayish = require_is_arrayish();
-    var errorEx = function errorEx2(name, properties) {
+    var errorEx = function errorEx2(name, properties2) {
       if (!name || name.constructor !== String) {
-        properties = name || {};
+        properties2 = name || {};
         name = Error.name;
       }
       var errorExError = function ErrorEXError(message) {
@@ -3230,11 +3238,11 @@ var require_error_ex = __commonJS({
           enumerable: false,
           get: function() {
             var newMessage = message.split(/\r?\n/g);
-            for (var key in properties) {
-              if (!properties.hasOwnProperty(key)) {
+            for (var key in properties2) {
+              if (!properties2.hasOwnProperty(key)) {
                 continue;
               }
-              var modifier = properties[key];
+              var modifier = properties2[key];
               if ("message" in modifier) {
                 newMessage = modifier.message(this[key], newMessage) || newMessage;
                 if (!isArrayish(newMessage)) {
@@ -3263,11 +3271,11 @@ var require_error_ex = __commonJS({
             stack[0] = this.name + ": " + this.message;
           }
           var lineCount = 1;
-          for (var key in properties) {
-            if (!properties.hasOwnProperty(key)) {
+          for (var key in properties2) {
+            if (!properties2.hasOwnProperty(key)) {
               continue;
             }
-            var modifier = properties[key];
+            var modifier = properties2[key];
             if ("line" in modifier) {
               var line = modifier.line(this[key]);
               if (line) {
@@ -4610,15 +4618,15 @@ var require_route = __commonJS({
       };
     }
     function wrapConversion(toModel, graph) {
-      var path2 = [graph[toModel].parent, toModel];
+      var path3 = [graph[toModel].parent, toModel];
       var fn = conversions[graph[toModel].parent][toModel];
       var cur = graph[toModel].parent;
       while (graph[cur].parent) {
-        path2.unshift(graph[cur].parent);
+        path3.unshift(graph[cur].parent);
         fn = link(conversions[graph[cur].parent][cur], fn);
         cur = graph[cur].parent;
       }
-      fn.conversion = path2;
+      fn.conversion = path3;
       return fn;
     }
     module2.exports = function(fromModel) {
@@ -4855,7 +4863,7 @@ var require_has_flag = __commonJS({
 var require_supports_color = __commonJS({
   "node_modules/@babel/highlight/node_modules/supports-color/index.js"(exports, module2) {
     "use strict";
-    var os = require("os");
+    var os2 = require("os");
     var hasFlag = require_has_flag();
     var env = process.env;
     var forceColor;
@@ -4893,7 +4901,7 @@ var require_supports_color = __commonJS({
       }
       const min = forceColor ? 1 : 0;
       if (process.platform === "win32") {
-        const osRelease = os.release().split(".");
+        const osRelease = os2.release().split(".");
         if (Number(process.versions.node.split(".")[0]) >= 8 && Number(osRelease[0]) >= 10 && Number(osRelease[2]) >= 10586) {
           return Number(osRelease[2]) >= 14931 ? 3 : 2;
         }
@@ -7702,10 +7710,10 @@ ${indent}${str}`;
         return String(this.value);
       }
     };
-    function collectionFromPath(schema, path2, value) {
+    function collectionFromPath(schema, path3, value) {
       let v = value;
-      for (let i = path2.length - 1; i >= 0; --i) {
-        const k = path2[i];
+      for (let i = path3.length - 1; i >= 0; --i) {
+        const k = path3[i];
         if (Number.isInteger(k) && k >= 0) {
           const a = [];
           a[k] = v;
@@ -7723,18 +7731,18 @@ ${indent}${str}`;
       }
       return schema.createNode(v, false);
     }
-    var isEmptyPath = (path2) => path2 == null || typeof path2 === "object" && path2[Symbol.iterator]().next().done;
+    var isEmptyPath = (path3) => path3 == null || typeof path3 === "object" && path3[Symbol.iterator]().next().done;
     var Collection = class extends Node {
       constructor(schema) {
         super();
         PlainValue._defineProperty(this, "items", []);
         this.schema = schema;
       }
-      addIn(path2, value) {
-        if (isEmptyPath(path2))
+      addIn(path3, value) {
+        if (isEmptyPath(path3))
           this.add(value);
         else {
-          const [key, ...rest] = path2;
+          const [key, ...rest] = path3;
           const node = this.get(key, true);
           if (node instanceof Collection)
             node.addIn(rest, value);
@@ -9937,8 +9945,8 @@ ${pair.comment}` : item.comment;
     }
     function warnFileDeprecation(filename) {
       if (shouldWarn(true)) {
-        const path2 = filename.replace(/.*yaml[/\\]/i, "").replace(/\.js$/, "").replace(/\\/g, "/");
-        warn(`The endpoint 'yaml/${path2}' will be removed in a future release.`, "DeprecationWarning");
+        const path3 = filename.replace(/.*yaml[/\\]/i, "").replace(/\.js$/, "").replace(/\\/g, "/");
+        warn(`The endpoint 'yaml/${path3}' will be removed in a future release.`, "DeprecationWarning");
       }
     }
     var warned = {};
@@ -10115,7 +10123,7 @@ var require_Schema_88e323a7 = __commonJS({
       },
       stringify: resolveSeq.stringifyNumber
     };
-    var core3 = failsafe.concat([nullObj, boolObj, octObj, intObj, hexObj, nanObj, expObj, floatObj]);
+    var core4 = failsafe.concat([nullObj, boolObj, octObj, intObj, hexObj, nanObj, expObj, floatObj]);
     var intIdentify$1 = (value) => typeof value === "bigint" || Number.isInteger(value);
     var stringifyJSON = ({
       value
@@ -10285,7 +10293,7 @@ var require_Schema_88e323a7 = __commonJS({
       stringify: resolveSeq.stringifyNumber
     }], warnings.binary, warnings.omap, warnings.pairs, warnings.set, warnings.intTime, warnings.floatTime, warnings.timestamp);
     var schemas = {
-      core: core3,
+      core: core4,
       failsafe,
       json,
       yaml11
@@ -10876,23 +10884,23 @@ ${cbNode.commentBefore}` : cb;
         assertCollection(this.contents);
         return this.contents.add(value);
       }
-      addIn(path2, value) {
+      addIn(path3, value) {
         assertCollection(this.contents);
-        this.contents.addIn(path2, value);
+        this.contents.addIn(path3, value);
       }
       delete(key) {
         assertCollection(this.contents);
         return this.contents.delete(key);
       }
-      deleteIn(path2) {
-        if (resolveSeq.isEmptyPath(path2)) {
+      deleteIn(path3) {
+        if (resolveSeq.isEmptyPath(path3)) {
           if (this.contents == null)
             return false;
           this.contents = null;
           return true;
         }
         assertCollection(this.contents);
-        return this.contents.deleteIn(path2);
+        return this.contents.deleteIn(path3);
       }
       getDefaults() {
         return Document.defaults[this.version] || Document.defaults[this.options.version] || {};
@@ -10900,29 +10908,29 @@ ${cbNode.commentBefore}` : cb;
       get(key, keepScalar) {
         return this.contents instanceof resolveSeq.Collection ? this.contents.get(key, keepScalar) : void 0;
       }
-      getIn(path2, keepScalar) {
-        if (resolveSeq.isEmptyPath(path2))
+      getIn(path3, keepScalar) {
+        if (resolveSeq.isEmptyPath(path3))
           return !keepScalar && this.contents instanceof resolveSeq.Scalar ? this.contents.value : this.contents;
-        return this.contents instanceof resolveSeq.Collection ? this.contents.getIn(path2, keepScalar) : void 0;
+        return this.contents instanceof resolveSeq.Collection ? this.contents.getIn(path3, keepScalar) : void 0;
       }
       has(key) {
         return this.contents instanceof resolveSeq.Collection ? this.contents.has(key) : false;
       }
-      hasIn(path2) {
-        if (resolveSeq.isEmptyPath(path2))
+      hasIn(path3) {
+        if (resolveSeq.isEmptyPath(path3))
           return this.contents !== void 0;
-        return this.contents instanceof resolveSeq.Collection ? this.contents.hasIn(path2) : false;
+        return this.contents instanceof resolveSeq.Collection ? this.contents.hasIn(path3) : false;
       }
       set(key, value) {
         assertCollection(this.contents);
         this.contents.set(key, value);
       }
-      setIn(path2, value) {
-        if (resolveSeq.isEmptyPath(path2))
+      setIn(path3, value) {
+        if (resolveSeq.isEmptyPath(path3))
           this.contents = value;
         else {
           assertCollection(this.contents);
-          this.contents.setIn(path2, value);
+          this.contents.setIn(path3, value);
         }
       }
       setSchema(id, customTags) {
@@ -11248,11 +11256,11 @@ var require_getPropertyByPath = __commonJS({
       value: true
     });
     exports.getPropertyByPath = getPropertyByPath;
-    function getPropertyByPath(source, path2) {
-      if (typeof path2 === "string" && Object.prototype.hasOwnProperty.call(source, path2)) {
-        return source[path2];
+    function getPropertyByPath(source, path3) {
+      if (typeof path3 === "string" && Object.prototype.hasOwnProperty.call(source, path3)) {
+        return source[path3];
       }
-      const parsedPath = typeof path2 === "string" ? path2.split(".") : path2;
+      const parsedPath = typeof path3 === "string" ? path3.split(".") : path3;
       return parsedPath.reduce((previous, key) => {
         if (previous === void 0) {
           return previous;
@@ -11389,7 +11397,7 @@ var require_readFile = __commonJS({
       value: true
     });
     exports.readFile = readFile;
-    exports.readFileSync = readFileSync;
+    exports.readFileSync = readFileSync4;
     var _fs = _interopRequireDefault(require("fs"));
     function _interopRequireDefault(obj) {
       return obj && obj.__esModule ? obj : { default: obj };
@@ -11417,7 +11425,7 @@ var require_readFile = __commonJS({
         throw error2;
       }
     }
-    function readFileSync(filepath, options = {}) {
+    function readFileSync4(filepath, options = {}) {
       const throwNotFound = options.throwNotFound === true;
       try {
         const content = _fs.default.readFileSync(filepath, "utf8");
@@ -11467,13 +11475,13 @@ var require_path_type = __commonJS({
   "node_modules/path-type/index.js"(exports) {
     "use strict";
     var { promisify } = require("util");
-    var fs = require("fs");
+    var fs4 = require("fs");
     async function isType(fsStatType, statsMethodName, filePath) {
       if (typeof filePath !== "string") {
         throw new TypeError(`Expected a string, got ${typeof filePath}`);
       }
       try {
-        const stats = await promisify(fs[fsStatType])(filePath);
+        const stats = await promisify(fs4[fsStatType])(filePath);
         return stats[statsMethodName]();
       } catch (error2) {
         if (error2.code === "ENOENT") {
@@ -11487,7 +11495,7 @@ var require_path_type = __commonJS({
         throw new TypeError(`Expected a string, got ${typeof filePath}`);
       }
       try {
-        return fs[fsStatType](filePath)[statsMethodName]();
+        return fs4[fsStatType](filePath)[statsMethodName]();
       } catch (error2) {
         if (error2.code === "ENOENT") {
           return false;
@@ -12858,7 +12866,7 @@ var require_braces = __commonJS({
 var require_constants2 = __commonJS({
   "node_modules/picomatch/lib/constants.js"(exports, module2) {
     "use strict";
-    var path2 = require("path");
+    var path3 = require("path");
     var WIN_SLASH = "\\\\/";
     var WIN_NO_SLASH = `[^${WIN_SLASH}]`;
     var DOT_LITERAL = "\\.";
@@ -12980,7 +12988,7 @@ var require_constants2 = __commonJS({
       CHAR_UNDERSCORE: 95,
       CHAR_VERTICAL_LINE: 124,
       CHAR_ZERO_WIDTH_NOBREAK_SPACE: 65279,
-      SEP: path2.sep,
+      SEP: path3.sep,
       extglobChars(chars) {
         return {
           "!": { type: "negate", open: "(?:(?!(?:", close: `))${chars.STAR})` },
@@ -13001,7 +13009,7 @@ var require_constants2 = __commonJS({
 var require_utils3 = __commonJS({
   "node_modules/picomatch/lib/utils.js"(exports) {
     "use strict";
-    var path2 = require("path");
+    var path3 = require("path");
     var win32 = process.platform === "win32";
     var {
       REGEX_BACKSLASH,
@@ -13030,7 +13038,7 @@ var require_utils3 = __commonJS({
       if (options && typeof options.windows === "boolean") {
         return options.windows;
       }
-      return win32 === true || path2.sep === "\\";
+      return win32 === true || path3.sep === "\\";
     };
     exports.escapeLast = (input, char, lastIdx) => {
       const idx = input.lastIndexOf(char, lastIdx);
@@ -14163,7 +14171,7 @@ var require_parse2 = __commonJS({
 var require_picomatch = __commonJS({
   "node_modules/picomatch/lib/picomatch.js"(exports, module2) {
     "use strict";
-    var path2 = require("path");
+    var path3 = require("path");
     var scan = require_scan();
     var parse = require_parse2();
     var utils = require_utils3();
@@ -14249,7 +14257,7 @@ var require_picomatch = __commonJS({
     };
     picomatch.matchBase = (input, glob, options, posix = utils.isWindows(options)) => {
       const regex = glob instanceof RegExp ? glob : picomatch.makeRe(glob, options);
-      return regex.test(path2.basename(input));
+      return regex.test(path3.basename(input));
     };
     picomatch.isMatch = (str, patterns, options) => picomatch(patterns, options)(str);
     picomatch.parse = (pattern, options) => {
@@ -15606,8 +15614,8 @@ var require_windows = __commonJS({
   "node_modules/isexe/windows.js"(exports, module2) {
     module2.exports = isexe;
     isexe.sync = sync;
-    var fs = require("fs");
-    function checkPathExt(path2, options) {
+    var fs4 = require("fs");
+    function checkPathExt(path3, options) {
       var pathext = options.pathExt !== void 0 ? options.pathExt : process.env.PATHEXT;
       if (!pathext) {
         return true;
@@ -15618,25 +15626,25 @@ var require_windows = __commonJS({
       }
       for (var i = 0; i < pathext.length; i++) {
         var p = pathext[i].toLowerCase();
-        if (p && path2.substr(-p.length).toLowerCase() === p) {
+        if (p && path3.substr(-p.length).toLowerCase() === p) {
           return true;
         }
       }
       return false;
     }
-    function checkStat(stat, path2, options) {
+    function checkStat(stat, path3, options) {
       if (!stat.isSymbolicLink() && !stat.isFile()) {
         return false;
       }
-      return checkPathExt(path2, options);
+      return checkPathExt(path3, options);
     }
-    function isexe(path2, options, cb) {
-      fs.stat(path2, function(er, stat) {
-        cb(er, er ? false : checkStat(stat, path2, options));
+    function isexe(path3, options, cb) {
+      fs4.stat(path3, function(er, stat) {
+        cb(er, er ? false : checkStat(stat, path3, options));
       });
     }
-    function sync(path2, options) {
-      return checkStat(fs.statSync(path2), path2, options);
+    function sync(path3, options) {
+      return checkStat(fs4.statSync(path3), path3, options);
     }
   }
 });
@@ -15646,14 +15654,14 @@ var require_mode = __commonJS({
   "node_modules/isexe/mode.js"(exports, module2) {
     module2.exports = isexe;
     isexe.sync = sync;
-    var fs = require("fs");
-    function isexe(path2, options, cb) {
-      fs.stat(path2, function(er, stat) {
+    var fs4 = require("fs");
+    function isexe(path3, options, cb) {
+      fs4.stat(path3, function(er, stat) {
         cb(er, er ? false : checkStat(stat, options));
       });
     }
-    function sync(path2, options) {
-      return checkStat(fs.statSync(path2), options);
+    function sync(path3, options) {
+      return checkStat(fs4.statSync(path3), options);
     }
     function checkStat(stat, options) {
       return stat.isFile() && checkMode(stat, options);
@@ -15677,16 +15685,16 @@ var require_mode = __commonJS({
 // node_modules/isexe/index.js
 var require_isexe = __commonJS({
   "node_modules/isexe/index.js"(exports, module2) {
-    var fs = require("fs");
-    var core3;
+    var fs4 = require("fs");
+    var core4;
     if (process.platform === "win32" || global.TESTING_WINDOWS) {
-      core3 = require_windows();
+      core4 = require_windows();
     } else {
-      core3 = require_mode();
+      core4 = require_mode();
     }
     module2.exports = isexe;
     isexe.sync = sync;
-    function isexe(path2, options, cb) {
+    function isexe(path3, options, cb) {
       if (typeof options === "function") {
         cb = options;
         options = {};
@@ -15696,7 +15704,7 @@ var require_isexe = __commonJS({
           throw new TypeError("callback not provided");
         }
         return new Promise(function(resolve2, reject) {
-          isexe(path2, options || {}, function(er, is) {
+          isexe(path3, options || {}, function(er, is) {
             if (er) {
               reject(er);
             } else {
@@ -15705,7 +15713,7 @@ var require_isexe = __commonJS({
           });
         });
       }
-      core3(path2, options || {}, function(er, is) {
+      core4(path3, options || {}, function(er, is) {
         if (er) {
           if (er.code === "EACCES" || options && options.ignoreErrors) {
             er = null;
@@ -15715,9 +15723,9 @@ var require_isexe = __commonJS({
         cb(er, is);
       });
     }
-    function sync(path2, options) {
+    function sync(path3, options) {
       try {
-        return core3.sync(path2, options || {});
+        return core4.sync(path3, options || {});
       } catch (er) {
         if (options && options.ignoreErrors || er.code === "EACCES") {
           return false;
@@ -15733,7 +15741,7 @@ var require_isexe = __commonJS({
 var require_which = __commonJS({
   "node_modules/which/which.js"(exports, module2) {
     var isWindows = process.platform === "win32" || process.env.OSTYPE === "cygwin" || process.env.OSTYPE === "msys";
-    var path2 = require("path");
+    var path3 = require("path");
     var COLON = isWindows ? ";" : ":";
     var isexe = require_isexe();
     var getNotFoundError = (cmd) => Object.assign(new Error(`not found: ${cmd}`), { code: "ENOENT" });
@@ -15769,7 +15777,7 @@ var require_which = __commonJS({
           return opt.all && found.length ? resolve2(found) : reject(getNotFoundError(cmd));
         const ppRaw = pathEnv[i];
         const pathPart = /^".*"$/.test(ppRaw) ? ppRaw.slice(1, -1) : ppRaw;
-        const pCmd = path2.join(pathPart, cmd);
+        const pCmd = path3.join(pathPart, cmd);
         const p = !pathPart && /^\.[\\\/]/.test(cmd) ? cmd.slice(0, 2) + pCmd : pCmd;
         resolve2(subStep(p, i, 0));
       });
@@ -15796,7 +15804,7 @@ var require_which = __commonJS({
       for (let i = 0; i < pathEnv.length; i++) {
         const ppRaw = pathEnv[i];
         const pathPart = /^".*"$/.test(ppRaw) ? ppRaw.slice(1, -1) : ppRaw;
-        const pCmd = path2.join(pathPart, cmd);
+        const pCmd = path3.join(pathPart, cmd);
         const p = !pathPart && /^\.[\\\/]/.test(cmd) ? cmd.slice(0, 2) + pCmd : pCmd;
         for (let j = 0; j < pathExt.length; j++) {
           const cur = p + pathExt[j];
@@ -15844,7 +15852,7 @@ var require_path_key = __commonJS({
 var require_resolveCommand = __commonJS({
   "node_modules/cross-spawn/lib/util/resolveCommand.js"(exports, module2) {
     "use strict";
-    var path2 = require("path");
+    var path3 = require("path");
     var which = require_which();
     var getPathKey = require_path_key();
     function resolveCommandAttempt(parsed, withoutPathExt) {
@@ -15862,7 +15870,7 @@ var require_resolveCommand = __commonJS({
       try {
         resolved = which.sync(parsed.command, {
           path: env[getPathKey({ env })],
-          pathExt: withoutPathExt ? path2.delimiter : void 0
+          pathExt: withoutPathExt ? path3.delimiter : void 0
         });
       } catch (e) {
       } finally {
@@ -15871,7 +15879,7 @@ var require_resolveCommand = __commonJS({
         }
       }
       if (resolved) {
-        resolved = path2.resolve(hasCustomCwd ? parsed.options.cwd : "", resolved);
+        resolved = path3.resolve(hasCustomCwd ? parsed.options.cwd : "", resolved);
       }
       return resolved;
     }
@@ -15925,8 +15933,8 @@ var require_shebang_command = __commonJS({
       if (!match) {
         return null;
       }
-      const [path2, argument] = match[0].replace(/#! ?/, "").split(" ");
-      const binary = path2.split("/").pop();
+      const [path3, argument] = match[0].replace(/#! ?/, "").split(" ");
+      const binary = path3.split("/").pop();
       if (binary === "env") {
         return argument;
       }
@@ -15939,16 +15947,16 @@ var require_shebang_command = __commonJS({
 var require_readShebang = __commonJS({
   "node_modules/cross-spawn/lib/util/readShebang.js"(exports, module2) {
     "use strict";
-    var fs = require("fs");
+    var fs4 = require("fs");
     var shebangCommand = require_shebang_command();
     function readShebang(command) {
       const size = 150;
       const buffer = Buffer.alloc(size);
       let fd;
       try {
-        fd = fs.openSync(command, "r");
-        fs.readSync(fd, buffer, 0, size, 0);
-        fs.closeSync(fd);
+        fd = fs4.openSync(command, "r");
+        fs4.readSync(fd, buffer, 0, size, 0);
+        fs4.closeSync(fd);
       } catch (e) {
       }
       return shebangCommand(buffer.toString());
@@ -15961,7 +15969,7 @@ var require_readShebang = __commonJS({
 var require_parse3 = __commonJS({
   "node_modules/cross-spawn/lib/parse.js"(exports, module2) {
     "use strict";
-    var path2 = require("path");
+    var path3 = require("path");
     var resolveCommand = require_resolveCommand();
     var escape = require_escape();
     var readShebang = require_readShebang();
@@ -15986,7 +15994,7 @@ var require_parse3 = __commonJS({
       const needsShell = !isExecutableRegExp.test(commandFile);
       if (parsed.options.forceShell || needsShell) {
         const needsDoubleEscapeMetaChars = isCmdShimRegExp.test(commandFile);
-        parsed.command = path2.normalize(parsed.command);
+        parsed.command = path3.normalize(parsed.command);
         parsed.command = escape.command(parsed.command);
         parsed.args = parsed.args.map((arg) => escape.argument(arg, needsDoubleEscapeMetaChars));
         const shellCommand = [parsed.command].concat(parsed.args).join(" ");
@@ -16118,7 +16126,7 @@ var require_strip_final_newline = __commonJS({
 var require_npm_run_path = __commonJS({
   "node_modules/npm-run-path/index.js"(exports, module2) {
     "use strict";
-    var path2 = require("path");
+    var path3 = require("path");
     var pathKey = require_path_key();
     var npmRunPath = (options) => {
       options = {
@@ -16128,16 +16136,16 @@ var require_npm_run_path = __commonJS({
         ...options
       };
       let previous;
-      let cwdPath = path2.resolve(options.cwd);
+      let cwdPath = path3.resolve(options.cwd);
       const result = [];
       while (previous !== cwdPath) {
-        result.push(path2.join(cwdPath, "node_modules/.bin"));
+        result.push(path3.join(cwdPath, "node_modules/.bin"));
         previous = cwdPath;
-        cwdPath = path2.resolve(cwdPath, "..");
+        cwdPath = path3.resolve(cwdPath, "..");
       }
-      const execPathDir = path2.resolve(options.cwd, options.execPath, "..");
+      const execPathDir = path3.resolve(options.cwd, options.execPath, "..");
       result.push(execPathDir);
-      return result.concat(options.path).join(path2.delimiter);
+      return result.concat(options.path).join(path3.delimiter);
     };
     module2.exports = npmRunPath;
     module2.exports.default = npmRunPath;
@@ -16147,9 +16155,9 @@ var require_npm_run_path = __commonJS({
         ...options
       };
       const env = { ...options.env };
-      const path3 = pathKey({ env });
-      options.path = env[path3];
-      env[path3] = module2.exports(options);
+      const path4 = pathKey({ env });
+      options.path = env[path4];
+      env[path4] = module2.exports(options);
       return env;
     };
   }
@@ -16906,7 +16914,7 @@ var require_signal_exit = __commonJS({
 var require_kill = __commonJS({
   "node_modules/execa/lib/kill.js"(exports, module2) {
     "use strict";
-    var os = require("os");
+    var os2 = require("os");
     var onExit = require_signal_exit();
     var DEFAULT_FORCE_KILL_TIMEOUT = 1e3 * 5;
     var spawnedKill = (kill, signal = "SIGTERM", options = {}) => {
@@ -16930,7 +16938,7 @@ var require_kill = __commonJS({
       return isSigterm(signal) && forceKillAfterTimeout !== false && killResult;
     };
     var isSigterm = (signal) => {
-      return signal === os.constants.signals.SIGTERM || typeof signal === "string" && signal.toUpperCase() === "SIGTERM";
+      return signal === os2.constants.signals.SIGTERM || typeof signal === "string" && signal.toUpperCase() === "SIGTERM";
     };
     var getForceKillAfterTimeout = ({ forceKillAfterTimeout = true }) => {
       if (forceKillAfterTimeout === true) {
@@ -17312,7 +17320,7 @@ var require_command2 = __commonJS({
 var require_execa = __commonJS({
   "node_modules/execa/index.js"(exports, module2) {
     "use strict";
-    var path2 = require("path");
+    var path3 = require("path");
     var childProcess = require("child_process");
     var crossSpawn = require_cross_spawn();
     var stripFinalNewline = require_strip_final_newline();
@@ -17354,7 +17362,7 @@ var require_execa = __commonJS({
       };
       options.env = getEnv(options);
       options.stdio = normalizeStdio(options);
-      if (process.platform === "win32" && path2.basename(file, ".exe") === "cmd") {
+      if (process.platform === "win32" && path3.basename(file, ".exe") === "cmd") {
         args.unshift("/q");
       }
       return { file, args, options, parsed };
@@ -18350,12 +18358,12 @@ var require_dist_node = __commonJS({
       }
     };
     exports.PropertiesFile = PropertiesFile;
-    var of = function of2(...args) {
+    var of2 = function of3(...args) {
       let globalFile = new PropertiesFile();
       globalFile.of.apply(globalFile, args);
       return globalFile;
     };
-    exports.of = of;
+    exports.of = of2;
   }
 });
 
@@ -18661,9 +18669,9 @@ var require_utils5 = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getLastCommitMessage = exports.verifyConditions = exports.loadPlugins = exports.dryRunTask = exports.buildContext = void 0;
-    var fs = __importStar(require("fs"));
-    var path2 = __importStar(require("path"));
-    var exec = __importStar(require_exec());
+    var fs4 = __importStar(require("fs"));
+    var path3 = __importStar(require("path"));
+    var exec3 = __importStar(require_exec());
     var cosmiconfig_1 = require_dist2();
     var inputs_1 = require_inputs();
     var logger_1 = require_logger();
@@ -18728,10 +18736,10 @@ var require_utils5 = __commonJS({
           if (!pluginName.startsWith("./")) {
             pluginPath = `./node_modules/${pluginName}`;
           }
-          if (pluginName.startsWith("@octorelease/") && !fs.existsSync(pluginPath)) {
+          if (pluginName.startsWith("@octorelease/") && !fs4.existsSync(pluginPath)) {
             pluginPath = pluginName.replace("@octorelease", __dirname);
           }
-          pluginsLoaded[pluginName] = require(path2.resolve(pluginPath));
+          pluginsLoaded[pluginName] = require(path3.resolve(pluginPath));
         }
         return pluginsLoaded;
       });
@@ -18752,7 +18760,7 @@ var require_utils5 = __commonJS({
     exports.verifyConditions = verifyConditions;
     function buildVersionInfo(branch, tagPrefix) {
       return __awaiter(this, void 0, void 0, function* () {
-        const cmdOutput = yield exec.getExecOutput("git", ["describe", "--abbrev=0", `--match=${tagPrefix}*`], { ignoreReturnCode: true });
+        const cmdOutput = yield exec3.getExecOutput("git", ["describe", "--abbrev=0", `--match=${tagPrefix}*`], { ignoreReturnCode: true });
         const oldVersion = cmdOutput.exitCode === 0 && cmdOutput.stdout.trim().slice(tagPrefix.length) || "0.0.0";
         let prerelease = void 0;
         if (branch.prerelease) {
@@ -18765,7 +18773,7 @@ var require_utils5 = __commonJS({
     }
     function getLastCommitMessage() {
       return __awaiter(this, void 0, void 0, function* () {
-        const cmdOutput = yield exec.getExecOutput("git", ["log", "-1", "--pretty=format:%s"], { ignoreReturnCode: true });
+        const cmdOutput = yield exec3.getExecOutput("git", ["log", "-1", "--pretty=format:%s"], { ignoreReturnCode: true });
         return cmdOutput.exitCode === 0 && cmdOutput.stdout.trim() || void 0;
       });
     }
@@ -18777,15 +18785,15 @@ var require_utils5 = __commonJS({
           throw new Error(`Unsupported CI service detected: ${envCi.service}`);
         }
         if (envCi.branch == null) {
-          const cmdOutput = yield exec.getExecOutput("git", ["rev-parse", "--abbrev-ref", "HEAD"]);
+          const cmdOutput = yield exec3.getExecOutput("git", ["rev-parse", "--abbrev-ref", "HEAD"]);
           envCi.branch = cmdOutput.stdout.trim();
         }
         if (envCi.commit == null) {
-          const cmdOutput = yield exec.getExecOutput("git", ["rev-parse", "HEAD"]);
+          const cmdOutput = yield exec3.getExecOutput("git", ["rev-parse", "HEAD"]);
           envCi.commit = cmdOutput.stdout.trim();
         }
         if (envCi.slug == null) {
-          const cmdOutput = yield exec.getExecOutput("git", ["config", "--get", "remote.origin.url"]);
+          const cmdOutput = yield exec3.getExecOutput("git", ["config", "--get", "remote.origin.url"]);
           envCi.slug = cmdOutput.stdout.trim().replace(/\.git$/, "").split("/").slice(-2).join("/");
         }
         const [owner, repo] = envCi.slug.split("/");
@@ -18881,13 +18889,13 @@ These characters are not allowed in the artifact name due to limitations with ce
       core_1.info(`Artifact name is valid!`);
     }
     exports.checkArtifactName = checkArtifactName;
-    function checkArtifactFilePath(path2) {
-      if (!path2) {
-        throw new Error(`Artifact path: ${path2}, is incorrectly provided`);
+    function checkArtifactFilePath(path3) {
+      if (!path3) {
+        throw new Error(`Artifact path: ${path3}, is incorrectly provided`);
       }
       for (const [invalidCharacterKey, errorMessageForCharacter] of invalidArtifactFilePathCharacters) {
-        if (path2.includes(invalidCharacterKey)) {
-          throw new Error(`Artifact path is not valid: ${path2}. Contains the following character: ${errorMessageForCharacter}
+        if (path3.includes(invalidCharacterKey)) {
+          throw new Error(`Artifact path is not valid: ${path3}. Contains the following character: ${errorMessageForCharacter}
           
 Invalid characters include: ${Array.from(invalidArtifactFilePathCharacters.values()).toString()}
           
@@ -18934,25 +18942,25 @@ var require_upload_specification = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getUploadSpecification = void 0;
-    var fs = __importStar(require("fs"));
+    var fs4 = __importStar(require("fs"));
     var core_1 = require_core();
     var path_1 = require("path");
     var path_and_artifact_name_validation_1 = require_path_and_artifact_name_validation();
     function getUploadSpecification(artifactName, rootDirectory, artifactFiles) {
       const specifications = [];
-      if (!fs.existsSync(rootDirectory)) {
+      if (!fs4.existsSync(rootDirectory)) {
         throw new Error(`Provided rootDirectory ${rootDirectory} does not exist`);
       }
-      if (!fs.lstatSync(rootDirectory).isDirectory()) {
+      if (!fs4.lstatSync(rootDirectory).isDirectory()) {
         throw new Error(`Provided rootDirectory ${rootDirectory} is not a valid directory`);
       }
       rootDirectory = path_1.normalize(rootDirectory);
       rootDirectory = path_1.resolve(rootDirectory);
       for (let file of artifactFiles) {
-        if (!fs.existsSync(file)) {
+        if (!fs4.existsSync(file)) {
           throw new Error(`File ${file} does not exist`);
         }
-        if (!fs.lstatSync(file).isDirectory()) {
+        if (!fs4.lstatSync(file).isDirectory()) {
           file = path_1.normalize(file);
           file = path_1.resolve(file);
           if (!file.startsWith(rootDirectory)) {
@@ -18979,7 +18987,7 @@ var require_old = __commonJS({
   "node_modules/fs.realpath/old.js"(exports) {
     var pathModule = require("path");
     var isWindows = process.platform === "win32";
-    var fs = require("fs");
+    var fs4 = require("fs");
     var DEBUG = process.env.NODE_DEBUG && /fs/.test(process.env.NODE_DEBUG);
     function rethrow() {
       var callback;
@@ -19044,7 +19052,7 @@ var require_old = __commonJS({
         base = m[0];
         previous = "";
         if (isWindows && !knownHard[base]) {
-          fs.lstatSync(base);
+          fs4.lstatSync(base);
           knownHard[base] = true;
         }
       }
@@ -19062,7 +19070,7 @@ var require_old = __commonJS({
         if (cache && Object.prototype.hasOwnProperty.call(cache, base)) {
           resolvedLink = cache[base];
         } else {
-          var stat = fs.lstatSync(base);
+          var stat = fs4.lstatSync(base);
           if (!stat.isSymbolicLink()) {
             knownHard[base] = true;
             if (cache)
@@ -19077,8 +19085,8 @@ var require_old = __commonJS({
             }
           }
           if (linkTarget === null) {
-            fs.statSync(base);
-            linkTarget = fs.readlinkSync(base);
+            fs4.statSync(base);
+            linkTarget = fs4.readlinkSync(base);
           }
           resolvedLink = pathModule.resolve(previous, linkTarget);
           if (cache)
@@ -19115,7 +19123,7 @@ var require_old = __commonJS({
         base = m[0];
         previous = "";
         if (isWindows && !knownHard[base]) {
-          fs.lstat(base, function(err) {
+          fs4.lstat(base, function(err) {
             if (err)
               return cb(err);
             knownHard[base] = true;
@@ -19143,7 +19151,7 @@ var require_old = __commonJS({
         if (cache && Object.prototype.hasOwnProperty.call(cache, base)) {
           return gotResolvedLink(cache[base]);
         }
-        return fs.lstat(base, gotStat);
+        return fs4.lstat(base, gotStat);
       }
       function gotStat(err, stat) {
         if (err)
@@ -19160,10 +19168,10 @@ var require_old = __commonJS({
             return gotTarget(null, seenLinks[id], base);
           }
         }
-        fs.stat(base, function(err2) {
+        fs4.stat(base, function(err2) {
           if (err2)
             return cb(err2);
-          fs.readlink(base, function(err3, target) {
+          fs4.readlink(base, function(err3, target) {
             if (!isWindows)
               seenLinks[id] = target;
             gotTarget(err3, target);
@@ -19195,9 +19203,9 @@ var require_fs = __commonJS({
     realpath.realpathSync = realpathSync;
     realpath.monkeypatch = monkeypatch;
     realpath.unmonkeypatch = unmonkeypatch;
-    var fs = require("fs");
-    var origRealpath = fs.realpath;
-    var origRealpathSync = fs.realpathSync;
+    var fs4 = require("fs");
+    var origRealpath = fs4.realpath;
+    var origRealpathSync = fs4.realpathSync;
     var version = process.version;
     var ok = /^v[0-5]\./.test(version);
     var old = require_old();
@@ -19235,12 +19243,12 @@ var require_fs = __commonJS({
       }
     }
     function monkeypatch() {
-      fs.realpath = realpath;
-      fs.realpathSync = realpathSync;
+      fs4.realpath = realpath;
+      fs4.realpathSync = realpathSync;
     }
     function unmonkeypatch() {
-      fs.realpath = origRealpath;
-      fs.realpathSync = origRealpathSync;
+      fs4.realpath = origRealpath;
+      fs4.realpathSync = origRealpathSync;
     }
   }
 });
@@ -19475,7 +19483,7 @@ var require_minimatch = __commonJS({
   "node_modules/minimatch/minimatch.js"(exports, module2) {
     module2.exports = minimatch;
     minimatch.Minimatch = Minimatch;
-    var path2 = function() {
+    var path3 = function() {
       try {
         return require("path");
       } catch (e) {
@@ -19483,7 +19491,7 @@ var require_minimatch = __commonJS({
     }() || {
       sep: "/"
     };
-    minimatch.sep = path2.sep;
+    minimatch.sep = path3.sep;
     var GLOBSTAR = minimatch.GLOBSTAR = Minimatch.GLOBSTAR = {};
     var expand = require_brace_expansion();
     var plTypes = {
@@ -19574,8 +19582,8 @@ var require_minimatch = __commonJS({
       if (!options)
         options = {};
       pattern = pattern.trim();
-      if (!options.allowWindowsEscape && path2.sep !== "/") {
-        pattern = pattern.split(path2.sep).join("/");
+      if (!options.allowWindowsEscape && path3.sep !== "/") {
+        pattern = pattern.split(path3.sep).join("/");
       }
       this.options = options;
       this.set = [];
@@ -19952,8 +19960,8 @@ var require_minimatch = __commonJS({
       if (f === "/" && partial)
         return true;
       var options = this.options;
-      if (path2.sep !== "/") {
-        f = f.split(path2.sep).join("/");
+      if (path3.sep !== "/") {
+        f = f.split(path3.sep).join("/");
       }
       f = f.split(slashSplit);
       this.debug(this.pattern, "split", f);
@@ -20108,12 +20116,12 @@ var require_inherits = __commonJS({
 var require_path_is_absolute = __commonJS({
   "node_modules/path-is-absolute/index.js"(exports, module2) {
     "use strict";
-    function posix(path2) {
-      return path2.charAt(0) === "/";
+    function posix(path3) {
+      return path3.charAt(0) === "/";
     }
-    function win32(path2) {
+    function win32(path3) {
       var splitDeviceRe = /^([a-zA-Z]:|[\\\/]{2}[^\\\/]+[\\\/]+[^\\\/]+)?([\\\/])?([\s\S]*?)$/;
-      var result = splitDeviceRe.exec(path2);
+      var result = splitDeviceRe.exec(path3);
       var device = result[1] || "";
       var isUnc = Boolean(device && device.charAt(1) !== ":");
       return Boolean(result[2] || isUnc);
@@ -20137,8 +20145,8 @@ var require_common = __commonJS({
     function ownProp(obj, field) {
       return Object.prototype.hasOwnProperty.call(obj, field);
     }
-    var fs = require("fs");
-    var path2 = require("path");
+    var fs4 = require("fs");
+    var path3 = require("path");
     var minimatch = require_minimatch();
     var isAbsolute = require_path_is_absolute();
     var Minimatch = minimatch.Minimatch;
@@ -20192,7 +20200,7 @@ var require_common = __commonJS({
       self.stat = !!options.stat;
       self.noprocess = !!options.noprocess;
       self.absolute = !!options.absolute;
-      self.fs = options.fs || fs;
+      self.fs = options.fs || fs4;
       self.maxLength = options.maxLength || Infinity;
       self.cache = options.cache || /* @__PURE__ */ Object.create(null);
       self.statCache = options.statCache || /* @__PURE__ */ Object.create(null);
@@ -20203,11 +20211,11 @@ var require_common = __commonJS({
       if (!ownProp(options, "cwd"))
         self.cwd = cwd;
       else {
-        self.cwd = path2.resolve(options.cwd);
+        self.cwd = path3.resolve(options.cwd);
         self.changedCwd = self.cwd !== cwd;
       }
-      self.root = options.root || path2.resolve(self.cwd, "/");
-      self.root = path2.resolve(self.root);
+      self.root = options.root || path3.resolve(self.cwd, "/");
+      self.root = path3.resolve(self.root);
       if (process.platform === "win32")
         self.root = self.root.replace(/\\/g, "/");
       self.cwdAbs = isAbsolute(self.cwd) ? self.cwd : makeAbs(self, self.cwd);
@@ -20288,30 +20296,30 @@ var require_common = __commonJS({
     function makeAbs(self, f) {
       var abs = f;
       if (f.charAt(0) === "/") {
-        abs = path2.join(self.root, f);
+        abs = path3.join(self.root, f);
       } else if (isAbsolute(f) || f === "") {
         abs = f;
       } else if (self.changedCwd) {
-        abs = path2.resolve(self.cwd, f);
+        abs = path3.resolve(self.cwd, f);
       } else {
-        abs = path2.resolve(f);
+        abs = path3.resolve(f);
       }
       if (process.platform === "win32")
         abs = abs.replace(/\\/g, "/");
       return abs;
     }
-    function isIgnored(self, path3) {
+    function isIgnored(self, path4) {
       if (!self.ignore.length)
         return false;
       return self.ignore.some(function(item) {
-        return item.matcher.match(path3) || !!(item.gmatcher && item.gmatcher.match(path3));
+        return item.matcher.match(path4) || !!(item.gmatcher && item.gmatcher.match(path4));
       });
     }
-    function childrenIgnored(self, path3) {
+    function childrenIgnored(self, path4) {
       if (!self.ignore.length)
         return false;
       return self.ignore.some(function(item) {
-        return !!(item.gmatcher && item.gmatcher.match(path3));
+        return !!(item.gmatcher && item.gmatcher.match(path4));
       });
     }
   }
@@ -20327,7 +20335,7 @@ var require_sync = __commonJS({
     var Minimatch = minimatch.Minimatch;
     var Glob = require_glob().Glob;
     var util = require("util");
-    var path2 = require("path");
+    var path3 = require("path");
     var assert = require("assert");
     var isAbsolute = require_path_is_absolute();
     var common = require_common();
@@ -20453,7 +20461,7 @@ var require_sync = __commonJS({
               e = prefix + e;
           }
           if (e.charAt(0) === "/" && !this.nomount) {
-            e = path2.join(this.root, e);
+            e = path3.join(this.root, e);
           }
           this._emitMatch(index, e);
         }
@@ -20602,9 +20610,9 @@ var require_sync = __commonJS({
       if (prefix && isAbsolute(prefix) && !this.nomount) {
         var trail = /[\/\\]$/.test(prefix);
         if (prefix.charAt(0) === "/") {
-          prefix = path2.join(this.root, prefix);
+          prefix = path3.join(this.root, prefix);
         } else {
-          prefix = path2.resolve(this.root, prefix);
+          prefix = path3.resolve(this.root, prefix);
           if (trail)
             prefix += "/";
         }
@@ -20799,7 +20807,7 @@ var require_glob = __commonJS({
     var Minimatch = minimatch.Minimatch;
     var inherits = require_inherits();
     var EE = require("events").EventEmitter;
-    var path2 = require("path");
+    var path3 = require("path");
     var assert = require("assert");
     var isAbsolute = require_path_is_absolute();
     var globSync = require_sync();
@@ -21080,7 +21088,7 @@ var require_glob = __commonJS({
               e = prefix + e;
           }
           if (e.charAt(0) === "/" && !this.nomount) {
-            e = path2.join(this.root, e);
+            e = path3.join(this.root, e);
           }
           this._emitMatch(index, e);
         }
@@ -21267,9 +21275,9 @@ var require_glob = __commonJS({
       if (prefix && isAbsolute(prefix) && !this.nomount) {
         var trail = /[\/\\]$/.test(prefix);
         if (prefix.charAt(0) === "/") {
-          prefix = path2.join(this.root, prefix);
+          prefix = path3.join(this.root, prefix);
         } else {
-          prefix = path2.resolve(this.root, prefix);
+          prefix = path3.resolve(this.root, prefix);
           if (trail)
             prefix += "/";
         }
@@ -21347,8 +21355,8 @@ var require_glob = __commonJS({
 var require_rimraf = __commonJS({
   "node_modules/rimraf/rimraf.js"(exports, module2) {
     var assert = require("assert");
-    var path2 = require("path");
-    var fs = require("fs");
+    var path3 = require("path");
+    var fs4 = require("fs");
     var glob = void 0;
     try {
       glob = require_glob();
@@ -21370,9 +21378,9 @@ var require_rimraf = __commonJS({
         "readdir"
       ];
       methods.forEach((m) => {
-        options[m] = options[m] || fs[m];
+        options[m] = options[m] || fs4[m];
         m = m + "Sync";
-        options[m] = options[m] || fs[m];
+        options[m] = options[m] || fs4[m];
       });
       options.maxBusyTries = options.maxBusyTries || 3;
       options.emfileWait = options.emfileWait || 1e3;
@@ -21529,7 +21537,7 @@ var require_rimraf = __commonJS({
           return options.rmdir(p, cb);
         let errState;
         files.forEach((f) => {
-          rimraf(path2.join(p, f), options, (er2) => {
+          rimraf(path3.join(p, f), options, (er2) => {
             if (errState)
               return;
             if (er2)
@@ -21604,7 +21612,7 @@ var require_rimraf = __commonJS({
     var rmkidsSync = (p, options) => {
       assert(p);
       assert(options);
-      options.readdirSync(p).forEach((f) => rimrafSync(path2.join(p, f), options));
+      options.readdirSync(p).forEach((f) => rimrafSync(path3.join(p, f), options));
       const retries = isWindows ? 100 : 1;
       let i = 0;
       do {
@@ -21627,24 +21635,24 @@ var require_rimraf = __commonJS({
 // node_modules/tmp/lib/tmp.js
 var require_tmp = __commonJS({
   "node_modules/tmp/lib/tmp.js"(exports, module2) {
-    var fs = require("fs");
-    var os = require("os");
-    var path2 = require("path");
+    var fs4 = require("fs");
+    var os2 = require("os");
+    var path3 = require("path");
     var crypto = require("crypto");
-    var _c = { fs: fs.constants, os: os.constants };
+    var _c = { fs: fs4.constants, os: os2.constants };
     var rimraf = require_rimraf();
     var RANDOM_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     var TEMPLATE_PATTERN = /XXXXXX/;
     var DEFAULT_TRIES = 3;
     var CREATE_FLAGS = (_c.O_CREAT || _c.fs.O_CREAT) | (_c.O_EXCL || _c.fs.O_EXCL) | (_c.O_RDWR || _c.fs.O_RDWR);
-    var IS_WIN32 = os.platform() === "win32";
+    var IS_WIN32 = os2.platform() === "win32";
     var EBADF = _c.EBADF || _c.os.errno.EBADF;
     var ENOENT = _c.ENOENT || _c.os.errno.ENOENT;
     var DIR_MODE = 448;
     var FILE_MODE = 384;
     var EXIT = "exit";
     var _removeObjects = [];
-    var FN_RMDIR_SYNC = fs.rmdirSync.bind(fs);
+    var FN_RMDIR_SYNC = fs4.rmdirSync.bind(fs4);
     var FN_RIMRAF_SYNC = rimraf.sync;
     var _gracefulCleanup = false;
     function tmpName(options, callback) {
@@ -21658,7 +21666,7 @@ var require_tmp = __commonJS({
       (function _getUniqueName() {
         try {
           const name = _generateTmpName(opts);
-          fs.stat(name, function(err) {
+          fs4.stat(name, function(err) {
             if (!err) {
               if (tries-- > 0)
                 return _getUniqueName();
@@ -21678,7 +21686,7 @@ var require_tmp = __commonJS({
       do {
         const name = _generateTmpName(opts);
         try {
-          fs.statSync(name);
+          fs4.statSync(name);
         } catch (e) {
           return name;
         }
@@ -21690,11 +21698,11 @@ var require_tmp = __commonJS({
       tmpName(opts, function _tmpNameCreated(err, name) {
         if (err)
           return cb(err);
-        fs.open(name, CREATE_FLAGS, opts.mode || FILE_MODE, function _fileCreated(err2, fd) {
+        fs4.open(name, CREATE_FLAGS, opts.mode || FILE_MODE, function _fileCreated(err2, fd) {
           if (err2)
             return cb(err2);
           if (opts.discardDescriptor) {
-            return fs.close(fd, function _discardCallback(possibleErr) {
+            return fs4.close(fd, function _discardCallback(possibleErr) {
               return cb(possibleErr, name, void 0, _prepareTmpFileRemoveCallback(name, -1, opts, false));
             });
           } else {
@@ -21708,9 +21716,9 @@ var require_tmp = __commonJS({
       const args = _parseArguments(options), opts = args[0];
       const discardOrDetachDescriptor = opts.discardDescriptor || opts.detachDescriptor;
       const name = tmpNameSync(opts);
-      var fd = fs.openSync(name, CREATE_FLAGS, opts.mode || FILE_MODE);
+      var fd = fs4.openSync(name, CREATE_FLAGS, opts.mode || FILE_MODE);
       if (opts.discardDescriptor) {
-        fs.closeSync(fd);
+        fs4.closeSync(fd);
         fd = void 0;
       }
       return {
@@ -21724,7 +21732,7 @@ var require_tmp = __commonJS({
       tmpName(opts, function _tmpNameCreated(err, name) {
         if (err)
           return cb(err);
-        fs.mkdir(name, opts.mode || DIR_MODE, function _dirCreated(err2) {
+        fs4.mkdir(name, opts.mode || DIR_MODE, function _dirCreated(err2) {
           if (err2)
             return cb(err2);
           cb(null, name, _prepareTmpDirRemoveCallback(name, opts, false));
@@ -21734,7 +21742,7 @@ var require_tmp = __commonJS({
     function dirSync(options) {
       const args = _parseArguments(options), opts = args[0];
       const name = tmpNameSync(opts);
-      fs.mkdirSync(name, opts.mode || DIR_MODE);
+      fs4.mkdirSync(name, opts.mode || DIR_MODE);
       return {
         name,
         removeCallback: _prepareTmpDirRemoveCallback(name, opts, true)
@@ -21748,23 +21756,23 @@ var require_tmp = __commonJS({
         next();
       };
       if (0 <= fdPath[0])
-        fs.close(fdPath[0], function() {
-          fs.unlink(fdPath[1], _handler);
+        fs4.close(fdPath[0], function() {
+          fs4.unlink(fdPath[1], _handler);
         });
       else
-        fs.unlink(fdPath[1], _handler);
+        fs4.unlink(fdPath[1], _handler);
     }
     function _removeFileSync(fdPath) {
       let rethrownException = null;
       try {
         if (0 <= fdPath[0])
-          fs.closeSync(fdPath[0]);
+          fs4.closeSync(fdPath[0]);
       } catch (e) {
         if (!_isEBADF(e) && !_isENOENT(e))
           throw e;
       } finally {
         try {
-          fs.unlinkSync(fdPath[1]);
+          fs4.unlinkSync(fdPath[1]);
         } catch (e) {
           if (!_isENOENT(e))
             rethrownException = e;
@@ -21782,7 +21790,7 @@ var require_tmp = __commonJS({
       return sync ? removeCallbackSync : removeCallback;
     }
     function _prepareTmpDirRemoveCallback(name, opts, sync) {
-      const removeFunction = opts.unsafeCleanup ? rimraf : fs.rmdir.bind(fs);
+      const removeFunction = opts.unsafeCleanup ? rimraf : fs4.rmdir.bind(fs4);
       const removeFunctionSync = opts.unsafeCleanup ? FN_RIMRAF_SYNC : FN_RMDIR_SYNC;
       const removeCallbackSync = _prepareRemoveCallback(removeFunctionSync, name, sync);
       const removeCallback = _prepareRemoveCallback(removeFunction, name, sync, removeCallbackSync);
@@ -21852,9 +21860,9 @@ var require_tmp = __commonJS({
     function _generateTmpName(opts) {
       const tmpDir = opts.tmpdir;
       if (!_isUndefined(opts.name))
-        return path2.join(tmpDir, opts.dir, opts.name);
+        return path3.join(tmpDir, opts.dir, opts.name);
       if (!_isUndefined(opts.template))
-        return path2.join(tmpDir, opts.dir, opts.template).replace(TEMPLATE_PATTERN, _randomChars(6));
+        return path3.join(tmpDir, opts.dir, opts.template).replace(TEMPLATE_PATTERN, _randomChars(6));
       const name = [
         opts.prefix ? opts.prefix : "tmp",
         "-",
@@ -21863,7 +21871,7 @@ var require_tmp = __commonJS({
         _randomChars(12),
         opts.postfix ? "-" + opts.postfix : ""
       ].join("");
-      return path2.join(tmpDir, opts.dir, name);
+      return path3.join(tmpDir, opts.dir, name);
     }
     function _assertAndSanitizeOptions(options) {
       options.tmpdir = _getTmpDir(options);
@@ -21884,9 +21892,9 @@ var require_tmp = __commonJS({
       options.detachDescriptor = !!options.detachDescriptor;
       options.discardDescriptor = !!options.discardDescriptor;
       options.unsafeCleanup = !!options.unsafeCleanup;
-      options.dir = _isUndefined(options.dir) ? "" : path2.relative(tmpDir, _resolvePath(options.dir, tmpDir));
-      options.template = _isUndefined(options.template) ? void 0 : path2.relative(tmpDir, _resolvePath(options.template, tmpDir));
-      options.template = _isBlank(options.template) ? void 0 : path2.relative(options.dir, options.template);
+      options.dir = _isUndefined(options.dir) ? "" : path3.relative(tmpDir, _resolvePath(options.dir, tmpDir));
+      options.template = _isUndefined(options.template) ? void 0 : path3.relative(tmpDir, _resolvePath(options.template, tmpDir));
+      options.template = _isBlank(options.template) ? void 0 : path3.relative(options.dir, options.template);
       options.name = _isUndefined(options.name) ? void 0 : _sanitizeName(options.name);
       options.prefix = _isUndefined(options.prefix) ? "" : options.prefix;
       options.postfix = _isUndefined(options.postfix) ? "" : options.postfix;
@@ -21894,9 +21902,9 @@ var require_tmp = __commonJS({
     function _resolvePath(name, tmpDir) {
       const sanitizedName = _sanitizeName(name);
       if (sanitizedName.startsWith(tmpDir)) {
-        return path2.resolve(sanitizedName);
+        return path3.resolve(sanitizedName);
       } else {
-        return path2.resolve(path2.join(tmpDir, sanitizedName));
+        return path3.resolve(path3.join(tmpDir, sanitizedName));
       }
     }
     function _sanitizeName(name) {
@@ -21907,13 +21915,13 @@ var require_tmp = __commonJS({
     }
     function _assertIsRelative(name, option, tmpDir) {
       if (option === "name") {
-        if (path2.isAbsolute(name))
+        if (path3.isAbsolute(name))
           throw new Error(`${option} option must not contain an absolute path, found "${name}".`);
-        let basename = path2.basename(name);
-        if (basename === ".." || basename === "." || basename !== name)
+        let basename2 = path3.basename(name);
+        if (basename2 === ".." || basename2 === "." || basename2 !== name)
           throw new Error(`${option} option must not contain a path, found "${name}".`);
       } else {
-        if (path2.isAbsolute(name) && !name.startsWith(tmpDir)) {
+        if (path3.isAbsolute(name) && !name.startsWith(tmpDir)) {
           throw new Error(`${option} option must be relative to "${tmpDir}", found "${name}".`);
         }
         let resolvedPath = _resolvePath(name, tmpDir);
@@ -21934,7 +21942,7 @@ var require_tmp = __commonJS({
       _gracefulCleanup = true;
     }
     function _getTmpDir(options) {
-      return path2.resolve(_sanitizeName(options && options.tmpdir || os.tmpdir()));
+      return path3.resolve(_sanitizeName(options && options.tmpdir || os2.tmpdir()));
     }
     process.addListener(EXIT, _garbageCollector);
     Object.defineProperty(module2.exports, "tmpdir", {
@@ -21961,23 +21969,23 @@ var require_tmp_promise = __commonJS({
     var { promisify } = require("util");
     var tmp = require_tmp();
     module2.exports.fileSync = tmp.fileSync;
-    var fileWithOptions = promisify((options, cb) => tmp.file(options, (err, path2, fd, cleanup) => err ? cb(err) : cb(void 0, { path: path2, fd, cleanup: promisify(cleanup) })));
+    var fileWithOptions = promisify((options, cb) => tmp.file(options, (err, path3, fd, cleanup) => err ? cb(err) : cb(void 0, { path: path3, fd, cleanup: promisify(cleanup) })));
     module2.exports.file = async (options) => fileWithOptions(options);
     module2.exports.withFile = async function withFile(fn, options) {
-      const { path: path2, fd, cleanup } = await module2.exports.file(options);
+      const { path: path3, fd, cleanup } = await module2.exports.file(options);
       try {
-        return await fn({ path: path2, fd });
+        return await fn({ path: path3, fd });
       } finally {
         await cleanup();
       }
     };
     module2.exports.dirSync = tmp.dirSync;
-    var dirWithOptions = promisify((options, cb) => tmp.dir(options, (err, path2, cleanup) => err ? cb(err) : cb(void 0, { path: path2, cleanup: promisify(cleanup) })));
+    var dirWithOptions = promisify((options, cb) => tmp.dir(options, (err, path3, cleanup) => err ? cb(err) : cb(void 0, { path: path3, cleanup: promisify(cleanup) })));
     module2.exports.dir = async (options) => dirWithOptions(options);
     module2.exports.withDir = async function withDir(fn, options) {
-      const { path: path2, cleanup } = await module2.exports.dir(options);
+      const { path: path3, cleanup } = await module2.exports.dir(options);
       try {
-        return await fn({ path: path2 });
+        return await fn({ path: path3 });
       } finally {
         await cleanup();
       }
@@ -22771,10 +22779,10 @@ var require_upload_gzip = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createGZipFileInBuffer = exports.createGZipFileOnDisk = void 0;
-    var fs = __importStar(require("fs"));
+    var fs4 = __importStar(require("fs"));
     var zlib = __importStar(require("zlib"));
     var util_1 = require("util");
-    var stat = util_1.promisify(fs.stat);
+    var stat = util_1.promisify(fs4.stat);
     var gzipExemptFileExtensions = [
       ".gzip",
       ".zip",
@@ -22791,9 +22799,9 @@ var require_upload_gzip = __commonJS({
           }
         }
         return new Promise((resolve2, reject) => {
-          const inputStream = fs.createReadStream(originalFilePath);
+          const inputStream = fs4.createReadStream(originalFilePath);
           const gzip = zlib.createGzip();
-          const outputStream = fs.createWriteStream(tempFilePath);
+          const outputStream = fs4.createWriteStream(tempFilePath);
           inputStream.pipe(gzip).pipe(outputStream);
           outputStream.on("finish", () => __awaiter(this, void 0, void 0, function* () {
             const size = (yield stat(tempFilePath)).size;
@@ -22811,7 +22819,7 @@ var require_upload_gzip = __commonJS({
       return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve2) => __awaiter(this, void 0, void 0, function* () {
           var e_1, _a;
-          const inputStream = fs.createReadStream(originalFilePath);
+          const inputStream = fs4.createReadStream(originalFilePath);
           const gzip = zlib.createGzip();
           inputStream.pipe(gzip);
           const chunks = [];
@@ -22901,7 +22909,7 @@ var require_requestUtils = __commonJS({
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.retryHttpClientRequest = exports.retry = void 0;
     var utils_1 = require_utils6();
-    var core3 = __importStar(require_core());
+    var core4 = __importStar(require_core());
     var config_variables_1 = require_config_variables();
     function retry(name, operation, customErrorMessages, maxAttempts) {
       return __awaiter(this, void 0, void 0, function* () {
@@ -22928,13 +22936,13 @@ var require_requestUtils = __commonJS({
             errorMessage = error2.message;
           }
           if (!isRetryable) {
-            core3.info(`${name} - Error is not retryable`);
+            core4.info(`${name} - Error is not retryable`);
             if (response) {
               utils_1.displayHttpDiagnostics(response);
             }
             break;
           }
-          core3.info(`${name} - Attempt ${attempt} of ${maxAttempts} failed with error: ${errorMessage}`);
+          core4.info(`${name} - Attempt ${attempt} of ${maxAttempts} failed with error: ${errorMessage}`);
           yield utils_1.sleep(utils_1.getExponentialRetryTimeInMilliseconds(attempt));
           attempt++;
         }
@@ -23018,8 +23026,8 @@ var require_upload_http_client = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.UploadHttpClient = void 0;
-    var fs = __importStar(require("fs"));
-    var core3 = __importStar(require_core());
+    var fs4 = __importStar(require("fs"));
+    var core4 = __importStar(require_core());
     var tmp = __importStar(require_tmp_promise());
     var stream = __importStar(require("stream"));
     var utils_1 = require_utils6();
@@ -23032,7 +23040,7 @@ var require_upload_http_client = __commonJS({
     var http_manager_1 = require_http_manager();
     var upload_gzip_1 = require_upload_gzip();
     var requestUtils_1 = require_requestUtils();
-    var stat = util_1.promisify(fs.stat);
+    var stat = util_1.promisify(fs4.stat);
     var UploadHttpClient = class {
       constructor() {
         this.uploadHttpManager = new http_manager_1.HttpManager(config_variables_1.getUploadFileConcurrency(), "@actions/artifact-upload");
@@ -23073,7 +23081,7 @@ var require_upload_http_client = __commonJS({
         return __awaiter(this, void 0, void 0, function* () {
           const FILE_CONCURRENCY = config_variables_1.getUploadFileConcurrency();
           const MAX_CHUNK_SIZE = config_variables_1.getUploadChunkSize();
-          core3.debug(`File Concurrency: ${FILE_CONCURRENCY}, and Chunk Size: ${MAX_CHUNK_SIZE}`);
+          core4.debug(`File Concurrency: ${FILE_CONCURRENCY}, and Chunk Size: ${MAX_CHUNK_SIZE}`);
           const parameters = [];
           let continueOnError = true;
           if (options) {
@@ -23110,15 +23118,15 @@ var require_upload_http_client = __commonJS({
               }
               const startTime = perf_hooks_1.performance.now();
               const uploadFileResult = yield this.uploadFileAsync(index, currentFileParameters);
-              if (core3.isDebug()) {
-                core3.debug(`File: ${++completedFiles}/${filesToUpload.length}. ${currentFileParameters.file} took ${(perf_hooks_1.performance.now() - startTime).toFixed(3)} milliseconds to finish upload`);
+              if (core4.isDebug()) {
+                core4.debug(`File: ${++completedFiles}/${filesToUpload.length}. ${currentFileParameters.file} took ${(perf_hooks_1.performance.now() - startTime).toFixed(3)} milliseconds to finish upload`);
               }
               uploadFileSize += uploadFileResult.successfulUploadSize;
               totalFileSize += uploadFileResult.totalSize;
               if (uploadFileResult.isSuccess === false) {
                 failedItemsToReport.push(currentFileParameters.file);
                 if (!continueOnError) {
-                  core3.error(`aborting artifact upload`);
+                  core4.error(`aborting artifact upload`);
                   abortPendingFileUploads = true;
                 }
               }
@@ -23127,7 +23135,7 @@ var require_upload_http_client = __commonJS({
           })));
           this.statusReporter.stop();
           this.uploadHttpManager.disposeAndReplaceAllClients();
-          core3.info(`Total size of all the files uploaded is ${uploadFileSize} bytes`);
+          core4.info(`Total size of all the files uploaded is ${uploadFileSize} bytes`);
           return {
             uploadSize: uploadFileSize,
             totalSize: totalFileSize,
@@ -23146,16 +23154,16 @@ var require_upload_http_client = __commonJS({
           let uploadFileSize = 0;
           let isGzip = true;
           if (!isFIFO && totalFileSize < 65536) {
-            core3.debug(`${parameters.file} is less than 64k in size. Creating a gzip file in-memory to potentially reduce the upload size`);
+            core4.debug(`${parameters.file} is less than 64k in size. Creating a gzip file in-memory to potentially reduce the upload size`);
             const buffer = yield upload_gzip_1.createGZipFileInBuffer(parameters.file);
             let openUploadStream;
             if (totalFileSize < buffer.byteLength) {
-              core3.debug(`The gzip file created for ${parameters.file} did not help with reducing the size of the file. The original file will be uploaded as-is`);
-              openUploadStream = () => fs.createReadStream(parameters.file);
+              core4.debug(`The gzip file created for ${parameters.file} did not help with reducing the size of the file. The original file will be uploaded as-is`);
+              openUploadStream = () => fs4.createReadStream(parameters.file);
               isGzip = false;
               uploadFileSize = totalFileSize;
             } else {
-              core3.debug(`A gzip file created for ${parameters.file} helped with reducing the size of the original file. The file will be uploaded using gzip.`);
+              core4.debug(`A gzip file created for ${parameters.file} helped with reducing the size of the original file. The file will be uploaded using gzip.`);
               openUploadStream = () => {
                 const passThrough = new stream.PassThrough();
                 passThrough.end(buffer);
@@ -23167,7 +23175,7 @@ var require_upload_http_client = __commonJS({
             if (!result) {
               isUploadSuccessful = false;
               failedChunkSizes += uploadFileSize;
-              core3.warning(`Aborting upload for ${parameters.file} due to failure`);
+              core4.warning(`Aborting upload for ${parameters.file} due to failure`);
             }
             return {
               isSuccess: isUploadSuccessful,
@@ -23176,16 +23184,16 @@ var require_upload_http_client = __commonJS({
             };
           } else {
             const tempFile = yield tmp.file();
-            core3.debug(`${parameters.file} is greater than 64k in size. Creating a gzip file on-disk ${tempFile.path} to potentially reduce the upload size`);
+            core4.debug(`${parameters.file} is greater than 64k in size. Creating a gzip file on-disk ${tempFile.path} to potentially reduce the upload size`);
             uploadFileSize = yield upload_gzip_1.createGZipFileOnDisk(parameters.file, tempFile.path);
             let uploadFilePath = tempFile.path;
             if (!isFIFO && totalFileSize < uploadFileSize) {
-              core3.debug(`The gzip file created for ${parameters.file} did not help with reducing the size of the file. The original file will be uploaded as-is`);
+              core4.debug(`The gzip file created for ${parameters.file} did not help with reducing the size of the file. The original file will be uploaded as-is`);
               uploadFileSize = totalFileSize;
               uploadFilePath = parameters.file;
               isGzip = false;
             } else {
-              core3.debug(`The gzip file created for ${parameters.file} is smaller than the original file. The file will be uploaded using gzip.`);
+              core4.debug(`The gzip file created for ${parameters.file} is smaller than the original file. The file will be uploaded using gzip.`);
             }
             let abortFileUpload = false;
             while (offset < uploadFileSize) {
@@ -23197,7 +23205,7 @@ var require_upload_http_client = __commonJS({
                 failedChunkSizes += chunkSize;
                 continue;
               }
-              const result = yield this.uploadChunk(httpClientIndex, parameters.resourceUrl, () => fs.createReadStream(uploadFilePath, {
+              const result = yield this.uploadChunk(httpClientIndex, parameters.resourceUrl, () => fs4.createReadStream(uploadFilePath, {
                 start: startChunkIndex,
                 end: endChunkIndex,
                 autoClose: false
@@ -23205,7 +23213,7 @@ var require_upload_http_client = __commonJS({
               if (!result) {
                 isUploadSuccessful = false;
                 failedChunkSizes += chunkSize;
-                core3.warning(`Aborting upload for ${parameters.file} due to failure`);
+                core4.warning(`Aborting upload for ${parameters.file} due to failure`);
                 abortFileUpload = true;
               } else {
                 if (uploadFileSize > 8388608) {
@@ -23213,7 +23221,7 @@ var require_upload_http_client = __commonJS({
                 }
               }
             }
-            core3.debug(`deleting temporary gzip file ${tempFile.path}`);
+            core4.debug(`deleting temporary gzip file ${tempFile.path}`);
             yield tempFile.cleanup();
             return {
               isSuccess: isUploadSuccessful,
@@ -23239,7 +23247,7 @@ var require_upload_http_client = __commonJS({
               if (response) {
                 utils_1.displayHttpDiagnostics(response);
               }
-              core3.info(`Retry limit has been reached for chunk at offset ${start} to ${resourceUrl}`);
+              core4.info(`Retry limit has been reached for chunk at offset ${start} to ${resourceUrl}`);
               return true;
             }
             return false;
@@ -23247,14 +23255,14 @@ var require_upload_http_client = __commonJS({
           const backOff = (retryAfterValue) => __awaiter(this, void 0, void 0, function* () {
             this.uploadHttpManager.disposeAndReplaceClient(httpClientIndex);
             if (retryAfterValue) {
-              core3.info(`Backoff due to too many requests, retry #${retryCount}. Waiting for ${retryAfterValue} milliseconds before continuing the upload`);
+              core4.info(`Backoff due to too many requests, retry #${retryCount}. Waiting for ${retryAfterValue} milliseconds before continuing the upload`);
               yield utils_1.sleep(retryAfterValue);
             } else {
               const backoffTime = utils_1.getExponentialRetryTimeInMilliseconds(retryCount);
-              core3.info(`Exponential backoff for retry #${retryCount}. Waiting for ${backoffTime} milliseconds before continuing the upload at offset ${start}`);
+              core4.info(`Exponential backoff for retry #${retryCount}. Waiting for ${backoffTime} milliseconds before continuing the upload at offset ${start}`);
               yield utils_1.sleep(backoffTime);
             }
-            core3.info(`Finished backoff for retry #${retryCount}, continuing with upload`);
+            core4.info(`Finished backoff for retry #${retryCount}, continuing with upload`);
             return;
           });
           while (retryCount <= retryLimit) {
@@ -23262,7 +23270,7 @@ var require_upload_http_client = __commonJS({
             try {
               response = yield uploadChunkRequest();
             } catch (error2) {
-              core3.info(`An error has been caught http-client index ${httpClientIndex}, retrying the upload`);
+              core4.info(`An error has been caught http-client index ${httpClientIndex}, retrying the upload`);
               console.log(error2);
               if (incrementAndCheckRetryLimit()) {
                 return false;
@@ -23274,13 +23282,13 @@ var require_upload_http_client = __commonJS({
             if (utils_1.isSuccessStatusCode(response.message.statusCode)) {
               return true;
             } else if (utils_1.isRetryableStatusCode(response.message.statusCode)) {
-              core3.info(`A ${response.message.statusCode} status code has been received, will attempt to retry the upload`);
+              core4.info(`A ${response.message.statusCode} status code has been received, will attempt to retry the upload`);
               if (incrementAndCheckRetryLimit(response)) {
                 return false;
               }
               utils_1.isThrottledStatusCode(response.message.statusCode) ? yield backOff(utils_1.tryGetRetryAfterValueTimeInMilliseconds(response.message.headers)) : yield backOff();
             } else {
-              core3.error(`Unexpected response. Unable to upload chunk to ${resourceUrl}`);
+              core4.error(`Unexpected response. Unable to upload chunk to ${resourceUrl}`);
               utils_1.displayHttpDiagnostics(response);
               return false;
             }
@@ -23294,7 +23302,7 @@ var require_upload_http_client = __commonJS({
           resourceUrl.searchParams.append("artifactName", artifactName);
           const parameters = { Size: size };
           const data = JSON.stringify(parameters, null, 2);
-          core3.debug(`URL is ${resourceUrl.toString()}`);
+          core4.debug(`URL is ${resourceUrl.toString()}`);
           const client = this.uploadHttpManager.getClient(0);
           const headers = utils_1.getUploadHeaders("application/json", false);
           const customErrorMessages = /* @__PURE__ */ new Map([
@@ -23307,7 +23315,7 @@ var require_upload_http_client = __commonJS({
             return client.patch(resourceUrl.toString(), data, headers);
           }), customErrorMessages);
           yield response.readBody();
-          core3.debug(`Artifact ${artifactName} has been successfully uploaded, total size in bytes: ${size}`);
+          core4.debug(`Artifact ${artifactName} has been successfully uploaded, total size in bytes: ${size}`);
         });
       }
     };
@@ -23376,8 +23384,8 @@ var require_download_http_client = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DownloadHttpClient = void 0;
-    var fs = __importStar(require("fs"));
-    var core3 = __importStar(require_core());
+    var fs4 = __importStar(require("fs"));
+    var core4 = __importStar(require_core());
     var zlib = __importStar(require("zlib"));
     var utils_1 = require_utils6();
     var url_1 = require("url");
@@ -23419,11 +23427,11 @@ var require_download_http_client = __commonJS({
       downloadSingleArtifact(downloadItems) {
         return __awaiter(this, void 0, void 0, function* () {
           const DOWNLOAD_CONCURRENCY = config_variables_1.getDownloadFileConcurrency();
-          core3.debug(`Download file concurrency is set to ${DOWNLOAD_CONCURRENCY}`);
+          core4.debug(`Download file concurrency is set to ${DOWNLOAD_CONCURRENCY}`);
           const parallelDownloads = [...new Array(DOWNLOAD_CONCURRENCY).keys()];
           let currentFile = 0;
           let downloadedFiles = 0;
-          core3.info(`Total number of files that will be downloaded: ${downloadItems.length}`);
+          core4.info(`Total number of files that will be downloaded: ${downloadItems.length}`);
           this.statusReporter.setTotalNumberOfFilesToProcess(downloadItems.length);
           this.statusReporter.start();
           yield Promise.all(parallelDownloads.map((index) => __awaiter(this, void 0, void 0, function* () {
@@ -23432,8 +23440,8 @@ var require_download_http_client = __commonJS({
               currentFile += 1;
               const startTime = perf_hooks_1.performance.now();
               yield this.downloadIndividualFile(index, currentFileToDownload.sourceLocation, currentFileToDownload.targetPath);
-              if (core3.isDebug()) {
-                core3.debug(`File: ${++downloadedFiles}/${downloadItems.length}. ${currentFileToDownload.targetPath} took ${(perf_hooks_1.performance.now() - startTime).toFixed(3)} milliseconds to finish downloading`);
+              if (core4.isDebug()) {
+                core4.debug(`File: ${++downloadedFiles}/${downloadItems.length}. ${currentFileToDownload.targetPath} took ${(perf_hooks_1.performance.now() - startTime).toFixed(3)} milliseconds to finish downloading`);
               }
               this.statusReporter.incrementProcessedCount();
             }
@@ -23449,7 +23457,7 @@ var require_download_http_client = __commonJS({
         return __awaiter(this, void 0, void 0, function* () {
           let retryCount = 0;
           const retryLimit = config_variables_1.getRetryLimit();
-          let destinationStream = fs.createWriteStream(downloadPath);
+          let destinationStream = fs4.createWriteStream(downloadPath);
           const headers = utils_1.getDownloadHeaders("application/json", true, true);
           const makeDownloadRequest = () => __awaiter(this, void 0, void 0, function* () {
             const client = this.downloadHttpManager.getClient(httpClientIndex);
@@ -23465,19 +23473,19 @@ var require_download_http_client = __commonJS({
             } else {
               this.downloadHttpManager.disposeAndReplaceClient(httpClientIndex);
               if (retryAfterValue) {
-                core3.info(`Backoff due to too many requests, retry #${retryCount}. Waiting for ${retryAfterValue} milliseconds before continuing the download`);
+                core4.info(`Backoff due to too many requests, retry #${retryCount}. Waiting for ${retryAfterValue} milliseconds before continuing the download`);
                 yield utils_1.sleep(retryAfterValue);
               } else {
                 const backoffTime = utils_1.getExponentialRetryTimeInMilliseconds(retryCount);
-                core3.info(`Exponential backoff for retry #${retryCount}. Waiting for ${backoffTime} milliseconds before continuing the download`);
+                core4.info(`Exponential backoff for retry #${retryCount}. Waiting for ${backoffTime} milliseconds before continuing the download`);
                 yield utils_1.sleep(backoffTime);
               }
-              core3.info(`Finished backoff for retry #${retryCount}, continuing with download`);
+              core4.info(`Finished backoff for retry #${retryCount}, continuing with download`);
             }
           });
           const isAllBytesReceived = (expected, received) => {
             if (!expected || !received || process.env["ACTIONS_ARTIFACT_SKIP_DOWNLOAD_VALIDATION"]) {
-              core3.info("Skipping download validation.");
+              core4.info("Skipping download validation.");
               return true;
             }
             return parseInt(expected) === received;
@@ -23485,14 +23493,14 @@ var require_download_http_client = __commonJS({
           const resetDestinationStream = (fileDownloadPath) => __awaiter(this, void 0, void 0, function* () {
             destinationStream.close();
             yield utils_1.rmFile(fileDownloadPath);
-            destinationStream = fs.createWriteStream(fileDownloadPath);
+            destinationStream = fs4.createWriteStream(fileDownloadPath);
           });
           while (retryCount <= retryLimit) {
             let response;
             try {
               response = yield makeDownloadRequest();
             } catch (error2) {
-              core3.info("An error occurred while attempting to download a file");
+              core4.info("An error occurred while attempting to download a file");
               console.log(error2);
               yield backOff();
               continue;
@@ -23512,7 +23520,7 @@ var require_download_http_client = __commonJS({
               }
             }
             if (forceRetry || utils_1.isRetryableStatusCode(response.message.statusCode)) {
-              core3.info(`A ${response.message.statusCode} response code has been received while attempting to download an artifact`);
+              core4.info(`A ${response.message.statusCode} response code has been received while attempting to download an artifact`);
               resetDestinationStream(downloadPath);
               utils_1.isThrottledStatusCode(response.message.statusCode) ? yield backOff(utils_1.tryGetRetryAfterValueTimeInMilliseconds(response.message.headers)) : yield backOff();
             } else {
@@ -23528,29 +23536,29 @@ var require_download_http_client = __commonJS({
             if (isGzip) {
               const gunzip = zlib.createGunzip();
               response.message.on("error", (error2) => {
-                core3.error(`An error occurred while attempting to read the response stream`);
+                core4.error(`An error occurred while attempting to read the response stream`);
                 gunzip.close();
                 destinationStream.close();
                 reject(error2);
               }).pipe(gunzip).on("error", (error2) => {
-                core3.error(`An error occurred while attempting to decompress the response stream`);
+                core4.error(`An error occurred while attempting to decompress the response stream`);
                 destinationStream.close();
                 reject(error2);
               }).pipe(destinationStream).on("close", () => {
                 resolve2();
               }).on("error", (error2) => {
-                core3.error(`An error occurred while writing a downloaded file to ${destinationStream.path}`);
+                core4.error(`An error occurred while writing a downloaded file to ${destinationStream.path}`);
                 reject(error2);
               });
             } else {
               response.message.on("error", (error2) => {
-                core3.error(`An error occurred while attempting to read the response stream`);
+                core4.error(`An error occurred while attempting to read the response stream`);
                 destinationStream.close();
                 reject(error2);
               }).pipe(destinationStream).on("close", () => {
                 resolve2();
               }).on("error", (error2) => {
-                core3.error(`An error occurred while writing a downloaded file to ${destinationStream.path}`);
+                core4.error(`An error occurred while writing a downloaded file to ${destinationStream.path}`);
                 reject(error2);
               });
             }
@@ -23597,21 +23605,21 @@ var require_download_specification = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getDownloadSpecification = void 0;
-    var path2 = __importStar(require("path"));
+    var path3 = __importStar(require("path"));
     function getDownloadSpecification(artifactName, artifactEntries, downloadPath, includeRootDirectory) {
       const directories = /* @__PURE__ */ new Set();
       const specifications = {
-        rootDownloadLocation: includeRootDirectory ? path2.join(downloadPath, artifactName) : downloadPath,
+        rootDownloadLocation: includeRootDirectory ? path3.join(downloadPath, artifactName) : downloadPath,
         directoryStructure: [],
         emptyFilesToCreate: [],
         filesToDownload: []
       };
       for (const entry of artifactEntries) {
         if (entry.path.startsWith(`${artifactName}/`) || entry.path.startsWith(`${artifactName}\\`)) {
-          const normalizedPathEntry = path2.normalize(entry.path);
-          const filePath = path2.join(downloadPath, includeRootDirectory ? normalizedPathEntry : normalizedPathEntry.replace(artifactName, ""));
+          const normalizedPathEntry = path3.normalize(entry.path);
+          const filePath = path3.join(downloadPath, includeRootDirectory ? normalizedPathEntry : normalizedPathEntry.replace(artifactName, ""));
           if (entry.itemType === "file") {
-            directories.add(path2.dirname(filePath));
+            directories.add(path3.dirname(filePath));
             if (entry.fileLength === 0) {
               specifications.emptyFilesToCreate.push(filePath);
             } else {
@@ -23691,7 +23699,7 @@ var require_artifact_client = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DefaultArtifactClient = void 0;
-    var core3 = __importStar(require_core());
+    var core4 = __importStar(require_core());
     var upload_specification_1 = require_upload_specification();
     var upload_http_client_1 = require_upload_http_client();
     var utils_1 = require_utils6();
@@ -23706,7 +23714,7 @@ var require_artifact_client = __commonJS({
       }
       uploadArtifact(name, files, rootDirectory, options) {
         return __awaiter(this, void 0, void 0, function* () {
-          core3.info(`Starting artifact upload
+          core4.info(`Starting artifact upload
 For more detailed logs during the artifact upload process, enable step-debugging: https://docs.github.com/actions/monitoring-and-troubleshooting-workflows/enabling-debug-logging#enabling-step-debug-logging`);
           path_and_artifact_name_validation_1.checkArtifactName(name);
           const uploadSpecification = upload_specification_1.getUploadSpecification(name, rootDirectory, files);
@@ -23718,24 +23726,24 @@ For more detailed logs during the artifact upload process, enable step-debugging
           };
           const uploadHttpClient = new upload_http_client_1.UploadHttpClient();
           if (uploadSpecification.length === 0) {
-            core3.warning(`No files found that can be uploaded`);
+            core4.warning(`No files found that can be uploaded`);
           } else {
             const response = yield uploadHttpClient.createArtifactInFileContainer(name, options);
             if (!response.fileContainerResourceUrl) {
-              core3.debug(response.toString());
+              core4.debug(response.toString());
               throw new Error("No URL provided by the Artifact Service to upload an artifact to");
             }
-            core3.debug(`Upload Resource URL: ${response.fileContainerResourceUrl}`);
-            core3.info(`Container for artifact "${name}" successfully created. Starting upload of file(s)`);
+            core4.debug(`Upload Resource URL: ${response.fileContainerResourceUrl}`);
+            core4.info(`Container for artifact "${name}" successfully created. Starting upload of file(s)`);
             const uploadResult = yield uploadHttpClient.uploadArtifactToFileContainer(response.fileContainerResourceUrl, uploadSpecification, options);
-            core3.info(`File upload process has finished. Finalizing the artifact upload`);
+            core4.info(`File upload process has finished. Finalizing the artifact upload`);
             yield uploadHttpClient.patchArtifactSize(uploadResult.totalSize, name);
             if (uploadResult.failedItems.length > 0) {
-              core3.info(`Upload finished. There were ${uploadResult.failedItems.length} items that failed to upload`);
+              core4.info(`Upload finished. There were ${uploadResult.failedItems.length} items that failed to upload`);
             } else {
-              core3.info(`Artifact has been finalized. All files have been successfully uploaded!`);
+              core4.info(`Artifact has been finalized. All files have been successfully uploaded!`);
             }
-            core3.info(`
+            core4.info(`
 The raw size of all the files that were specified for upload is ${uploadResult.totalSize} bytes
 The size of all the files that were uploaded is ${uploadResult.uploadSize} bytes. This takes into account any gzip compression used to reduce the upload size, time and storage
 
@@ -23748,7 +23756,7 @@ Note: The size of downloaded zips can differ significantly from the reported siz
           return uploadResponse;
         });
       }
-      downloadArtifact(name, path2, options) {
+      downloadArtifact(name, path3, options) {
         return __awaiter(this, void 0, void 0, function* () {
           const downloadHttpClient = new download_http_client_1.DownloadHttpClient();
           const artifacts = yield downloadHttpClient.listArtifacts();
@@ -23762,17 +23770,17 @@ Note: The size of downloaded zips can differ significantly from the reported siz
             throw new Error(`Unable to find an artifact with the name: ${name}`);
           }
           const items = yield downloadHttpClient.getContainerItems(artifactToDownload.name, artifactToDownload.fileContainerResourceUrl);
-          if (!path2) {
-            path2 = config_variables_1.getWorkSpaceDirectory();
+          if (!path3) {
+            path3 = config_variables_1.getWorkSpaceDirectory();
           }
-          path2 = path_1.normalize(path2);
-          path2 = path_1.resolve(path2);
-          const downloadSpecification = download_specification_1.getDownloadSpecification(name, items.value, path2, (options === null || options === void 0 ? void 0 : options.createArtifactFolder) || false);
+          path3 = path_1.normalize(path3);
+          path3 = path_1.resolve(path3);
+          const downloadSpecification = download_specification_1.getDownloadSpecification(name, items.value, path3, (options === null || options === void 0 ? void 0 : options.createArtifactFolder) || false);
           if (downloadSpecification.filesToDownload.length === 0) {
-            core3.info(`No downloadable files were found for the artifact: ${artifactToDownload.name}`);
+            core4.info(`No downloadable files were found for the artifact: ${artifactToDownload.name}`);
           } else {
             yield utils_1.createDirectoriesForArtifact(downloadSpecification.directoryStructure);
-            core3.info("Directory structure has been setup for the artifact");
+            core4.info("Directory structure has been setup for the artifact");
             yield utils_1.createEmptyFilesForArtifact(downloadSpecification.emptyFilesToCreate);
             yield downloadHttpClient.downloadSingleArtifact(downloadSpecification.filesToDownload);
           }
@@ -23782,29 +23790,29 @@ Note: The size of downloaded zips can differ significantly from the reported siz
           };
         });
       }
-      downloadAllArtifacts(path2) {
+      downloadAllArtifacts(path3) {
         return __awaiter(this, void 0, void 0, function* () {
           const downloadHttpClient = new download_http_client_1.DownloadHttpClient();
           const response = [];
           const artifacts = yield downloadHttpClient.listArtifacts();
           if (artifacts.count === 0) {
-            core3.info("Unable to find any artifacts for the associated workflow");
+            core4.info("Unable to find any artifacts for the associated workflow");
             return response;
           }
-          if (!path2) {
-            path2 = config_variables_1.getWorkSpaceDirectory();
+          if (!path3) {
+            path3 = config_variables_1.getWorkSpaceDirectory();
           }
-          path2 = path_1.normalize(path2);
-          path2 = path_1.resolve(path2);
+          path3 = path_1.normalize(path3);
+          path3 = path_1.resolve(path3);
           let downloadedArtifacts = 0;
           while (downloadedArtifacts < artifacts.count) {
             const currentArtifactToDownload = artifacts.value[downloadedArtifacts];
             downloadedArtifacts += 1;
-            core3.info(`starting download of artifact ${currentArtifactToDownload.name} : ${downloadedArtifacts}/${artifacts.count}`);
+            core4.info(`starting download of artifact ${currentArtifactToDownload.name} : ${downloadedArtifacts}/${artifacts.count}`);
             const items = yield downloadHttpClient.getContainerItems(currentArtifactToDownload.name, currentArtifactToDownload.fileContainerResourceUrl);
-            const downloadSpecification = download_specification_1.getDownloadSpecification(currentArtifactToDownload.name, items.value, path2, true);
+            const downloadSpecification = download_specification_1.getDownloadSpecification(currentArtifactToDownload.name, items.value, path3, true);
             if (downloadSpecification.filesToDownload.length === 0) {
-              core3.info(`No downloadable files were found for any artifact ${currentArtifactToDownload.name}`);
+              core4.info(`No downloadable files were found for any artifact ${currentArtifactToDownload.name}`);
             } else {
               yield utils_1.createDirectoriesForArtifact(downloadSpecification.directoryStructure);
               yield utils_1.createEmptyFilesForArtifact(downloadSpecification.emptyFilesToCreate);
@@ -23853,8 +23861,8 @@ var require_context = __commonJS({
           if (fs_1.existsSync(process.env.GITHUB_EVENT_PATH)) {
             this.payload = JSON.parse(fs_1.readFileSync(process.env.GITHUB_EVENT_PATH, { encoding: "utf8" }));
           } else {
-            const path2 = process.env.GITHUB_EVENT_PATH;
-            process.stdout.write(`GITHUB_EVENT_PATH ${path2} does not exist${os_1.EOL}`);
+            const path3 = process.env.GITHUB_EVENT_PATH;
+            process.stdout.write(`GITHUB_EVENT_PATH ${path3} does not exist${os_1.EOL}`);
           }
         }
         this.eventName = process.env.GITHUB_EVENT_NAME;
@@ -25167,14 +25175,14 @@ var require_url_state_machine = __commonJS({
       return url.replace(/\u0009|\u000A|\u000D/g, "");
     }
     function shortenPath(url) {
-      const path2 = url.path;
-      if (path2.length === 0) {
+      const path3 = url.path;
+      if (path3.length === 0) {
         return;
       }
-      if (url.scheme === "file" && path2.length === 1 && isNormalizedWindowsDriveLetter(path2[0])) {
+      if (url.scheme === "file" && path3.length === 1 && isNormalizedWindowsDriveLetter(path3[0])) {
         return;
       }
-      path2.pop();
+      path3.pop();
     }
     function includesCredentials(url) {
       return url.username !== "" || url.password !== "";
@@ -29038,15 +29046,7 @@ var require_github2 = __commonJS({
   }
 });
 
-// src/index.ts
-var path = __toESM(require("path"));
-var core2 = __toESM(require_core());
-var import_core = __toESM(require_lib5());
-
 // src/utils.ts
-var artifact = __toESM(require_artifact_client2());
-var core = __toESM(require_core());
-var github = __toESM(require_github2());
 function findCurrentPr() {
   return __async(this, null, function* () {
     const octokit = github.getOctokit(core.getInput("github-token") || process.env.GITHUB_TOKEN);
@@ -29056,29 +29056,930 @@ function findCurrentPr() {
     return result.data.find((pr) => pr.state === "open" && github.context.payload.ref === `refs/heads/${pr.head.ref}`);
   });
 }
+function getArtifactName(defaultName) {
+  const scriptName = path.basename(core.getInput("script"), ".js");
+  return core.getInput("artifact-name") || (defaultName != null ? `${scriptName}-${defaultName}` : scriptName);
+}
+function readArtifactJson(name) {
+  return __async(this, null, function* () {
+    const artifactClient = artifact.create();
+    try {
+      const downloadResponse = yield artifactClient.downloadArtifact(name);
+      return JSON.parse(fs.readFileSync(path.join(downloadResponse.downloadPath, name), "utf-8"));
+    } catch (err) {
+    }
+  });
+}
+function writeArtifactJson(name, value) {
+  return __async(this, null, function* () {
+    const filePath = path.join(os.tmpdir(), name);
+    fs.writeFileSync(filePath, JSON.stringify(value));
+    const artifactClient = artifact.create();
+    yield artifactClient.uploadArtifact(name, [filePath], os.tmpdir(), { retentionDays: 1 });
+  });
+}
+var fs, os, path, artifact, core, github;
+var init_utils = __esm({
+  "src/utils.ts"() {
+    fs = __toESM(require("fs"));
+    os = __toESM(require("os"));
+    path = __toESM(require("path"));
+    artifact = __toESM(require_artifact_client2());
+    core = __toESM(require_core());
+    github = __toESM(require_github2());
+  }
+});
+
+// scripts/getSonarScanArgs.ts
+var getSonarScanArgs_exports = {};
+__export(getSonarScanArgs_exports, {
+  default: () => getSonarScanArgs_default
+});
+function rewriteCoverageReports(context2) {
+  if (context2.ci.service !== "github") {
+    return;
+  }
+  const sonarProps = properties.of("sonar-project.properties");
+  const reportPaths = sonarProps.get("sonar.javascript.lcov.reportPaths");
+  if (typeof reportPaths !== "string") {
+    return;
+  }
+  context2.logger.info("Fixing coverage paths for SonarCloud");
+  const pattern = new RegExp(context2.env.GITHUB_WORKSPACE, "g");
+  for (const reportPath of reportPaths.split(",")) {
+    const reportText = fs2.readFileSync(reportPath, "utf-8");
+    fs2.writeFileSync(reportPath, reportText.replace(pattern, "/github/workspace"));
+  }
+}
+function getSonarScanArgs_default(context2) {
+  return __async(this, null, function* () {
+    const artifactName = getArtifactName("lock");
+    const lockFile = yield readArtifactJson(artifactName);
+    if (lockFile == null) {
+      yield writeArtifactJson(artifactName, {});
+    } else {
+      context2.logger.warn("Skipping Sonar scan because it already ran");
+      return;
+    }
+    const sonarProps = {};
+    const packageJson = JSON.parse(fs2.readFileSync("package.json", "utf-8"));
+    sonarProps["sonar.projectVersion"] = packageJson.version;
+    sonarProps["sonar.links.ci"] = `https://github.com/${context2.ci.slug}/actions/runs/${context2.ci.build}`;
+    const pr = yield findCurrentPr();
+    if (pr != null) {
+      sonarProps["sonar.pullrequest.key"] = pr.number;
+      sonarProps["sonar.pullrequest.branch"] = pr.head.ref;
+      sonarProps["sonar.pullrequest.base"] = pr.base.ref;
+    } else {
+      sonarProps["sonar.branch.name"] = context2.ci.branch;
+    }
+    context2.logger.info("Sonar scan properties:\n" + JSON.stringify(sonarProps, null, 2));
+    const sonarArgs = Object.entries(sonarProps).map(([k, v]) => `-D${k}=${v}`);
+    core2.setOutput("result", sonarArgs.join("\n"));
+    rewriteCoverageReports(context2);
+  });
+}
+var fs2, core2, properties;
+var init_getSonarScanArgs = __esm({
+  "scripts/getSonarScanArgs.ts"() {
+    fs2 = __toESM(require("fs"));
+    core2 = __toESM(require_core());
+    properties = __toESM(require_dist_node());
+    init_utils();
+  }
+});
+
+// node_modules/@octorelease/git/lib/utils.js
+var require_utils10 = __commonJS({
+  "node_modules/@octorelease/git/lib/utils.js"(exports) {
+    "use strict";
+    var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
+        return m[k];
+      } });
+    } : function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      o[k2] = m[k];
+    });
+    var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o, v) {
+      Object.defineProperty(o, "default", { enumerable: true, value: v });
+    } : function(o, v) {
+      o["default"] = v;
+    });
+    var __importStar = exports && exports.__importStar || function(mod) {
+      if (mod && mod.__esModule)
+        return mod;
+      var result = {};
+      if (mod != null) {
+        for (var k in mod)
+          if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
+      }
+      __setModuleDefault(result, mod);
+      return result;
+    };
+    var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
+      function adopt(value) {
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
+        });
+      }
+      return new (P || (P = Promise))(function(resolve2, reject) {
+        function fulfilled(value) {
+          try {
+            step(generator.next(value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function rejected(value) {
+          try {
+            step(generator["throw"](value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function step(result) {
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      });
+    };
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.gitTag = exports.gitPush = exports.gitConfig = exports.gitCommit = exports.gitAdd = void 0;
+    var fs4 = __importStar(require("fs"));
+    var os2 = __importStar(require("os"));
+    var path3 = __importStar(require("path"));
+    var url = __importStar(require("url"));
+    var exec3 = __importStar(require_exec());
+    function gitAdd(...files) {
+      return __awaiter(this, void 0, void 0, function* () {
+        yield exec3.exec("git", ["add", ...files]);
+      });
+    }
+    exports.gitAdd = gitAdd;
+    function gitCommit(message, amend) {
+      return __awaiter(this, void 0, void 0, function* () {
+        if (!amend) {
+          const cmdOutput = yield exec3.getExecOutput("git", ["diff", "--name-only", "--cached"]);
+          if (cmdOutput.stdout.trim().length == 0) {
+            return false;
+          }
+        }
+        const cmdArgs = ["commit", "-s", "-m", `${message} [ci skip]`];
+        if (amend) {
+          cmdArgs.push("--amend");
+        }
+        yield exec3.exec("git", cmdArgs);
+        return true;
+      });
+    }
+    exports.gitCommit = gitCommit;
+    function gitConfig(context2) {
+      return __awaiter(this, void 0, void 0, function* () {
+        yield exec3.exec("git", ["config", "--global", "user.name", context2.env.GIT_COMMITTER_NAME]);
+        yield exec3.exec("git", ["config", "--global", "user.email", context2.env.GIT_COMMITTER_EMAIL]);
+        if (context2.env.GIT_CREDENTIALS != null) {
+          yield exec3.exec("git", ["config", "--global", "credential.helper", "store"]);
+          const cmdOutput = yield exec3.getExecOutput("git", ["config", "--get", "remote.origin.url"]);
+          const gitUrl = new url.URL(cmdOutput.stdout);
+          fs4.appendFileSync(path3.join(os2.homedir(), ".git-credentials"), `${gitUrl.protocol}//${context2.env.GIT_CREDENTIALS}@${gitUrl.host}`);
+        }
+      });
+    }
+    exports.gitConfig = gitConfig;
+    function gitPush(context2, branch, tags) {
+      return __awaiter(this, void 0, void 0, function* () {
+        if (!tags) {
+          const cmdOutput = yield exec3.getExecOutput("git", ["cherry"]);
+          if (cmdOutput.stdout.trim().length == 0) {
+            return false;
+          }
+        }
+        const cmdArgs = ["push", "-u", "origin", branch];
+        if (tags) {
+          cmdArgs.push("--follow-tags");
+        }
+        if (context2.dryRun) {
+          cmdArgs.push("--dry-run");
+        }
+        yield exec3.exec("git", cmdArgs);
+        return true;
+      });
+    }
+    exports.gitPush = gitPush;
+    function gitTag(tagName, message) {
+      return __awaiter(this, void 0, void 0, function* () {
+        const cmdOutput = yield exec3.getExecOutput("git", ["tag", "-l", tagName]);
+        if (cmdOutput.stdout.trim().length > 0) {
+          return false;
+        }
+        const cmdArgs = ["tag", tagName];
+        if (message != null) {
+          cmdArgs.push("-a", "-m", message);
+        }
+        yield exec3.exec("git", cmdArgs);
+        return true;
+      });
+    }
+    exports.gitTag = gitTag;
+  }
+});
+
+// node_modules/@octorelease/git/lib/init.js
+var require_init = __commonJS({
+  "node_modules/@octorelease/git/lib/init.js"(exports) {
+    "use strict";
+    var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
+        return m[k];
+      } });
+    } : function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      o[k2] = m[k];
+    });
+    var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o, v) {
+      Object.defineProperty(o, "default", { enumerable: true, value: v });
+    } : function(o, v) {
+      o["default"] = v;
+    });
+    var __importStar = exports && exports.__importStar || function(mod) {
+      if (mod && mod.__esModule)
+        return mod;
+      var result = {};
+      if (mod != null) {
+        for (var k in mod)
+          if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
+      }
+      __setModuleDefault(result, mod);
+      return result;
+    };
+    var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
+      function adopt(value) {
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
+        });
+      }
+      return new (P || (P = Promise))(function(resolve2, reject) {
+        function fulfilled(value) {
+          try {
+            step(generator.next(value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function rejected(value) {
+          try {
+            step(generator["throw"](value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function step(result) {
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      });
+    };
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var utils = __importStar(require_utils10());
+    function default_1(context2, config) {
+      return __awaiter(this, void 0, void 0, function* () {
+        if (context2.env.GIT_COMMITTER_NAME == null) {
+          throw new Error("Required environment variable GIT_COMMITTER_NAME is undefined");
+        }
+        if (context2.env.GIT_COMMITTER_EMAIL == null) {
+          throw new Error("Required environment variable GIT_COMMITTER_EMAIL is undefined");
+        }
+        yield utils.gitConfig(context2);
+      });
+    }
+    exports.default = default_1;
+  }
+});
+
+// node_modules/@octorelease/git/lib/version.js
+var require_version = __commonJS({
+  "node_modules/@octorelease/git/lib/version.js"(exports) {
+    "use strict";
+    var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
+        return m[k];
+      } });
+    } : function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      o[k2] = m[k];
+    });
+    var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o, v) {
+      Object.defineProperty(o, "default", { enumerable: true, value: v });
+    } : function(o, v) {
+      o["default"] = v;
+    });
+    var __importStar = exports && exports.__importStar || function(mod) {
+      if (mod && mod.__esModule)
+        return mod;
+      var result = {};
+      if (mod != null) {
+        for (var k in mod)
+          if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
+      }
+      __setModuleDefault(result, mod);
+      return result;
+    };
+    var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
+      function adopt(value) {
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
+        });
+      }
+      return new (P || (P = Promise))(function(resolve2, reject) {
+        function fulfilled(value) {
+          try {
+            step(generator.next(value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function rejected(value) {
+          try {
+            step(generator["throw"](value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function step(result) {
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      });
+    };
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var utils = __importStar(require_utils10());
+    function default_1(context2, config) {
+      return __awaiter(this, void 0, void 0, function* () {
+        const commitMessage = config.commitMessage || "Bump version to {{version}}";
+        let tagMessage = config.tagMessage || context2.branch.channel && `Release {{version}} to ${context2.branch.channel}`;
+        yield utils.gitAdd(...context2.changedFiles);
+        if (!(yield utils.gitCommit(commitMessage.replace("{{version}}", context2.version.new)))) {
+          context2.logger.warning("Nothing to commit");
+        }
+        tagMessage = tagMessage === null || tagMessage === void 0 ? void 0 : tagMessage.replace("{{version}}", context2.version.new);
+        if (!(yield utils.gitTag(context2.tagPrefix + context2.version.new, tagMessage))) {
+          context2.logger.warning("Git tag already exists");
+        }
+        if (!(yield utils.gitPush(context2, context2.branch.name, true))) {
+          context2.logger.warning("Nothing to push");
+        }
+      });
+    }
+    exports.default = default_1;
+  }
+});
+
+// node_modules/@octorelease/git/lib/config.js
+var require_config = __commonJS({
+  "node_modules/@octorelease/git/lib/config.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+  }
+});
+
+// node_modules/@octorelease/git/lib/index.js
+var require_lib8 = __commonJS({
+  "node_modules/@octorelease/git/lib/index.js"(exports) {
+    "use strict";
+    var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
+        return m[k];
+      } });
+    } : function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      o[k2] = m[k];
+    });
+    var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o, v) {
+      Object.defineProperty(o, "default", { enumerable: true, value: v });
+    } : function(o, v) {
+      o["default"] = v;
+    });
+    var __exportStar = exports && exports.__exportStar || function(m, exports2) {
+      for (var p in m)
+        if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports2, p))
+          __createBinding(exports2, m, p);
+    };
+    var __importStar = exports && exports.__importStar || function(mod) {
+      if (mod && mod.__esModule)
+        return mod;
+      var result = {};
+      if (mod != null) {
+        for (var k in mod)
+          if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
+      }
+      __setModuleDefault(result, mod);
+      return result;
+    };
+    var __importDefault = exports && exports.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : { "default": mod };
+    };
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.utils = exports.version = exports.init = void 0;
+    var init_1 = require_init();
+    Object.defineProperty(exports, "init", { enumerable: true, get: function() {
+      return __importDefault(init_1).default;
+    } });
+    var version_1 = require_version();
+    Object.defineProperty(exports, "version", { enumerable: true, get: function() {
+      return __importDefault(version_1).default;
+    } });
+    __exportStar(require_config(), exports);
+    exports.utils = __importStar(require_utils10());
+  }
+});
+
+// node_modules/pluralize/pluralize.js
+var require_pluralize = __commonJS({
+  "node_modules/pluralize/pluralize.js"(exports, module2) {
+    (function(root, pluralize) {
+      if (typeof require === "function" && typeof exports === "object" && typeof module2 === "object") {
+        module2.exports = pluralize();
+      } else if (typeof define === "function" && define.amd) {
+        define(function() {
+          return pluralize();
+        });
+      } else {
+        root.pluralize = pluralize();
+      }
+    })(exports, function() {
+      var pluralRules = [];
+      var singularRules = [];
+      var uncountables = {};
+      var irregularPlurals = {};
+      var irregularSingles = {};
+      function sanitizeRule(rule) {
+        if (typeof rule === "string") {
+          return new RegExp("^" + rule + "$", "i");
+        }
+        return rule;
+      }
+      function restoreCase(word, token) {
+        if (word === token)
+          return token;
+        if (word === word.toLowerCase())
+          return token.toLowerCase();
+        if (word === word.toUpperCase())
+          return token.toUpperCase();
+        if (word[0] === word[0].toUpperCase()) {
+          return token.charAt(0).toUpperCase() + token.substr(1).toLowerCase();
+        }
+        return token.toLowerCase();
+      }
+      function interpolate(str, args) {
+        return str.replace(/\$(\d{1,2})/g, function(match, index) {
+          return args[index] || "";
+        });
+      }
+      function replace(word, rule) {
+        return word.replace(rule[0], function(match, index) {
+          var result = interpolate(rule[1], arguments);
+          if (match === "") {
+            return restoreCase(word[index - 1], result);
+          }
+          return restoreCase(match, result);
+        });
+      }
+      function sanitizeWord(token, word, rules) {
+        if (!token.length || uncountables.hasOwnProperty(token)) {
+          return word;
+        }
+        var len = rules.length;
+        while (len--) {
+          var rule = rules[len];
+          if (rule[0].test(word))
+            return replace(word, rule);
+        }
+        return word;
+      }
+      function replaceWord(replaceMap, keepMap, rules) {
+        return function(word) {
+          var token = word.toLowerCase();
+          if (keepMap.hasOwnProperty(token)) {
+            return restoreCase(word, token);
+          }
+          if (replaceMap.hasOwnProperty(token)) {
+            return restoreCase(word, replaceMap[token]);
+          }
+          return sanitizeWord(token, word, rules);
+        };
+      }
+      function checkWord(replaceMap, keepMap, rules, bool) {
+        return function(word) {
+          var token = word.toLowerCase();
+          if (keepMap.hasOwnProperty(token))
+            return true;
+          if (replaceMap.hasOwnProperty(token))
+            return false;
+          return sanitizeWord(token, token, rules) === token;
+        };
+      }
+      function pluralize(word, count, inclusive) {
+        var pluralized = count === 1 ? pluralize.singular(word) : pluralize.plural(word);
+        return (inclusive ? count + " " : "") + pluralized;
+      }
+      pluralize.plural = replaceWord(irregularSingles, irregularPlurals, pluralRules);
+      pluralize.isPlural = checkWord(irregularSingles, irregularPlurals, pluralRules);
+      pluralize.singular = replaceWord(irregularPlurals, irregularSingles, singularRules);
+      pluralize.isSingular = checkWord(irregularPlurals, irregularSingles, singularRules);
+      pluralize.addPluralRule = function(rule, replacement) {
+        pluralRules.push([sanitizeRule(rule), replacement]);
+      };
+      pluralize.addSingularRule = function(rule, replacement) {
+        singularRules.push([sanitizeRule(rule), replacement]);
+      };
+      pluralize.addUncountableRule = function(word) {
+        if (typeof word === "string") {
+          uncountables[word.toLowerCase()] = true;
+          return;
+        }
+        pluralize.addPluralRule(word, "$0");
+        pluralize.addSingularRule(word, "$0");
+      };
+      pluralize.addIrregularRule = function(single, plural) {
+        plural = plural.toLowerCase();
+        single = single.toLowerCase();
+        irregularSingles[single] = plural;
+        irregularPlurals[plural] = single;
+      };
+      [
+        ["I", "we"],
+        ["me", "us"],
+        ["he", "they"],
+        ["she", "they"],
+        ["them", "them"],
+        ["myself", "ourselves"],
+        ["yourself", "yourselves"],
+        ["itself", "themselves"],
+        ["herself", "themselves"],
+        ["himself", "themselves"],
+        ["themself", "themselves"],
+        ["is", "are"],
+        ["was", "were"],
+        ["has", "have"],
+        ["this", "these"],
+        ["that", "those"],
+        ["echo", "echoes"],
+        ["dingo", "dingoes"],
+        ["volcano", "volcanoes"],
+        ["tornado", "tornadoes"],
+        ["torpedo", "torpedoes"],
+        ["genus", "genera"],
+        ["viscus", "viscera"],
+        ["stigma", "stigmata"],
+        ["stoma", "stomata"],
+        ["dogma", "dogmata"],
+        ["lemma", "lemmata"],
+        ["schema", "schemata"],
+        ["anathema", "anathemata"],
+        ["ox", "oxen"],
+        ["axe", "axes"],
+        ["die", "dice"],
+        ["yes", "yeses"],
+        ["foot", "feet"],
+        ["eave", "eaves"],
+        ["goose", "geese"],
+        ["tooth", "teeth"],
+        ["quiz", "quizzes"],
+        ["human", "humans"],
+        ["proof", "proofs"],
+        ["carve", "carves"],
+        ["valve", "valves"],
+        ["looey", "looies"],
+        ["thief", "thieves"],
+        ["groove", "grooves"],
+        ["pickaxe", "pickaxes"],
+        ["passerby", "passersby"]
+      ].forEach(function(rule) {
+        return pluralize.addIrregularRule(rule[0], rule[1]);
+      });
+      [
+        [/s?$/i, "s"],
+        [/[^\u0000-\u007F]$/i, "$0"],
+        [/([^aeiou]ese)$/i, "$1"],
+        [/(ax|test)is$/i, "$1es"],
+        [/(alias|[^aou]us|t[lm]as|gas|ris)$/i, "$1es"],
+        [/(e[mn]u)s?$/i, "$1s"],
+        [/([^l]ias|[aeiou]las|[ejzr]as|[iu]am)$/i, "$1"],
+        [/(alumn|syllab|vir|radi|nucle|fung|cact|stimul|termin|bacill|foc|uter|loc|strat)(?:us|i)$/i, "$1i"],
+        [/(alumn|alg|vertebr)(?:a|ae)$/i, "$1ae"],
+        [/(seraph|cherub)(?:im)?$/i, "$1im"],
+        [/(her|at|gr)o$/i, "$1oes"],
+        [/(agend|addend|millenni|dat|extrem|bacteri|desiderat|strat|candelabr|errat|ov|symposi|curricul|automat|quor)(?:a|um)$/i, "$1a"],
+        [/(apheli|hyperbat|periheli|asyndet|noumen|phenomen|criteri|organ|prolegomen|hedr|automat)(?:a|on)$/i, "$1a"],
+        [/sis$/i, "ses"],
+        [/(?:(kni|wi|li)fe|(ar|l|ea|eo|oa|hoo)f)$/i, "$1$2ves"],
+        [/([^aeiouy]|qu)y$/i, "$1ies"],
+        [/([^ch][ieo][ln])ey$/i, "$1ies"],
+        [/(x|ch|ss|sh|zz)$/i, "$1es"],
+        [/(matr|cod|mur|sil|vert|ind|append)(?:ix|ex)$/i, "$1ices"],
+        [/\b((?:tit)?m|l)(?:ice|ouse)$/i, "$1ice"],
+        [/(pe)(?:rson|ople)$/i, "$1ople"],
+        [/(child)(?:ren)?$/i, "$1ren"],
+        [/eaux$/i, "$0"],
+        [/m[ae]n$/i, "men"],
+        ["thou", "you"]
+      ].forEach(function(rule) {
+        return pluralize.addPluralRule(rule[0], rule[1]);
+      });
+      [
+        [/s$/i, ""],
+        [/(ss)$/i, "$1"],
+        [/(wi|kni|(?:after|half|high|low|mid|non|night|[^\w]|^)li)ves$/i, "$1fe"],
+        [/(ar|(?:wo|[ae])l|[eo][ao])ves$/i, "$1f"],
+        [/ies$/i, "y"],
+        [/\b([pl]|zomb|(?:neck|cross)?t|coll|faer|food|gen|goon|group|lass|talk|goal|cut)ies$/i, "$1ie"],
+        [/\b(mon|smil)ies$/i, "$1ey"],
+        [/\b((?:tit)?m|l)ice$/i, "$1ouse"],
+        [/(seraph|cherub)im$/i, "$1"],
+        [/(x|ch|ss|sh|zz|tto|go|cho|alias|[^aou]us|t[lm]as|gas|(?:her|at|gr)o|[aeiou]ris)(?:es)?$/i, "$1"],
+        [/(analy|diagno|parenthe|progno|synop|the|empha|cri|ne)(?:sis|ses)$/i, "$1sis"],
+        [/(movie|twelve|abuse|e[mn]u)s$/i, "$1"],
+        [/(test)(?:is|es)$/i, "$1is"],
+        [/(alumn|syllab|vir|radi|nucle|fung|cact|stimul|termin|bacill|foc|uter|loc|strat)(?:us|i)$/i, "$1us"],
+        [/(agend|addend|millenni|dat|extrem|bacteri|desiderat|strat|candelabr|errat|ov|symposi|curricul|quor)a$/i, "$1um"],
+        [/(apheli|hyperbat|periheli|asyndet|noumen|phenomen|criteri|organ|prolegomen|hedr|automat)a$/i, "$1on"],
+        [/(alumn|alg|vertebr)ae$/i, "$1a"],
+        [/(cod|mur|sil|vert|ind)ices$/i, "$1ex"],
+        [/(matr|append)ices$/i, "$1ix"],
+        [/(pe)(rson|ople)$/i, "$1rson"],
+        [/(child)ren$/i, "$1"],
+        [/(eau)x?$/i, "$1"],
+        [/men$/i, "man"]
+      ].forEach(function(rule) {
+        return pluralize.addSingularRule(rule[0], rule[1]);
+      });
+      [
+        "adulthood",
+        "advice",
+        "agenda",
+        "aid",
+        "aircraft",
+        "alcohol",
+        "ammo",
+        "analytics",
+        "anime",
+        "athletics",
+        "audio",
+        "bison",
+        "blood",
+        "bream",
+        "buffalo",
+        "butter",
+        "carp",
+        "cash",
+        "chassis",
+        "chess",
+        "clothing",
+        "cod",
+        "commerce",
+        "cooperation",
+        "corps",
+        "debris",
+        "diabetes",
+        "digestion",
+        "elk",
+        "energy",
+        "equipment",
+        "excretion",
+        "expertise",
+        "firmware",
+        "flounder",
+        "fun",
+        "gallows",
+        "garbage",
+        "graffiti",
+        "hardware",
+        "headquarters",
+        "health",
+        "herpes",
+        "highjinks",
+        "homework",
+        "housework",
+        "information",
+        "jeans",
+        "justice",
+        "kudos",
+        "labour",
+        "literature",
+        "machinery",
+        "mackerel",
+        "mail",
+        "media",
+        "mews",
+        "moose",
+        "music",
+        "mud",
+        "manga",
+        "news",
+        "only",
+        "personnel",
+        "pike",
+        "plankton",
+        "pliers",
+        "police",
+        "pollution",
+        "premises",
+        "rain",
+        "research",
+        "rice",
+        "salmon",
+        "scissors",
+        "series",
+        "sewage",
+        "shambles",
+        "shrimp",
+        "software",
+        "species",
+        "staff",
+        "swine",
+        "tennis",
+        "traffic",
+        "transportation",
+        "trout",
+        "tuna",
+        "wealth",
+        "welfare",
+        "whiting",
+        "wildebeest",
+        "wildlife",
+        "you",
+        /pok[eé]mon$/i,
+        /[^aeiou]ese$/i,
+        /deer$/i,
+        /fish$/i,
+        /measles$/i,
+        /o[iu]s$/i,
+        /pox$/i,
+        /sheep$/i
+      ].forEach(pluralize.addUncountableRule);
+      return pluralize;
+    });
+  }
+});
+
+// scripts/npmUpdate.ts
+var npmUpdate_exports = {};
+__export(npmUpdate_exports, {
+  default: () => npmUpdate_default
+});
+function getDependencies(branch, dev) {
+  const dependencies = dev ? branch.devDependencies : branch.dependencies;
+  if (!Array.isArray(dependencies)) {
+    return dependencies || {};
+  }
+  const dependencyMap = {};
+  for (const pkgName of dependencies) {
+    dependencyMap[pkgName] = branch.channel || "latest";
+  }
+  return dependencyMap;
+}
+function updateDependency(pkgName, pkgTag, dev) {
+  return __async(this, null, function* () {
+    const packageJson = JSON.parse(fs3.readFileSync("package.json", "utf-8"));
+    const dependencies = packageJson[dev ? "devDependencies" : "dependencies"] || {};
+    const currentVersion = dependencies[pkgName];
+    if (resolutions[pkgName] == null) {
+      resolutions[pkgName] = (yield exec.getExecOutput("npm", ["view", `${pkgName}@${pkgTag}`, "version"])).stdout.trim();
+    }
+    const latestVersion = resolutions[pkgName];
+    if (currentVersion !== latestVersion) {
+      const npmArgs = dev ? ["--save-dev"] : ["--save-prod", "--save-exact"];
+      yield exec.exec("npm", ["install", `${pkgName}@${latestVersion}`, ...npmArgs]);
+      updateDetails.push(`${pkgName}: ${currentVersion} -> ${latestVersion}`);
+    }
+  });
+}
+function npmUpdate_default(context2) {
+  return __async(this, null, function* () {
+    const branchConfig = context2.branch;
+    if (branchConfig.dependencies == null && branchConfig.devDependencies == null) {
+      return;
+    }
+    const pluralize = require_pluralize();
+    const dependencies = getDependencies(branchConfig, false);
+    const devDependencies = getDependencies(branchConfig, true);
+    const changedFiles = ["package.json", "package-lock.json"];
+    context2.logger.info(`Checking for updates to ${pluralize("dependency", Object.keys(dependencies).length, true)} and ${pluralize("dev dependency", Object.keys(devDependencies).length, true)}`);
+    const artifactName = getArtifactName("resolutions");
+    const resolutionsCached = yield readArtifactJson(artifactName);
+    if (resolutionsCached != null) {
+      resolutions = resolutionsCached;
+      if (Object.keys(resolutions).length === 0) {
+        return;
+      }
+    }
+    if (branchConfig.dependencies != null) {
+      for (const [pkgName, pkgTag] of Object.entries(dependencies)) {
+        yield updateDependency(pkgName, pkgTag, false);
+      }
+    }
+    if (branchConfig.devDependencies) {
+      for (const [pkgName, pkgTag] of Object.entries(devDependencies)) {
+        yield updateDependency(pkgName, pkgTag, true);
+      }
+    }
+    if (resolutionsCached == null) {
+      yield writeArtifactJson(artifactName, resolutions);
+    }
+    if (updateDetails.length > 0) {
+      const packageJson = JSON.parse(fs3.readFileSync("package.json", "utf-8"));
+      if (packageJson.workspaces != null) {
+        changedFiles.push("**/package.json");
+        const dependencyList = [...Object.keys(dependencies), ...Object.keys(devDependencies)];
+        yield exec.exec("npx", [
+          "-y",
+          "--",
+          "syncpack",
+          "fix-mismatches",
+          "--dev",
+          "--prod",
+          "--filter",
+          dependencyList.join("|")
+        ]);
+        yield exec.exec("git", ["checkout", "package-lock.json"]);
+        yield exec.exec("npm", ["install"]);
+      }
+      if (context2.env.GIT_COMMITTER_NAME !== null && context2.env.GIT_COMMITTER_EMAIL !== null) {
+        yield import_git.utils.gitConfig(context2);
+        yield import_git.utils.gitAdd(...changedFiles);
+        yield import_git.utils.gitCommit("Update dependencies [ci skip]\n\n" + updateDetails.join("\n"));
+      }
+    }
+  });
+}
+var fs3, exec, import_git, updateDetails, resolutions;
+var init_npmUpdate = __esm({
+  "scripts/npmUpdate.ts"() {
+    fs3 = __toESM(require("fs"));
+    exec = __toESM(require_exec());
+    import_git = __toESM(require_lib8());
+    init_utils();
+    updateDetails = [];
+    resolutions = {};
+  }
+});
 
 // src/index.ts
+var path2 = __toESM(require("path"));
+var core3 = __toESM(require_core());
+var import_core = __toESM(require_lib5());
+
+// src/loader.ts
+var SCRIPTS = {
+  getSonarScanArgs: (init_getSonarScanArgs(), __toCommonJS(getSonarScanArgs_exports)),
+  npmUpdate: (init_npmUpdate(), __toCommonJS(npmUpdate_exports))
+};
+function loadScript(scriptName) {
+  if (!Object.keys(SCRIPTS).includes(scriptName)) {
+    throw new Error(`Could not find script to run: ${scriptName}`);
+  }
+  return SCRIPTS[scriptName].default;
+}
+
+// src/index.ts
+init_utils();
 function run() {
   return __async(this, null, function* () {
     var _a;
     try {
-      const workingDir = core2.getInput("working-dir");
+      const workingDir = core3.getInput("working-dir");
       if (workingDir) {
-        process.chdir(path.resolve(workingDir));
+        process.chdir(path2.resolve(workingDir));
       }
       const prBranch = (_a = yield findCurrentPr()) == null ? void 0 : _a.base.ref;
       const context2 = yield import_core.utils.buildContext({ branch: prBranch });
       if (context2 == null) {
-        core2.info("Current branch is not targeting a release branch, exiting now");
+        core3.info("Current branch is not targeting a release branch, exiting now");
         process.exit();
       }
-      const script = require(path.join(__dirname, core2.getInput("script")));
-      yield script.default(context2);
+      yield loadScript(core3.getInput("script"))(context2);
     } catch (error2) {
       if (error2 instanceof Error) {
-        core2.error(error2.stack || error2.message);
+        core3.error(error2.stack || error2.message);
       }
-      core2.setFailed(error2);
+      core3.setFailed(error2);
     }
   });
 }
