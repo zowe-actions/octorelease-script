@@ -15,10 +15,10 @@
  */
 
 import * as fs from "fs";
+import * as core from "@actions/core";
 import * as exec from "@actions/exec";
 import { IContext, IProtectedBranch } from "@octorelease/core";
 import { utils as gitUtils } from "@octorelease/git";
-import * as utils from "../src/utils";
 
 const updateDetails: string[] = [];
 let resolutions: Record<string, string> = {};
@@ -70,14 +70,12 @@ export default async function (context: IContext): Promise<void> {
     const pluralize = require("pluralize");
     const dependencies = getDependencies(branchConfig, false);
     const devDependencies = getDependencies(branchConfig, true);
-    const changedFiles = ["package.json", "package-lock.json"];
+    const changedFiles = ["package.json", "package-lock.json", "npm-shrinkwrap.json"];
     context.logger.info(`Checking for updates to ${pluralize("dependency", Object.keys(dependencies).length, true)} ` +
         `and ${pluralize("dev dependency", Object.keys(devDependencies).length, true)}`);
 
-    const artifactName = utils.getArtifactName("resolutions");
-    const resolutionsCached = await utils.readArtifactJson<typeof resolutions>(artifactName);
-    if (resolutionsCached != null) {
-        resolutions = resolutionsCached;
+    if (context.env.NPM_RESOLUTIONS != null) {
+        resolutions = JSON.parse(context.env.NPM_RESOLUTIONS);
         if (Object.keys(resolutions).length === 0) {
             return;
         }
@@ -95,8 +93,8 @@ export default async function (context: IContext): Promise<void> {
         }
     }
 
-    if (resolutionsCached == null) {
-        await utils.writeArtifactJson(artifactName, resolutions);
+    if (context.env.NPM_RESOLUTIONS == null) {
+        core.setOutput("result", JSON.stringify(resolutions));
     }
 
     if (updateDetails.length > 0) {
@@ -107,7 +105,11 @@ export default async function (context: IContext): Promise<void> {
 
             await exec.exec("npx", ["-y", "--", "syncpack", "fix-mismatches", "--dev", "--prod", "--filter",
                 dependencyList.join("|")]);
-            await exec.exec("git", ["checkout", "package-lock.json"]);
+            try {
+                await exec.exec("git", ["checkout", "package-lock.json"]);
+            } catch {
+                await exec.exec("git", ["checkout", "npm-shrinkwrap.json"]);
+            }
             await exec.exec("npm", ["install"]);
         }
 
