@@ -70,7 +70,8 @@ export default async function (context: IContext): Promise<void> {
     const pluralize = require("pluralize");
     const dependencies = getDependencies(branchConfig, false);
     const devDependencies = getDependencies(branchConfig, true);
-    const changedFiles = ["package.json", "package-lock.json", "npm-shrinkwrap.json"];
+    const lockfilePath = fs.existsSync("npm-shrinkwrap.json") ? "npm-shrinkwrap.json" : "package-lock.json";
+    const changedFiles = ["package.json", lockfilePath];
     context.logger.info(`Checking for updates to ${pluralize("dependency", Object.keys(dependencies).length, true)} ` +
         `and ${pluralize("dev dependency", Object.keys(devDependencies).length, true)}`);
 
@@ -105,11 +106,7 @@ export default async function (context: IContext): Promise<void> {
 
             await exec.exec("npx", ["-y", "--", "syncpack", "fix-mismatches", "--dev", "--prod", "--filter",
                 dependencyList.join("|")]);
-            try {
-                await exec.exec("git", ["checkout", "package-lock.json"]);
-            } catch {
-                await exec.exec("git", ["checkout", "npm-shrinkwrap.json"]);
-            }
+            await exec.exec("git", ["checkout", lockfilePath]);
             await exec.exec("npm", ["install"]);
         }
 

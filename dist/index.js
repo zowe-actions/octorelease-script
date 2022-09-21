@@ -19581,7 +19581,8 @@ function npmUpdate_default(context2) {
     const pluralize = require_pluralize();
     const dependencies = getDependencies(branchConfig, false);
     const devDependencies = getDependencies(branchConfig, true);
-    const changedFiles = ["package.json", "package-lock.json", "npm-shrinkwrap.json"];
+    const lockfilePath = fs.existsSync("npm-shrinkwrap.json") ? "npm-shrinkwrap.json" : "package-lock.json";
+    const changedFiles = ["package.json", lockfilePath];
     context2.logger.info(`Checking for updates to ${pluralize("dependency", Object.keys(dependencies).length, true)} and ${pluralize("dev dependency", Object.keys(devDependencies).length, true)}`);
     if (context2.env.NPM_RESOLUTIONS != null) {
       resolutions = JSON.parse(context2.env.NPM_RESOLUTIONS);
@@ -19617,11 +19618,7 @@ function npmUpdate_default(context2) {
           "--filter",
           dependencyList.join("|")
         ]);
-        try {
-          yield exec.exec("git", ["checkout", "package-lock.json"]);
-        } catch (e) {
-          yield exec.exec("git", ["checkout", "npm-shrinkwrap.json"]);
-        }
+        yield exec.exec("git", ["checkout", lockfilePath]);
         yield exec.exec("npm", ["install"]);
       }
       if (context2.env.GIT_COMMITTER_NAME !== null && context2.env.GIT_COMMITTER_EMAIL !== null) {
