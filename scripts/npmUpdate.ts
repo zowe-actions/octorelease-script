@@ -75,7 +75,7 @@ export default async function (context: IContext): Promise<void> {
     context.logger.info(`Checking for updates to ${pluralize("dependency", Object.keys(dependencies).length, true)} ` +
         `and ${pluralize("dev dependency", Object.keys(devDependencies).length, true)}`);
 
-    if (context.env.NPM_RESOLUTIONS != null) {
+    if (context.env.NPM_RESOLUTIONS) {
         resolutions = JSON.parse(context.env.NPM_RESOLUTIONS);
         if (Object.keys(resolutions).length === 0) {
             return;
@@ -94,7 +94,7 @@ export default async function (context: IContext): Promise<void> {
         }
     }
 
-    if (context.env.NPM_RESOLUTIONS == null) {
+    if (!context.env.NPM_RESOLUTIONS) {
         core.setOutput("result", JSON.stringify(resolutions));
     }
 
