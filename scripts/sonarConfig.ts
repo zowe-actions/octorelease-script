@@ -15,7 +15,6 @@
  */
 
 import * as fs from "fs";
-import * as core from "@actions/core";
 import { IContext } from "@octorelease/core";
 import * as properties from "java-properties";
 import * as utils from "../src/utils";
@@ -39,17 +38,7 @@ function rewriteCoverageReports(context: IContext) {
 }
 
 export default async function (context: IContext): Promise<void> {
-    // Skip the Sonar scan if another job in same matrix already ran it
-    const artifactName = utils.getArtifactName("lock");
-    const lockFile = await utils.readArtifactJson(artifactName);
-    if (lockFile == null) {
-        await utils.writeArtifactJson(artifactName, {});
-    } else {
-        context.logger.warn("Skipping Sonar scan because it already ran");
-        return;
-    }
-
-    // Define Sonar properties in addition to sonar-project.properties file
+    // Append Sonar properties to the sonar-project.properties file
     const sonarProps: { [key: string]: any } = {};
     const packageJson = JSON.parse(fs.readFileSync("package.json", "utf-8"));
     sonarProps["sonar.projectVersion"] = packageJson.version;
@@ -68,7 +57,6 @@ export default async function (context: IContext): Promise<void> {
 
     // Convert properties to argument string and store it in output
     context.logger.info("Sonar scan properties:\n" + JSON.stringify(sonarProps, null, 2));
-    const sonarArgs = Object.entries(sonarProps).map(([k, v]) => `-D${k}=${v}`);
-    core.setOutput("result", sonarArgs.join("\n"));
+    fs.appendFileSync("sonar-project.properties", Object.entries(sonarProps).map(([k, v]) => `${k}=${v}`).join("\n"));
     rewriteCoverageReports(context);
 }

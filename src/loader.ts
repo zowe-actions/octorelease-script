@@ -17,8 +17,8 @@
 import { IContext } from "@octorelease/core";
 
 const SCRIPTS: { [key: string]: any } = {
-    getSonarScanArgs: require("../scripts/getSonarScanArgs"),
-    npmUpdate: require("../scripts/npmUpdate")
+    npmUpdate: require("../scripts/npmUpdate"),
+    sonarConfig: require("../scripts/sonarConfig")
 };
 
 export function loadScript(scriptName: string): (context: IContext) => Promise<void> {

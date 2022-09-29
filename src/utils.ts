@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-import * as fs from "fs";
-import * as os from "os";
-import * as path from "path";
-import * as artifact from "@actions/artifact";
 import * as core from "@actions/core";
 import * as github from "@actions/github";
 
@@ -28,24 +24,4 @@ export async function findCurrentPr(): Promise<any | undefined> {
         commit_sha: github.context.sha
     });
     return result.data.find(pr => pr.state === "open" && github.context.payload.ref === `refs/heads/${pr.head.ref}`);
-}
-
-export function getArtifactName(defaultName?: string): string {
-    const scriptName = path.basename(core.getInput("script"), ".js");
-    return core.getInput("artifact-name") || (defaultName != null ? `${scriptName}-${defaultName}` : scriptName);
-}
-
-export async function readArtifactJson<T>(name: string): Promise<T | undefined> {
-    const artifactClient = artifact.create();
-    try {
-        const downloadResponse = await artifactClient.downloadArtifact(name);
-        return JSON.parse(fs.readFileSync(path.join(downloadResponse.downloadPath, name), "utf-8"));
-    } catch (err) { /* Do nothing */ }
-}
-
-export async function writeArtifactJson<T>(name: string, value: T): Promise<void> {
-    const filePath = path.join(os.tmpdir(), name);
-    fs.writeFileSync(filePath, JSON.stringify(value));
-    const artifactClient = artifact.create();
-    await artifactClient.uploadArtifact(name, [filePath], os.tmpdir(), { retentionDays: 1 });
 }
