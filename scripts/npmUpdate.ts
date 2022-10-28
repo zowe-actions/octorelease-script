@@ -20,6 +20,7 @@ import * as exec from "@actions/exec";
 import { IContext, IProtectedBranch } from "@octorelease/core";
 import { utils as gitUtils } from "@octorelease/git";
 
+const lockfilePath = fs.existsSync("npm-shrinkwrap.json") ? "npm-shrinkwrap.json" : "package-lock.json";
 const updateDetails: string[] = [];
 let resolutions: Record<string, string> = {};
 
@@ -43,10 +44,8 @@ function getDependencies(branch: IProtectedBranchWithDeps, dev: boolean) {
 }
 
 async function updateDependency(pkgName: string, pkgTag: string, dev: boolean): Promise<void> {
-    const packageJson = JSON.parse(fs.readFileSync("package.json", "utf-8"));
-    const dependencies = packageJson[dev ? "devDependencies" : "dependencies"] || {};
-    const currentVersion = dependencies[pkgName];
-    // TODO What if current version has caret or tilde in front?
+    const lockfile = JSON.parse(fs.readFileSync(lockfilePath, "utf-8"));
+    const currentVersion = lockfile.dependencies[pkgName].version;
 
     if (resolutions[pkgName] == null) {
         resolutions[pkgName] = (await exec.getExecOutput("npm",
@@ -70,7 +69,6 @@ export default async function (context: IContext): Promise<void> {
     const pluralize = require("pluralize");
     const dependencies = getDependencies(branchConfig, false);
     const devDependencies = getDependencies(branchConfig, true);
-    const lockfilePath = fs.existsSync("npm-shrinkwrap.json") ? "npm-shrinkwrap.json" : "package-lock.json";
     const changedFiles = ["package.json", lockfilePath];
     context.logger.info(`Checking for updates to ${pluralize("dependency", Object.keys(dependencies).length, true)} ` +
         `and ${pluralize("dev dependency", Object.keys(devDependencies).length, true)}`);
