@@ -20116,9 +20116,8 @@ function getDependencies(branch, dev) {
 }
 function updateDependency(pkgName, pkgTag, dev) {
   return __async(this, null, function* () {
-    const packageJson = JSON.parse(fs.readFileSync("package.json", "utf-8"));
-    const dependencies = packageJson[dev ? "devDependencies" : "dependencies"] || {};
-    const currentVersion = dependencies[pkgName];
+    const lockfile = JSON.parse(fs.readFileSync(lockfilePath, "utf-8"));
+    const currentVersion = lockfile.dependencies[pkgName].version;
     if (resolutions[pkgName] == null) {
       resolutions[pkgName] = (yield exec.getExecOutput("npm", ["view", `${pkgName}@${pkgTag}`, "version"])).stdout.trim();
     }
@@ -20139,7 +20138,6 @@ function npmUpdate_default(context2) {
     const pluralize = require_pluralize();
     const dependencies = getDependencies(branchConfig, false);
     const devDependencies = getDependencies(branchConfig, true);
-    const lockfilePath = fs.existsSync("npm-shrinkwrap.json") ? "npm-shrinkwrap.json" : "package-lock.json";
     const changedFiles = ["package.json", lockfilePath];
     context2.logger.info(`Checking for updates to ${pluralize("dependency", Object.keys(dependencies).length, true)} and ${pluralize("dev dependency", Object.keys(devDependencies).length, true)}`);
     if (context2.env.NPM_RESOLUTIONS) {
@@ -20187,13 +20185,14 @@ function npmUpdate_default(context2) {
     }
   });
 }
-var fs, core, exec, import_git, updateDetails, resolutions;
+var fs, core, exec, import_git, lockfilePath, updateDetails, resolutions;
 var init_npmUpdate = __esm({
   "scripts/npmUpdate.ts"() {
     fs = __toESM(require("fs"));
     core = __toESM(require_core());
     exec = __toESM(require_exec());
     import_git = __toESM(require_lib6());
+    lockfilePath = fs.existsSync("npm-shrinkwrap.json") ? "npm-shrinkwrap.json" : "package-lock.json";
     updateDetails = [];
     resolutions = {};
   }
