@@ -19243,7 +19243,7 @@ var require_utils5 = __commonJS({
         const micromatch = require_micromatch();
         const branches = config.config.branches.map((branch) => typeof branch === "string" ? { name: branch } : branch);
         const branchIndex = branches.findIndex((branch) => micromatch.isMatch((opts === null || opts === void 0 ? void 0 : opts.branch) || envCi.branch, branch.name));
-        if (branchIndex == -1) {
+        if (branchIndex == -1 && !(opts === null || opts === void 0 ? void 0 : opts.force)) {
           return;
         } else {
           branches[branchIndex].name = (opts === null || opts === void 0 ? void 0 : opts.branch) || envCi.branch;
@@ -19329,9 +19329,9 @@ var require_utils5 = __commonJS({
         return { old: oldVersion, new: oldVersion, prerelease };
       });
     }
-    function getLastCommitMessage() {
+    function getLastCommitMessage(context2) {
       return __awaiter(this, void 0, void 0, function* () {
-        const cmdOutput = yield exec3.getExecOutput("git", ["log", "-1", "--pretty=format:%s"], { ignoreReturnCode: true });
+        const cmdOutput = yield exec3.getExecOutput("git", ["log", "-1", "--pretty=format:%s", context2.ci.commit], { ignoreReturnCode: true });
         return cmdOutput.exitCode === 0 && cmdOutput.stdout.trim() || void 0;
       });
     }
@@ -25552,6 +25552,7 @@ var SCRIPTS = {
   npmUpdate: (init_npmUpdate(), __toCommonJS(npmUpdate_exports)),
   sonarConfig: (init_sonarConfig(), __toCommonJS(sonarConfig_exports))
 };
+var RELEASE_SCRIPTS = ["npmUpdate"];
 function loadScript(scriptName) {
   if (!Object.keys(SCRIPTS).includes(scriptName)) {
     throw new Error(`Could not find script to run: ${scriptName}`);
@@ -25570,7 +25571,10 @@ function run() {
         process.chdir(path.resolve(workingDir));
       }
       const prBranch = (_a = yield findCurrentPr()) == null ? void 0 : _a.base.ref;
-      const context2 = yield import_core.utils.buildContext({ branch: prBranch });
+      const context2 = yield import_core.utils.buildContext({
+        branch: prBranch,
+        force: !RELEASE_SCRIPTS.includes(core3.getInput("script"))
+      });
       if (context2 == null) {
         core3.info("Current branch is not targeting a release branch, exiting now");
         process.exit();

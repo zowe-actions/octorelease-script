@@ -21,6 +21,9 @@ const SCRIPTS: { [key: string]: any } = {
     sonarConfig: require("../scripts/sonarConfig")
 };
 
+// List of scripts that should only run in release branches
+export const RELEASE_SCRIPTS: string[] = ["npmUpdate"];
+
 export function loadScript(scriptName: string): (context: IContext) => Promise<void> {
     if (!Object.keys(SCRIPTS).includes(scriptName)) {
         throw new Error(`Could not find script to run: ${scriptName}`);

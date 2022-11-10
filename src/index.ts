@@ -19,7 +19,7 @@
 import * as path from "path";
 import * as core from "@actions/core";
 import { utils as coreUtils } from "@octorelease/core";
-import { loadScript } from "./loader";
+import { loadScript, RELEASE_SCRIPTS } from "./loader";
 import * as utils from "./utils";
 
 async function run(): Promise<void> {
@@ -30,7 +30,10 @@ async function run(): Promise<void> {
         }
 
         const prBranch = (await utils.findCurrentPr())?.base.ref;
-        const context = await coreUtils.buildContext({ branch: prBranch });
+        const context = await coreUtils.buildContext({
+            branch: prBranch,
+            force: !RELEASE_SCRIPTS.includes(core.getInput("script"))
+        });
         if (context == null) {
             core.info("Current branch is not targeting a release branch, exiting now");
             process.exit();
