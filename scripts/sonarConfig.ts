@@ -19,6 +19,16 @@ import { IContext } from "@octorelease/core";
 import * as properties from "java-properties";
 import * as utils from "../src/utils";
 
+async function downloadCoverageReports(context: IContext) {
+    if (process.env.COVERAGE_ARTIFACT == null) {
+        return;
+    }
+    const splitIndex = process.env.COVERAGE_ARTIFACT.indexOf(":");
+    const [workflowId, artifactName] = process.env.COVERAGE_ARTIFACT.slice(0, splitIndex).split("/", 2);
+    const extractPath = process.env.COVERAGE_ARTIFACT.slice(splitIndex + 1);
+    await utils.downloadArtifact(workflowId, context.ci.commit, artifactName, extractPath);
+}
+
 function rewriteCoverageReports(context: IContext) {
     // Workaround for https://community.sonarsource.com/t/code-coverage-doesnt-work-with-github-action/16747
     if (context.ci.service as any !== "github") {
@@ -58,5 +68,6 @@ export default async function (context: IContext): Promise<void> {
     // Convert properties to argument string and store it in output
     context.logger.info("Sonar scan properties:\n" + JSON.stringify(sonarProps, null, 2));
     fs.appendFileSync("sonar-project.properties", Object.entries(sonarProps).map(([k, v]) => `${k}=${v}`).join("\n"));
+    await downloadCoverageReports(context);
     rewriteCoverageReports(context);
 }

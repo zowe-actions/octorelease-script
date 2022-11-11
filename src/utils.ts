@@ -14,8 +14,40 @@
  * limitations under the License.
  */
 
+import * as fs from "fs";
+import { pipeline, Readable } from "stream";
+import { promisify } from "util";
 import * as core from "@actions/core";
 import * as github from "@actions/github";
+
+export async function downloadArtifact(workflowId: string, commitSha: string, artifactName: string,
+    extractPath?: string): Promise<void> {
+    const octokit = github.getOctokit(core.getInput("github-token") || process.env.GITHUB_TOKEN as string);
+    const lastSuccessfulRunId = (await octokit.rest.actions.listWorkflowRuns({
+        ...github.context.repo,
+        workflow_id: workflowId,
+        status: "success",
+        per_page: 1,
+        head_sha: commitSha
+    })).data.workflow_runs[0].id;
+    const artifactInfo = (await octokit.rest.actions.listWorkflowRunArtifacts({
+        ...github.context.repo,
+        run_id: lastSuccessfulRunId
+    })).data.artifacts.find((a) => a.name === artifactName);
+    if (artifactInfo == null) {
+        throw new Error(`Could not find artifact ${artifactName} for run ID ${lastSuccessfulRunId}`);
+    }
+    const artifactRaw = Buffer.from((await octokit.rest.actions.downloadArtifact({
+        ...github.context.repo,
+        artifact_id: artifactInfo.id,
+        archive_format: "zip"
+    })).data as any);
+    if (extractPath != null) {
+        fs.mkdirSync(extractPath, { recursive: true });
+    }
+    await promisify(pipeline)(Readable.from(artifactRaw),
+        require("unzip-stream").Extract({ path: extractPath ?? process.cwd() }));
+}
 
 export async function findCurrentPr(): Promise<any | undefined> {
     const octokit = github.getOctokit(core.getInput("github-token") || process.env.GITHUB_TOKEN as string);
