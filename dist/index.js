@@ -27461,9 +27461,11 @@ function sonarConfig_default(context3) {
   return __async(this, null, function* () {
     var _a;
     const sonarProps = {};
-    sonarProps["sonar.projectVersion"] = context3.version.old;
+    const packageJson = JSON.parse(fs3.readFileSync(fs3.existsSync("lerna.json") ? "lerna.json" : "package.json", "utf-8"));
+    sonarProps["sonar.projectVersion"] = packageJson.version;
     sonarProps["sonar.links.ci"] = `https://github.com/${context3.ci.slug}/actions/runs/${context3.ci.build}`;
     const pr = yield findCurrentPr((_a = github2.context.payload.workflow_run) == null ? void 0 : _a.head_sha);
+    console.log(JSON.stringify(github2.context.payload, null, 2));
     if (pr != null) {
       sonarProps["sonar.pullrequest.key"] = pr.number;
       sonarProps["sonar.pullrequest.branch"] = pr.head.ref;
