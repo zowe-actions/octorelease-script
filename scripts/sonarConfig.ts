@@ -15,18 +15,17 @@
  */
 
 import * as fs from "fs";
+import * as github from "@actions/github";
 import { IContext } from "@octorelease/core";
 import * as properties from "java-properties";
 import * as utils from "../src/utils";
 
 async function downloadCoverageReports(context: IContext) {
-    if (process.env.COVERAGE_ARTIFACT == null) {
+    if (context.ci.service as any !== "github" || process.env.COVERAGE_ARTIFACT == null) {
         return;
     }
-    const splitIndex = process.env.COVERAGE_ARTIFACT.indexOf(":");
-    const [workflowId, artifactName] = process.env.COVERAGE_ARTIFACT.slice(0, splitIndex).split("/", 2);
-    const extractPath = process.env.COVERAGE_ARTIFACT.slice(splitIndex + 1);
-    await utils.downloadArtifact(workflowId, context.ci.commit, artifactName, extractPath);
+    const [artifactName, extractPath] = process.env.COVERAGE_ARTIFACT.split(":", 2);
+    await utils.downloadArtifact(github.context.payload.workflow_run.id, artifactName, extractPath);
 }
 
 function rewriteCoverageReports(context: IContext) {
@@ -50,13 +49,12 @@ function rewriteCoverageReports(context: IContext) {
 export default async function (context: IContext): Promise<void> {
     // Append Sonar properties to the sonar-project.properties file
     const sonarProps: { [key: string]: any } = {};
-    const packageJson = JSON.parse(fs.readFileSync("package.json", "utf-8"));
-    sonarProps["sonar.projectVersion"] = packageJson.version;
+    sonarProps["sonar.projectVersion"] = context.version.old;
     sonarProps["sonar.links.ci"] =
         `https://github.com/${(context.ci as any).slug}/actions/runs/${(context.ci as any).build}`;
 
     // Set properties for pull request or branch scanning
-    const pr = await utils.findCurrentPr();
+    const pr = await utils.findCurrentPr(github.context.payload.workflow_run?.head_sha);
     if (pr != null) {
         sonarProps["sonar.pullrequest.key"] = pr.number;
         sonarProps["sonar.pullrequest.branch"] = pr.head.ref;

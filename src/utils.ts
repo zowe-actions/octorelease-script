@@ -20,22 +20,14 @@ import { promisify } from "util";
 import * as core from "@actions/core";
 import * as github from "@actions/github";
 
-export async function downloadArtifact(workflowId: string, commitSha: string, artifactName: string,
-    extractPath?: string): Promise<void> {
+export async function downloadArtifact(runId: number, artifactName: string, extractPath?: string): Promise<void> {
     const octokit = github.getOctokit(core.getInput("github-token") || process.env.GITHUB_TOKEN as string);
-    const lastSuccessfulRunId = (await octokit.rest.actions.listWorkflowRuns({
-        ...github.context.repo,
-        workflow_id: workflowId,
-        status: "success",
-        per_page: 1,
-        head_sha: commitSha
-    })).data.workflow_runs[0].id;
     const artifactInfo = (await octokit.rest.actions.listWorkflowRunArtifacts({
         ...github.context.repo,
-        run_id: lastSuccessfulRunId
+        run_id: runId
     })).data.artifacts.find((a) => a.name === artifactName);
     if (artifactInfo == null) {
-        throw new Error(`Could not find artifact ${artifactName} for run ID ${lastSuccessfulRunId}`);
+        throw new Error(`Could not find artifact ${artifactName} for run ID ${runId}`);
     }
     const artifactRaw = Buffer.from((await octokit.rest.actions.downloadArtifact({
         ...github.context.repo,
@@ -49,11 +41,11 @@ export async function downloadArtifact(workflowId: string, commitSha: string, ar
         require("unzip-stream").Extract({ path: extractPath ?? process.cwd() }));
 }
 
-export async function findCurrentPr(): Promise<any | undefined> {
+export async function findCurrentPr(commitSha?: string): Promise<any | undefined> {
     const octokit = github.getOctokit(core.getInput("github-token") || process.env.GITHUB_TOKEN as string);
     const result = await octokit.rest.repos.listPullRequestsAssociatedWithCommit({
         ...github.context.repo,
-        commit_sha: github.context.sha
+        commit_sha: commitSha ?? github.context.sha
     });
     return result.data.find(pr => pr.state === "open" && github.context.payload.ref === `refs/heads/${pr.head.ref}`);
 }

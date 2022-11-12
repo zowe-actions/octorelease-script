@@ -2488,88 +2488,88 @@ var require_stages = __commonJS({
     exports.version = exports.success = exports.publish = exports.init = exports.fail = void 0;
     var core4 = __importStar(require_core());
     var inputs_1 = require_inputs();
-    function fail(context2, pluginsLoaded) {
+    function fail(context3, pluginsLoaded) {
       return __awaiter(this, void 0, void 0, function* () {
         if (shouldSkipStage("fail"))
           return;
         for (const [pluginName, pluginModule] of Object.entries(pluginsLoaded)) {
           if (pluginModule.fail != null) {
-            context2.logger.info(`Running "fail" stage for plugin ${pluginName}`);
-            context2.logger.pluginName = pluginName;
+            context3.logger.info(`Running "fail" stage for plugin ${pluginName}`);
+            context3.logger.pluginName = pluginName;
             try {
-              yield pluginModule.fail(context2, context2.plugins[pluginName] || {});
+              yield pluginModule.fail(context3, context3.plugins[pluginName] || {});
             } finally {
-              context2.logger.pluginName = void 0;
+              context3.logger.pluginName = void 0;
             }
           }
         }
       });
     }
     exports.fail = fail;
-    function init(context2, pluginsLoaded) {
+    function init(context3, pluginsLoaded) {
       return __awaiter(this, void 0, void 0, function* () {
         for (const [pluginName, pluginModule] of Object.entries(pluginsLoaded)) {
           if (pluginModule.init != null) {
-            context2.logger.info(`Running "init" stage for plugin ${pluginName}`);
-            context2.logger.pluginName = pluginName;
+            context3.logger.info(`Running "init" stage for plugin ${pluginName}`);
+            context3.logger.pluginName = pluginName;
             try {
-              yield pluginModule.init(context2, context2.plugins[pluginName] || {});
+              yield pluginModule.init(context3, context3.plugins[pluginName] || {});
             } finally {
-              context2.logger.pluginName = void 0;
+              context3.logger.pluginName = void 0;
             }
           }
         }
       });
     }
     exports.init = init;
-    function publish(context2, pluginsLoaded) {
+    function publish(context3, pluginsLoaded) {
       return __awaiter(this, void 0, void 0, function* () {
         if (shouldSkipStage("publish"))
           return;
         for (const [pluginName, pluginModule] of Object.entries(pluginsLoaded)) {
           if (pluginModule.publish != null) {
-            context2.logger.info(`Running "publish" stage for plugin ${pluginName}`);
-            context2.logger.pluginName = pluginName;
+            context3.logger.info(`Running "publish" stage for plugin ${pluginName}`);
+            context3.logger.pluginName = pluginName;
             try {
-              yield pluginModule.publish(context2, context2.plugins[pluginName] || {});
+              yield pluginModule.publish(context3, context3.plugins[pluginName] || {});
             } finally {
-              context2.logger.pluginName = void 0;
+              context3.logger.pluginName = void 0;
             }
           }
         }
       });
     }
     exports.publish = publish;
-    function success(context2, pluginsLoaded) {
+    function success(context3, pluginsLoaded) {
       return __awaiter(this, void 0, void 0, function* () {
         if (shouldSkipStage("success"))
           return;
         for (const [pluginName, pluginModule] of Object.entries(pluginsLoaded)) {
           if (pluginModule.success != null) {
-            context2.logger.info(`Running "success" stage for plugin ${pluginName}`);
-            context2.logger.pluginName = pluginName;
+            context3.logger.info(`Running "success" stage for plugin ${pluginName}`);
+            context3.logger.pluginName = pluginName;
             try {
-              yield pluginModule.success(context2, context2.plugins[pluginName] || {});
+              yield pluginModule.success(context3, context3.plugins[pluginName] || {});
             } finally {
-              context2.logger.pluginName = void 0;
+              context3.logger.pluginName = void 0;
             }
           }
         }
       });
     }
     exports.success = success;
-    function version(context2, pluginsLoaded) {
+    function version(context3, pluginsLoaded) {
       return __awaiter(this, void 0, void 0, function* () {
         if (shouldSkipStage("version"))
           return;
         for (const [pluginName, pluginModule] of Object.entries(pluginsLoaded)) {
           if (pluginModule.version != null) {
-            context2.logger.info(`Running "version" stage for plugin ${pluginName}`);
-            context2.logger.pluginName = pluginName;
+            context3.logger.info(`Running "version" stage for plugin ${pluginName}`);
+            context3.logger.pluginName = pluginName;
             try {
-              yield pluginModule.version(context2, context2.plugins[pluginName] || {});
+              yield pluginModule.version(context3, context3.plugins[pluginName] || {});
             } finally {
-              context2.logger.pluginName = void 0;
+              context3.logger.pluginName = void 0;
             }
           }
         }
@@ -3890,7 +3890,7 @@ var require_json_parse_even_better_errors = __commonJS({
       const h = char.charCodeAt(0).toString(16).toUpperCase();
       return "0x" + (h.length % 2 ? "0" : "") + h;
     };
-    var parseError = (e, txt, context2) => {
+    var parseError = (e, txt, context3) => {
       if (!txt) {
         return {
           message: e.message + " while parsing empty string",
@@ -3901,8 +3901,8 @@ var require_json_parse_even_better_errors = __commonJS({
       const errIdx = badToken ? +badToken[2] : e.message.match(/^Unexpected end of JSON.*/i) ? txt.length - 1 : null;
       const msg = badToken ? e.message.replace(/^Unexpected token ./, `Unexpected token ${JSON.stringify(badToken[1])} (${hexify(badToken[1])})`) : e.message;
       if (errIdx !== null && errIdx !== void 0) {
-        const start = errIdx <= context2 ? 0 : errIdx - context2;
-        const end = errIdx + context2 >= txt.length ? txt.length : errIdx + context2;
+        const start = errIdx <= context3 ? 0 : errIdx - context3;
+        const end = errIdx + context3 >= txt.length ? txt.length : errIdx + context3;
         const slice = (start === 0 ? "" : "...") + txt.slice(start, end) + (end === txt.length ? "" : "...");
         const near = txt === slice ? "" : "near ";
         return {
@@ -3911,15 +3911,15 @@ var require_json_parse_even_better_errors = __commonJS({
         };
       } else {
         return {
-          message: msg + ` while parsing '${txt.slice(0, context2 * 2)}'`,
+          message: msg + ` while parsing '${txt.slice(0, context3 * 2)}'`,
           position: 0
         };
       }
     };
     var JSONParseError = class extends SyntaxError {
-      constructor(er, txt, context2, caller) {
-        context2 = context2 || 20;
-        const metadata = parseError(er, txt, context2);
+      constructor(er, txt, context3, caller) {
+        context3 = context3 || 20;
+        const metadata = parseError(er, txt, context3);
         super(metadata.message);
         Object.assign(this, metadata);
         this.code = "EJSONPARSE";
@@ -3939,9 +3939,9 @@ var require_json_parse_even_better_errors = __commonJS({
     var kNewline = Symbol.for("newline");
     var formatRE = /^\s*[{\[]((?:\r?\n)+)([\s\t]*)/;
     var emptyRE = /^(?:\{\}|\[\])((?:\r?\n)+)?$/;
-    var parseJson = (txt, reviver, context2) => {
+    var parseJson = (txt, reviver, context3) => {
       const parseText = stripBOM(txt);
-      context2 = context2 || 20;
+      context3 = context3 || 20;
       try {
         const [, newline = "\n", indent = "  "] = parseText.match(emptyRE) || parseText.match(formatRE) || [, "", ""];
         const result = JSON.parse(parseText, reviver);
@@ -3958,7 +3958,7 @@ var require_json_parse_even_better_errors = __commonJS({
             systemError: e
           });
         }
-        throw new JSONParseError(e, parseText, context2, parseJson);
+        throw new JSONParseError(e, parseText, context3, parseJson);
       }
     };
     var stripBOM = (txt) => String(txt).replace(/^\uFEFF/, "");
@@ -6428,9 +6428,9 @@ ${offset}${err}${errEnd}`;
           error: error2
         };
       }
-      constructor(type, props, context2) {
+      constructor(type, props, context3) {
         Object.defineProperty(this, "context", {
-          value: context2 || null,
+          value: context3 || null,
           writable: true
         });
         this.error = null;
@@ -6783,12 +6783,12 @@ ${ctx}
         this.valueRange.end = valueEnd;
         return valueEnd;
       }
-      parse(context2, start) {
-        this.context = context2;
+      parse(context3, start) {
+        this.context = context3;
         const {
           inFlow,
           src
-        } = context2;
+        } = context3;
         let offset = start;
         const ch = src[offset];
         if (ch && ch !== "#" && ch !== "\n") {
@@ -6831,8 +6831,8 @@ var require_parse_cst = __commonJS({
       get includesTrailingLines() {
         return true;
       }
-      parse(context2, start) {
-        this.context = context2;
+      parse(context3, start) {
+        this.context = context3;
         this.range = new PlainValue.Range(start, start + 1);
         return start + 1;
       }
@@ -6845,19 +6845,19 @@ var require_parse_cst = __commonJS({
       get includesTrailingLines() {
         return !!this.node && this.node.includesTrailingLines;
       }
-      parse(context2, start) {
-        this.context = context2;
+      parse(context3, start) {
+        this.context = context3;
         const {
           parseNode,
           src
-        } = context2;
+        } = context3;
         let {
           atLineStart,
           lineStart
-        } = context2;
+        } = context3;
         if (!atLineStart && this.type === PlainValue.Type.SEQ_ITEM)
           this.error = new PlainValue.YAMLSemanticError(this, "Sequence items must not have preceding content on the same line");
-        const indent = atLineStart ? start - lineStart : context2.indent;
+        const indent = atLineStart ? start - lineStart : context3.indent;
         let offset = PlainValue.Node.endOfWhiteSpace(src, start + 1);
         let ch = src[offset];
         const inlineComment = ch === "#";
@@ -6895,7 +6895,7 @@ var require_parse_cst = __commonJS({
         }
         if (this.node) {
           if (blankLine) {
-            const items = context2.parent.items || context2.parent.contents;
+            const items = context3.parent.items || context3.parent.contents;
             if (items)
               items.push(blankLine);
           }
@@ -6938,8 +6938,8 @@ var require_parse_cst = __commonJS({
       constructor() {
         super(PlainValue.Type.COMMENT);
       }
-      parse(context2, start) {
-        this.context = context2;
+      parse(context3, start) {
+        this.context = context3;
         const offset = this.parseComment(start);
         this.range = new PlainValue.Range(start, offset);
         return offset;
@@ -7014,12 +7014,12 @@ var require_parse_cst = __commonJS({
       get includesTrailingLines() {
         return this.items.length > 0;
       }
-      parse(context2, start) {
-        this.context = context2;
+      parse(context3, start) {
+        this.context = context3;
         const {
           parseNode,
           src
-        } = context2;
+        } = context3;
         let lineStart = PlainValue.Node.startOfLine(src, start);
         const firstItem = this.items[0];
         firstItem.context.parent = this;
@@ -7194,8 +7194,8 @@ var require_parse_cst = __commonJS({
         this.valueRange = new PlainValue.Range(start, offset);
         return offset;
       }
-      parse(context2, start) {
-        this.context = context2;
+      parse(context3, start) {
+        this.context = context3;
         let offset = this.parseName(start + 1);
         offset = this.parseParameters(offset);
         offset = this.parseComment(offset);
@@ -7327,7 +7327,7 @@ var require_parse_cst = __commonJS({
               break;
             default: {
               const iEnd = PlainValue.Node.endOfIndent(src, offset);
-              const context2 = {
+              const context3 = {
                 atLineStart,
                 indent: -1,
                 inFlow: false,
@@ -7335,7 +7335,7 @@ var require_parse_cst = __commonJS({
                 lineStart,
                 parent: this
               };
-              const node = parseNode(context2, iEnd);
+              const node = parseNode(context3, iEnd);
               if (!node)
                 return this.valueRange.end = iEnd;
               this.contents.push(node);
@@ -7374,12 +7374,12 @@ var require_parse_cst = __commonJS({
         }
         return offset;
       }
-      parse(context2, start) {
-        context2.root = this;
-        this.context = context2;
+      parse(context3, start) {
+        context3.root = this;
+        this.context = context3;
         const {
           src
-        } = context2;
+        } = context3;
         let offset = src.charCodeAt(start) === 65279 ? start + 1 : start;
         offset = this.parseDirectives(offset);
         offset = this.parseContents(offset);
@@ -7419,11 +7419,11 @@ var require_parse_cst = __commonJS({
       }
     };
     var Alias = class extends PlainValue.Node {
-      parse(context2, start) {
-        this.context = context2;
+      parse(context3, start) {
+        this.context = context3;
         const {
           src
-        } = context2;
+        } = context3;
         let offset = PlainValue.Node.endOfIdentifier(src, start + 1);
         this.valueRange = new PlainValue.Range(start + 1, offset);
         offset = PlainValue.Node.endOfWhiteSpace(src, offset);
@@ -7607,11 +7607,11 @@ var require_parse_cst = __commonJS({
         this.valueRange = new PlainValue.Range(start + 1, offset);
         return offset;
       }
-      parse(context2, start) {
-        this.context = context2;
+      parse(context3, start) {
+        this.context = context3;
         const {
           src
-        } = context2;
+        } = context3;
         let offset = this.parseBlockHeader(start);
         offset = PlainValue.Node.endOfWhiteSpace(src, offset);
         offset = this.parseComment(offset);
@@ -7632,16 +7632,16 @@ var require_parse_cst = __commonJS({
         const node = this.items[idx - 1];
         return !!node && (node.jsonLike || node.type === PlainValue.Type.COMMENT && this.prevNodeIsJsonLike(idx - 1));
       }
-      parse(context2, start) {
-        this.context = context2;
+      parse(context3, start) {
+        this.context = context3;
         const {
           parseNode,
           src
-        } = context2;
+        } = context3;
         let {
           indent,
           lineStart
-        } = context2;
+        } = context3;
         let char = src[start];
         this.items = [{
           char,
@@ -7926,11 +7926,11 @@ var require_parse_cst = __commonJS({
         }
         return String.fromCodePoint(code);
       }
-      parse(context2, start) {
-        this.context = context2;
+      parse(context3, start) {
+        this.context = context3;
         const {
           src
-        } = context2;
+        } = context3;
         let offset = QuoteDouble.endOfQuote(src, start + 1);
         this.valueRange = new PlainValue.Range(start, offset);
         offset = PlainValue.Node.endOfWhiteSpace(src, offset);
@@ -8004,11 +8004,11 @@ var require_parse_cst = __commonJS({
           str
         } : str;
       }
-      parse(context2, start) {
-        this.context = context2;
+      parse(context3, start) {
+        this.context = context3;
         const {
           src
-        } = context2;
+        } = context3;
         let offset = QuoteSingle.endOfQuote(src, start + 1);
         this.valueRange = new PlainValue.Range(start, offset);
         offset = PlainValue.Node.endOfWhiteSpace(src, offset);
@@ -8079,14 +8079,14 @@ var require_parse_cst = __commonJS({
         PlainValue._defineProperty(this, "parseNode", (overlay, start) => {
           if (PlainValue.Node.atDocumentBoundary(this.src, start))
             return null;
-          const context2 = new ParseContext(this, overlay);
+          const context3 = new ParseContext(this, overlay);
           const {
             props,
             type,
             valueStart
-          } = context2.parseProps(start);
+          } = context3.parseProps(start);
           const node = createNewNode(type, props);
-          let offset = node.parse(context2, valueStart);
+          let offset = node.parse(context3, valueStart);
           node.range = new PlainValue.Range(start, offset);
           if (offset <= start) {
             node.error = new Error(`Node#parse consumed no characters`);
@@ -8094,12 +8094,12 @@ var require_parse_cst = __commonJS({
             node.error.source = node;
             node.range.end = start + 1;
           }
-          if (context2.nodeStartsCollection(node)) {
-            if (!node.error && !context2.atLineStart && context2.parent.type === PlainValue.Type.DOCUMENT) {
+          if (context3.nodeStartsCollection(node)) {
+            if (!node.error && !context3.atLineStart && context3.parent.type === PlainValue.Type.DOCUMENT) {
               node.error = new PlainValue.YAMLSyntaxError(node, "Block collection must not have preceding content here (e.g. directives-end indicator)");
             }
             const collection = new Collection(node);
-            offset = collection.parse(new ParseContext(context2), offset);
+            offset = collection.parse(new ParseContext(context3), offset);
             collection.range = new PlainValue.Range(start, offset);
             return collection;
           }
@@ -8194,10 +8194,10 @@ var require_parse_cst = __commonJS({
       let offset = 0;
       do {
         const doc = new Document();
-        const context2 = new ParseContext({
+        const context3 = new ParseContext({
           src
         });
-        offset = doc.parse(context2, offset);
+        offset = doc.parse(context3, offset);
         documents.push(doc);
       } while (offset < src.length);
       documents.setOrigRanges = () => {
@@ -17507,10 +17507,10 @@ var require_kill = __commonJS({
       }
       return forceKillAfterTimeout;
     };
-    var spawnedCancel = (spawned, context2) => {
+    var spawnedCancel = (spawned, context3) => {
       const killResult = spawned.kill();
       if (killResult) {
-        context2.isCanceled = true;
+        context3.isCanceled = true;
       }
     };
     var timeoutKill = (spawned, signal, reject) => {
@@ -17961,9 +17961,9 @@ var require_execa = __commonJS({
       const spawnedPromise = getSpawnedPromise(spawned);
       const timedPromise = setupTimeout(spawned, parsed.options, spawnedPromise);
       const processDone = setExitHandler(spawned, parsed.options, timedPromise);
-      const context2 = { isCanceled: false };
+      const context3 = { isCanceled: false };
       spawned.kill = spawnedKill.bind(null, spawned.kill.bind(spawned));
-      spawned.cancel = spawnedCancel.bind(null, spawned, context2);
+      spawned.cancel = spawnedCancel.bind(null, spawned, context3);
       const handlePromise = async () => {
         const [{ error: error2, exitCode, signal, timedOut }, stdoutResult, stderrResult, allResult] = await getSpawnedResult(spawned, parsed.options, processDone);
         const stdout = handleOutput(parsed.options, stdoutResult);
@@ -17981,7 +17981,7 @@ var require_execa = __commonJS({
             escapedCommand,
             parsed,
             timedOut,
-            isCanceled: context2.isCanceled,
+            isCanceled: context3.isCanceled,
             killed: spawned.killed
           });
           if (!parsed.options.reject) {
@@ -19276,20 +19276,20 @@ var require_utils5 = __commonJS({
       });
     }
     exports.buildContext = buildContext;
-    function dryRunTask(context2, description, task) {
+    function dryRunTask(context3, description, task) {
       return __awaiter(this, void 0, void 0, function* () {
-        if (context2.dryRun) {
-          context2.logger.info(`Skipping "${description}"`);
+        if (context3.dryRun) {
+          context3.logger.info(`Skipping "${description}"`);
         } else {
           return task();
         }
       });
     }
     exports.dryRunTask = dryRunTask;
-    function loadPlugins(context2) {
+    function loadPlugins(context3) {
       return __awaiter(this, void 0, void 0, function* () {
         const pluginsLoaded = {};
-        for (const pluginName in context2.plugins) {
+        for (const pluginName in context3.plugins) {
           let pluginPath = pluginName;
           if (!pluginName.startsWith("./")) {
             pluginPath = `./node_modules/${pluginName}`;
@@ -19303,15 +19303,15 @@ var require_utils5 = __commonJS({
       });
     }
     exports.loadPlugins = loadPlugins;
-    function verifyConditions(context2) {
+    function verifyConditions(context3) {
       return __awaiter(this, void 0, void 0, function* () {
-        context2.version.new = inputs_1.Inputs.newVersion || context2.version.new;
-        if (context2.version.prerelease != null) {
-          context2.version.new = `${context2.version.new.split("-")[0]}-${context2.version.prerelease}`;
+        context3.version.new = inputs_1.Inputs.newVersion || context3.version.new;
+        if (context3.version.prerelease != null) {
+          context3.version.new = `${context3.version.new.split("-")[0]}-${context3.version.prerelease}`;
         }
-        const semverDiff = require_semver().diff(context2.version.old.split("-")[0], context2.version.new.split("-")[0]);
-        if (semverDiff === "major" && (context2.branch.level === "minor" || context2.branch.level === "patch") || semverDiff === "minor" && context2.branch.level === "patch") {
-          throw new Error(`Protected branch ${context2.branch.name} does not allow ${semverDiff} version changes`);
+        const semverDiff = require_semver().diff(context3.version.old.split("-")[0], context3.version.new.split("-")[0]);
+        if (semverDiff === "major" && (context3.branch.level === "minor" || context3.branch.level === "patch") || semverDiff === "minor" && context3.branch.level === "patch") {
+          throw new Error(`Protected branch ${context3.branch.name} does not allow ${semverDiff} version changes`);
         }
       });
     }
@@ -19329,9 +19329,9 @@ var require_utils5 = __commonJS({
         return { old: oldVersion, new: oldVersion, prerelease };
       });
     }
-    function getLastCommitMessage(context2) {
+    function getLastCommitMessage(context3) {
       return __awaiter(this, void 0, void 0, function* () {
-        const cmdOutput = yield exec3.getExecOutput("git", ["log", "-1", "--pretty=format:%s", context2.ci.commit], { ignoreReturnCode: true });
+        const cmdOutput = yield exec3.getExecOutput("git", ["log", "-1", "--pretty=format:%s", context3.ci.commit], { ignoreReturnCode: true });
         return cmdOutput.exitCode === 0 && cmdOutput.stdout.trim() || void 0;
       });
     }
@@ -19497,20 +19497,20 @@ var require_utils6 = __commonJS({
       });
     }
     exports.gitCommit = gitCommit;
-    function gitConfig(context2) {
+    function gitConfig(context3) {
       return __awaiter(this, void 0, void 0, function* () {
-        yield exec3.exec("git", ["config", "--global", "user.name", context2.env.GIT_COMMITTER_NAME]);
-        yield exec3.exec("git", ["config", "--global", "user.email", context2.env.GIT_COMMITTER_EMAIL]);
-        if (context2.env.GIT_CREDENTIALS != null) {
+        yield exec3.exec("git", ["config", "--global", "user.name", context3.env.GIT_COMMITTER_NAME]);
+        yield exec3.exec("git", ["config", "--global", "user.email", context3.env.GIT_COMMITTER_EMAIL]);
+        if (context3.env.GIT_CREDENTIALS != null) {
           yield exec3.exec("git", ["config", "--global", "credential.helper", "store"]);
           const cmdOutput = yield exec3.getExecOutput("git", ["config", "--get", "remote.origin.url"]);
           const gitUrl = new url.URL(cmdOutput.stdout);
-          fs4.appendFileSync(path2.join(os.homedir(), ".git-credentials"), `${gitUrl.protocol}//${context2.env.GIT_CREDENTIALS}@${gitUrl.host}`);
+          fs4.appendFileSync(path2.join(os.homedir(), ".git-credentials"), `${gitUrl.protocol}//${context3.env.GIT_CREDENTIALS}@${gitUrl.host}`);
         }
       });
     }
     exports.gitConfig = gitConfig;
-    function gitPush(context2, branch, tags) {
+    function gitPush(context3, branch, tags) {
       return __awaiter(this, void 0, void 0, function* () {
         if (!tags) {
           const cmdOutput = yield exec3.getExecOutput("git", ["cherry"]);
@@ -19522,7 +19522,7 @@ var require_utils6 = __commonJS({
         if (tags) {
           cmdArgs.push("--follow-tags");
         }
-        if (context2.dryRun) {
+        if (context3.dryRun) {
           cmdArgs.push("--dry-run");
         }
         yield exec3.exec("git", cmdArgs);
@@ -19609,15 +19609,15 @@ var require_init = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     var utils = __importStar(require_utils6());
-    function default_1(context2, config) {
+    function default_1(context3, config) {
       return __awaiter(this, void 0, void 0, function* () {
-        if (context2.env.GIT_COMMITTER_NAME == null) {
+        if (context3.env.GIT_COMMITTER_NAME == null) {
           throw new Error("Required environment variable GIT_COMMITTER_NAME is undefined");
         }
-        if (context2.env.GIT_COMMITTER_EMAIL == null) {
+        if (context3.env.GIT_COMMITTER_EMAIL == null) {
           throw new Error("Required environment variable GIT_COMMITTER_EMAIL is undefined");
         }
-        yield utils.gitConfig(context2);
+        yield utils.gitConfig(context3);
       });
     }
     exports.default = default_1;
@@ -19685,20 +19685,20 @@ var require_version2 = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     var utils = __importStar(require_utils6());
-    function default_1(context2, config) {
+    function default_1(context3, config) {
       return __awaiter(this, void 0, void 0, function* () {
         const commitMessage = config.commitMessage || "Bump version to {{version}}";
-        let tagMessage = config.tagMessage || context2.branch.channel && `Release {{version}} to ${context2.branch.channel}`;
-        yield utils.gitAdd(...context2.changedFiles);
-        if (!(yield utils.gitCommit(commitMessage.replace("{{version}}", context2.version.new)))) {
-          context2.logger.warning("Nothing to commit");
+        let tagMessage = config.tagMessage || context3.branch.channel && `Release {{version}} to ${context3.branch.channel}`;
+        yield utils.gitAdd(...context3.changedFiles);
+        if (!(yield utils.gitCommit(commitMessage.replace("{{version}}", context3.version.new)))) {
+          context3.logger.warning("Nothing to commit");
         }
-        tagMessage = tagMessage === null || tagMessage === void 0 ? void 0 : tagMessage.replace("{{version}}", context2.version.new);
-        if (!(yield utils.gitTag(context2.tagPrefix + context2.version.new, tagMessage))) {
-          context2.logger.warning("Git tag already exists");
+        tagMessage = tagMessage === null || tagMessage === void 0 ? void 0 : tagMessage.replace("{{version}}", context3.version.new);
+        if (!(yield utils.gitTag(context3.tagPrefix + context3.version.new, tagMessage))) {
+          context3.logger.warning("Git tag already exists");
         }
-        if (!(yield utils.gitPush(context2, context2.branch.name, true))) {
-          context2.logger.warning("Nothing to push");
+        if (!(yield utils.gitPush(context3, context3.branch.name, true))) {
+          context3.logger.warning("Nothing to push");
         }
       });
     }
@@ -20129,9 +20129,9 @@ function updateDependency(pkgName, pkgTag, dev) {
     }
   });
 }
-function npmUpdate_default(context2) {
+function npmUpdate_default(context3) {
   return __async(this, null, function* () {
-    const branchConfig = context2.branch;
+    const branchConfig = context3.branch;
     if (branchConfig.dependencies == null && branchConfig.devDependencies == null) {
       return;
     }
@@ -20139,9 +20139,9 @@ function npmUpdate_default(context2) {
     const dependencies = getDependencies(branchConfig, false);
     const devDependencies = getDependencies(branchConfig, true);
     const changedFiles = ["package.json", lockfilePath];
-    context2.logger.info(`Checking for updates to ${pluralize("dependency", Object.keys(dependencies).length, true)} and ${pluralize("dev dependency", Object.keys(devDependencies).length, true)}`);
-    if (context2.env.NPM_RESOLUTIONS) {
-      resolutions = JSON.parse(context2.env.NPM_RESOLUTIONS);
+    context3.logger.info(`Checking for updates to ${pluralize("dependency", Object.keys(dependencies).length, true)} and ${pluralize("dev dependency", Object.keys(devDependencies).length, true)}`);
+    if (context3.env.NPM_RESOLUTIONS) {
+      resolutions = JSON.parse(context3.env.NPM_RESOLUTIONS);
       if (Object.keys(resolutions).length === 0) {
         return;
       }
@@ -20156,7 +20156,7 @@ function npmUpdate_default(context2) {
         yield updateDependency(pkgName, pkgTag, true);
       }
     }
-    if (!context2.env.NPM_RESOLUTIONS) {
+    if (!context3.env.NPM_RESOLUTIONS) {
       core.setOutput("result", JSON.stringify(resolutions));
     }
     if (updateDetails.length > 0) {
@@ -20177,8 +20177,8 @@ function npmUpdate_default(context2) {
         yield exec.exec("git", ["checkout", lockfilePath]);
         yield exec.exec("npm", ["install"]);
       }
-      if (context2.env.GIT_COMMITTER_NAME !== null && context2.env.GIT_COMMITTER_EMAIL !== null) {
-        yield import_git.utils.gitConfig(context2);
+      if (context3.env.GIT_COMMITTER_NAME !== null && context3.env.GIT_COMMITTER_EMAIL !== null) {
+        yield import_git.utils.gitConfig(context3);
         yield import_git.utils.gitAdd(...changedFiles);
         yield import_git.utils.gitCommit("Update dependencies [ci skip]\n\n" + updateDetails.join("\n"));
       }
@@ -20613,8 +20613,8 @@ var require_dist_node3 = __commonJS({
     function isKeyOperator(operator) {
       return operator === ";" || operator === "&" || operator === "?";
     }
-    function getValues(context2, operator, key, modifier) {
-      var value = context2[key], result = [];
+    function getValues(context3, operator, key, modifier) {
+      var value = context3[key], result = [];
       if (isDefined(value) && value !== "") {
         if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
           value = value.toString();
@@ -20674,7 +20674,7 @@ var require_dist_node3 = __commonJS({
         expand: expand.bind(null, template)
       };
     }
-    function expand(template, context2) {
+    function expand(template, context3) {
       var operators = ["+", "#", ".", "/", ";", "?", "&"];
       return template.replace(/\{([^\{\}]+)\}|([^\{\}]+)/g, function(_, expression, literal) {
         if (expression) {
@@ -20686,7 +20686,7 @@ var require_dist_node3 = __commonJS({
           }
           expression.split(/,/g).forEach(function(variable) {
             var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
-            values.push(getValues(context2, operator, tmp[1], tmp[2] || tmp[3]));
+            values.push(getValues(context3, operator, tmp[1], tmp[2] || tmp[3]));
           });
           if (operator && operator !== "+") {
             var separator = ",";
@@ -27388,20 +27388,14 @@ var require_unzip = __commonJS({
 });
 
 // src/utils.ts
-function downloadArtifact(workflowId, commitSha, artifactName, extractPath) {
+function downloadArtifact(runId, artifactName, extractPath) {
   return __async(this, null, function* () {
     const octokit = github.getOctokit(core2.getInput("github-token") || process.env.GITHUB_TOKEN);
-    const lastSuccessfulRunId = (yield octokit.rest.actions.listWorkflowRuns(__spreadProps(__spreadValues({}, github.context.repo), {
-      workflow_id: workflowId,
-      status: "success",
-      per_page: 1,
-      head_sha: commitSha
-    }))).data.workflow_runs[0].id;
     const artifactInfo = (yield octokit.rest.actions.listWorkflowRunArtifacts(__spreadProps(__spreadValues({}, github.context.repo), {
-      run_id: lastSuccessfulRunId
+      run_id: runId
     }))).data.artifacts.find((a) => a.name === artifactName);
     if (artifactInfo == null) {
-      throw new Error(`Could not find artifact ${artifactName} for run ID ${lastSuccessfulRunId}`);
+      throw new Error(`Could not find artifact ${artifactName} for run ID ${runId}`);
     }
     const artifactRaw = Buffer.from((yield octokit.rest.actions.downloadArtifact(__spreadProps(__spreadValues({}, github.context.repo), {
       artifact_id: artifactInfo.id,
@@ -27413,11 +27407,11 @@ function downloadArtifact(workflowId, commitSha, artifactName, extractPath) {
     yield (0, import_util.promisify)(import_stream.pipeline)(import_stream.Readable.from(artifactRaw), require_unzip().Extract({ path: extractPath != null ? extractPath : process.cwd() }));
   });
 }
-function findCurrentPr() {
+function findCurrentPr(commitSha) {
   return __async(this, null, function* () {
     const octokit = github.getOctokit(core2.getInput("github-token") || process.env.GITHUB_TOKEN);
     const result = yield octokit.rest.repos.listPullRequestsAssociatedWithCommit(__spreadProps(__spreadValues({}, github.context.repo), {
-      commit_sha: github.context.sha
+      commit_sha: commitSha != null ? commitSha : github.context.sha
     }));
     return result.data.find((pr) => pr.state === "open" && github.context.payload.ref === `refs/heads/${pr.head.ref}`);
   });
@@ -27438,19 +27432,17 @@ var sonarConfig_exports = {};
 __export(sonarConfig_exports, {
   default: () => sonarConfig_default
 });
-function downloadCoverageReports(context2) {
+function downloadCoverageReports(context3) {
   return __async(this, null, function* () {
-    if (process.env.COVERAGE_ARTIFACT == null) {
+    if (context3.ci.service !== "github" || process.env.COVERAGE_ARTIFACT == null) {
       return;
     }
-    const splitIndex = process.env.COVERAGE_ARTIFACT.indexOf(":");
-    const [workflowId, artifactName] = process.env.COVERAGE_ARTIFACT.slice(0, splitIndex).split("/", 2);
-    const extractPath = process.env.COVERAGE_ARTIFACT.slice(splitIndex + 1);
-    yield downloadArtifact(workflowId, context2.ci.commit, artifactName, extractPath);
+    const [artifactName, extractPath] = process.env.COVERAGE_ARTIFACT.split(":", 2);
+    yield downloadArtifact(github2.context.payload.workflow_run.id, artifactName, extractPath);
   });
 }
-function rewriteCoverageReports(context2) {
-  if (context2.ci.service !== "github") {
+function rewriteCoverageReports(context3) {
+  if (context3.ci.service !== "github") {
     return;
   }
   const sonarProps = properties.of("sonar-project.properties");
@@ -27458,37 +27450,38 @@ function rewriteCoverageReports(context2) {
   if (typeof reportPaths !== "string") {
     return;
   }
-  context2.logger.info("Fixing coverage paths for SonarCloud");
-  const pattern = new RegExp(context2.env.GITHUB_WORKSPACE, "g");
+  context3.logger.info("Fixing coverage paths for SonarCloud");
+  const pattern = new RegExp(context3.env.GITHUB_WORKSPACE, "g");
   for (const reportPath of reportPaths.split(",")) {
     const reportText = fs3.readFileSync(reportPath, "utf-8");
     fs3.writeFileSync(reportPath, reportText.replace(pattern, "/github/workspace"));
   }
 }
-function sonarConfig_default(context2) {
+function sonarConfig_default(context3) {
   return __async(this, null, function* () {
+    var _a;
     const sonarProps = {};
-    const packageJson = JSON.parse(fs3.readFileSync("package.json", "utf-8"));
-    sonarProps["sonar.projectVersion"] = packageJson.version;
-    sonarProps["sonar.links.ci"] = `https://github.com/${context2.ci.slug}/actions/runs/${context2.ci.build}`;
-    const pr = yield findCurrentPr();
+    sonarProps["sonar.projectVersion"] = context3.version.old;
+    sonarProps["sonar.links.ci"] = `https://github.com/${context3.ci.slug}/actions/runs/${context3.ci.build}`;
+    const pr = yield findCurrentPr((_a = github2.context.payload.workflow_run) == null ? void 0 : _a.head_sha);
     if (pr != null) {
       sonarProps["sonar.pullrequest.key"] = pr.number;
       sonarProps["sonar.pullrequest.branch"] = pr.head.ref;
       sonarProps["sonar.pullrequest.base"] = pr.base.ref;
     } else {
-      sonarProps["sonar.branch.name"] = context2.ci.branch;
+      sonarProps["sonar.branch.name"] = context3.ci.branch;
     }
-    context2.logger.info("Sonar scan properties:\n" + JSON.stringify(sonarProps, null, 2));
+    context3.logger.info("Sonar scan properties:\n" + JSON.stringify(sonarProps, null, 2));
     fs3.appendFileSync("sonar-project.properties", Object.entries(sonarProps).map(([k, v]) => `${k}=${v}`).join("\n"));
-    yield downloadCoverageReports(context2);
-    rewriteCoverageReports(context2);
+    yield downloadCoverageReports(context3);
+    rewriteCoverageReports(context3);
   });
 }
-var fs3, properties;
+var fs3, github2, properties;
 var init_sonarConfig = __esm({
   "scripts/sonarConfig.ts"() {
     fs3 = __toESM(require("fs"));
+    github2 = __toESM(require_github2());
     properties = __toESM(require_dist_node());
     init_utils();
   }
@@ -27523,15 +27516,15 @@ function run() {
         process.chdir(path.resolve(workingDir));
       }
       const prBranch = (_a = yield findCurrentPr()) == null ? void 0 : _a.base.ref;
-      const context2 = yield import_core.utils.buildContext({
+      const context3 = yield import_core.utils.buildContext({
         branch: prBranch,
         force: !RELEASE_SCRIPTS.includes(core3.getInput("script"))
       });
-      if (context2 == null) {
+      if (context3 == null) {
         core3.info("Current branch is not targeting a release branch, exiting now");
         process.exit();
       }
-      yield loadScript(core3.getInput("script"))(context2);
+      yield loadScript(core3.getInput("script"))(context3);
     } catch (error2) {
       if (error2 instanceof Error) {
         core3.error(error2.stack || error2.message);
