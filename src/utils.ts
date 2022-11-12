@@ -41,11 +41,14 @@ export async function downloadArtifact(runId: number, artifactName: string, extr
         require("unzip-stream").Extract({ path: extractPath ?? process.cwd() }));
 }
 
-export async function findCurrentPr(commitSha?: string): Promise<any | undefined> {
+export async function findCurrentPr(): Promise<any | undefined> {
     const octokit = github.getOctokit(core.getInput("github-token") || process.env.GITHUB_TOKEN as string);
+    const headSha = github.context.payload.workflow_run?.head_sha ?? github.context.sha;
+    const headRef = (github.context.payload.workflow_run?.head_branch != null) ?
+        `refs/heads/${github.context.payload.workflow_run.head_branch}` : github.context.payload.ref;
     const result = await octokit.rest.repos.listPullRequestsAssociatedWithCommit({
         ...github.context.repo,
-        commit_sha: commitSha ?? github.context.sha
+        commit_sha: headSha
     });
-    return result.data.find(pr => pr.state === "open" && github.context.payload.ref === `refs/heads/${pr.head.ref}`);
+    return result.data.find(pr => pr.state === "open" && headRef === `refs/heads/${pr.head.ref}`);
 }

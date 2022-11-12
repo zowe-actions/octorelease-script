@@ -49,15 +49,14 @@ function rewriteCoverageReports(context: IContext) {
 export default async function (context: IContext): Promise<void> {
     // Append Sonar properties to the sonar-project.properties file
     const sonarProps: { [key: string]: any } = {};
-    const packageJson = JSON.parse(fs.readFileSync(fs.existsSync("lerna.json") ?
-        "lerna.json" : "package.json", "utf-8"));
+    const packageJson = JSON.parse(fs.readFileSync(fs.existsSync("lerna.json") ? "lerna.json"
+        : "package.json", "utf-8"));
     sonarProps["sonar.projectVersion"] = packageJson.version;
     sonarProps["sonar.links.ci"] =
         `https://github.com/${(context.ci as any).slug}/actions/runs/${(context.ci as any).build}`;
 
     // Set properties for pull request or branch scanning
-    const pr = await utils.findCurrentPr(github.context.payload.workflow_run?.head_sha);
-    console.log(JSON.stringify(github.context.payload, null, 2));
+    const pr = await utils.findCurrentPr();
     if (pr != null) {
         sonarProps["sonar.pullrequest.key"] = pr.number;
         sonarProps["sonar.pullrequest.branch"] = pr.head.ref;

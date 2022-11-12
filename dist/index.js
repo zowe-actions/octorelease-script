@@ -27407,13 +27407,16 @@ function downloadArtifact(runId, artifactName, extractPath) {
     yield (0, import_util.promisify)(import_stream.pipeline)(import_stream.Readable.from(artifactRaw), require_unzip().Extract({ path: extractPath != null ? extractPath : process.cwd() }));
   });
 }
-function findCurrentPr(commitSha) {
+function findCurrentPr() {
   return __async(this, null, function* () {
+    var _a, _b, _c;
     const octokit = github.getOctokit(core2.getInput("github-token") || process.env.GITHUB_TOKEN);
+    const headSha = (_b = (_a = github.context.payload.workflow_run) == null ? void 0 : _a.head_sha) != null ? _b : github.context.sha;
+    const headRef = ((_c = github.context.payload.workflow_run) == null ? void 0 : _c.head_branch) != null ? `refs/heads/${github.context.payload.workflow_run.head_branch}` : github.context.payload.ref;
     const result = yield octokit.rest.repos.listPullRequestsAssociatedWithCommit(__spreadProps(__spreadValues({}, github.context.repo), {
-      commit_sha: commitSha != null ? commitSha : github.context.sha
+      commit_sha: headSha
     }));
-    return result.data.find((pr) => pr.state === "open" && github.context.payload.ref === `refs/heads/${pr.head.ref}`);
+    return result.data.find((pr) => pr.state === "open" && headRef === `refs/heads/${pr.head.ref}`);
   });
 }
 var fs2, import_stream, import_util, core2, github;
@@ -27459,13 +27462,11 @@ function rewriteCoverageReports(context3) {
 }
 function sonarConfig_default(context3) {
   return __async(this, null, function* () {
-    var _a;
     const sonarProps = {};
     const packageJson = JSON.parse(fs3.readFileSync(fs3.existsSync("lerna.json") ? "lerna.json" : "package.json", "utf-8"));
     sonarProps["sonar.projectVersion"] = packageJson.version;
     sonarProps["sonar.links.ci"] = `https://github.com/${context3.ci.slug}/actions/runs/${context3.ci.build}`;
-    const pr = yield findCurrentPr((_a = github2.context.payload.workflow_run) == null ? void 0 : _a.head_sha);
-    console.log(JSON.stringify(github2.context.payload, null, 2));
+    const pr = yield findCurrentPr();
     if (pr != null) {
       sonarProps["sonar.pullrequest.key"] = pr.number;
       sonarProps["sonar.pullrequest.branch"] = pr.head.ref;
