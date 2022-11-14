@@ -43,12 +43,18 @@ export async function downloadArtifact(runId: number, artifactName: string, extr
 
 export async function findCurrentPr(): Promise<any | undefined> {
     const octokit = github.getOctokit(core.getInput("github-token") || process.env.GITHUB_TOKEN as string);
-    const headSha = github.context.payload.workflow_run?.head_sha ?? github.context.sha;
-    const headRef = (github.context.payload.workflow_run?.head_branch != null) ?
-        `refs/heads/${github.context.payload.workflow_run.head_branch}` : github.context.payload.ref;
-    const result = await octokit.rest.repos.listPullRequestsAssociatedWithCommit({
-        ...github.context.repo,
-        commit_sha: headSha
-    });
-    return result.data.find(pr => pr.state === "open" && headRef === `refs/heads/${pr.head.ref}`);
+    if (github.context.payload.workflow_run == null) {
+        const prs = (await octokit.rest.repos.listPullRequestsAssociatedWithCommit({
+            ...github.context.repo,
+            commit_sha: github.context.sha
+        })).data;
+        return prs.find(pr => github.context.payload.ref === `refs/heads/${pr.head.ref}`) || prs[0];
+    } else {
+        const [owner, repo] = github.context.payload.workflow_run.head_repository.full_name.split("/");
+        const prs = (await octokit.rest.repos.listPullRequestsAssociatedWithCommit({
+            owner, repo,
+            commit_sha: github.context.payload.workflow_run.head_sha
+        })).data.filter(pr => pr.base.repo.full_name === github.context.payload.workflow_run.repository.full_name);
+        return prs.find(pr => pr.head.ref === github.context.payload.workflow_run.head_branch) || prs[0];
+    }
 }
