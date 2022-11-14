@@ -27416,7 +27416,7 @@ function findCurrentPr() {
       }))).data;
       return prs.find((pr) => github.context.payload.ref === `refs/heads/${pr.head.ref}`) || prs[0];
     } else {
-      const [owner, repo] = github.context.payload.workflow_run.head_repository.full_name.split("/");
+      const [owner, repo] = github.context.payload.workflow_run.head_repository.full_name.split("/", 2);
       const prs = (yield octokit.rest.repos.listPullRequestsAssociatedWithCommit({
         owner,
         repo,
@@ -27451,6 +27451,13 @@ function downloadCoverageReports(context3) {
     yield downloadArtifact(github2.context.payload.workflow_run.id, artifactName, extractPath);
   });
 }
+function getPrHeadRef(pr) {
+  if (pr.base.repo.full_name === pr.head.repo.full_name) {
+    return pr.head.ref;
+  } else {
+    return `${pr.head.repo.full_name.split("/")[0]}:${pr.head.ref}`;
+  }
+}
 function rewriteCoverageReports(context3) {
   if (context3.ci.service !== "github") {
     return;
@@ -27476,7 +27483,7 @@ function sonarConfig_default(context3) {
     const pr = yield findCurrentPr();
     if (pr != null) {
       sonarProps["sonar.pullrequest.key"] = pr.number;
-      sonarProps["sonar.pullrequest.branch"] = pr.head.ref;
+      sonarProps["sonar.pullrequest.branch"] = getPrHeadRef(pr);
       sonarProps["sonar.pullrequest.base"] = pr.base.ref;
     } else {
       sonarProps["sonar.branch.name"] = context3.ci.branch;

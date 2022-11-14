@@ -50,7 +50,7 @@ export async function findCurrentPr(): Promise<any | undefined> {
         })).data;
         return prs.find(pr => github.context.payload.ref === `refs/heads/${pr.head.ref}`) || prs[0];
     } else {
-        const [owner, repo] = github.context.payload.workflow_run.head_repository.full_name.split("/");
+        const [owner, repo] = github.context.payload.workflow_run.head_repository.full_name.split("/", 2);
         const prs = (await octokit.rest.repos.listPullRequestsAssociatedWithCommit({
             owner, repo,
             commit_sha: github.context.payload.workflow_run.head_sha

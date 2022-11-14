@@ -21,11 +21,21 @@ import * as properties from "java-properties";
 import * as utils from "../src/utils";
 
 async function downloadCoverageReports(context: IContext) {
+    // For GHA workflows triggered by workflow_run event, download coverage artifact from the triggering workflow
     if (context.ci.service as any !== "github" || process.env.COVERAGE_ARTIFACT == null) {
         return;
     }
     const [artifactName, extractPath] = process.env.COVERAGE_ARTIFACT.split(":", 2);
     await utils.downloadArtifact(github.context.payload.workflow_run.id, artifactName, extractPath);
+}
+
+function getPrHeadRef(pr: any) {
+    // Prepend repo owner to PR branch name if it comes from a fork
+    if (pr.base.repo.full_name === pr.head.repo.full_name) {
+        return pr.head.ref;
+    } else {
+        return `${pr.head.repo.full_name.split("/")[0]}:${pr.head.ref}`;
+    }
 }
 
 function rewriteCoverageReports(context: IContext) {
@@ -59,7 +69,7 @@ export default async function (context: IContext): Promise<void> {
     const pr = await utils.findCurrentPr();
     if (pr != null) {
         sonarProps["sonar.pullrequest.key"] = pr.number;
-        sonarProps["sonar.pullrequest.branch"] = pr.head.ref;
+        sonarProps["sonar.pullrequest.branch"] = getPrHeadRef(pr);
         sonarProps["sonar.pullrequest.base"] = pr.base.ref;
     } else {
         sonarProps["sonar.branch.name"] = context.ci.branch as string;
