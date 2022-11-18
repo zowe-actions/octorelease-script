@@ -27485,6 +27485,7 @@ function sonarConfig_default(context3) {
       sonarProps["sonar.pullrequest.key"] = pr.number;
       sonarProps["sonar.pullrequest.branch"] = getPrHeadRef(pr);
       sonarProps["sonar.pullrequest.base"] = pr.base.ref;
+      sonarProps["sonar.pullrequest.github.repository"] = context3.ci.slug;
     } else {
       sonarProps["sonar.branch.name"] = context3.ci.branch;
     }

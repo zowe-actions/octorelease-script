@@ -71,6 +71,7 @@ export default async function (context: IContext): Promise<void> {
         sonarProps["sonar.pullrequest.key"] = pr.number;
         sonarProps["sonar.pullrequest.branch"] = getPrHeadRef(pr);
         sonarProps["sonar.pullrequest.base"] = pr.base.ref;
+        sonarProps["sonar.pullrequest.github.repository"] = (context.ci as any).slug;
     } else {
         sonarProps["sonar.branch.name"] = context.ci.branch as string;
     }
