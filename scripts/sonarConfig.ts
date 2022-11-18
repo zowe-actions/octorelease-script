@@ -64,6 +64,9 @@ export default async function (context: IContext): Promise<void> {
     sonarProps["sonar.projectVersion"] = packageJson.version;
     sonarProps["sonar.links.ci"] =
         `https://github.com/${(context.ci as any).slug}/actions/runs/${(context.ci as any).build}`;
+    if (github.context.payload.workflow_run != null) {
+        sonarProps["sonar.scm.revision"] = github.context.payload.workflow_run.head_sha;
+    }
 
     // Set properties for pull request or branch scanning
     const pr = await utils.findCurrentPr();
@@ -71,7 +74,6 @@ export default async function (context: IContext): Promise<void> {
         sonarProps["sonar.pullrequest.key"] = pr.number;
         sonarProps["sonar.pullrequest.branch"] = getPrHeadRef(pr);
         sonarProps["sonar.pullrequest.base"] = pr.base.ref;
-        sonarProps["sonar.pullrequest.github.repository"] = (context.ci as any).slug;
     } else {
         sonarProps["sonar.branch.name"] = context.ci.branch as string;
     }

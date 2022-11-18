@@ -27480,12 +27480,14 @@ function sonarConfig_default(context3) {
     const packageJson = JSON.parse(fs3.readFileSync(fs3.existsSync("lerna.json") ? "lerna.json" : "package.json", "utf-8"));
     sonarProps["sonar.projectVersion"] = packageJson.version;
     sonarProps["sonar.links.ci"] = `https://github.com/${context3.ci.slug}/actions/runs/${context3.ci.build}`;
+    if (github2.context.payload.workflow_run != null) {
+      sonarProps["sonar.scm.revision"] = github2.context.payload.workflow_run.head_sha;
+    }
     const pr = yield findCurrentPr();
     if (pr != null) {
       sonarProps["sonar.pullrequest.key"] = pr.number;
       sonarProps["sonar.pullrequest.branch"] = getPrHeadRef(pr);
       sonarProps["sonar.pullrequest.base"] = pr.base.ref;
-      sonarProps["sonar.pullrequest.github.repository"] = context3.ci.slug;
     } else {
       sonarProps["sonar.branch.name"] = context3.ci.branch;
     }
