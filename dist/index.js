@@ -27476,6 +27476,7 @@ function rewriteCoverageReports(context3) {
 }
 function sonarConfig_default(context3) {
   return __async(this, null, function* () {
+    var _a, _b;
     const sonarProps = {};
     const packageJson = JSON.parse(fs3.readFileSync(fs3.existsSync("lerna.json") ? "lerna.json" : "package.json", "utf-8"));
     sonarProps["sonar.projectVersion"] = packageJson.version;
@@ -27489,7 +27490,7 @@ function sonarConfig_default(context3) {
       sonarProps["sonar.pullrequest.branch"] = getPrHeadRef(pr);
       sonarProps["sonar.pullrequest.base"] = pr.base.ref;
     } else {
-      sonarProps["sonar.branch.name"] = context3.ci.branch;
+      sonarProps["sonar.branch.name"] = (_b = (_a = github2.context.payload.workflow_run) == null ? void 0 : _a.head_branch) != null ? _b : context3.ci.branch;
     }
     context3.logger.info("Sonar scan properties:\n" + JSON.stringify(sonarProps, null, 2));
     fs3.appendFileSync("sonar-project.properties", Object.entries(sonarProps).map(([k, v]) => `${k}=${v}`).join("\n"));

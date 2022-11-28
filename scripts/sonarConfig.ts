@@ -75,7 +75,8 @@ export default async function (context: IContext): Promise<void> {
         sonarProps["sonar.pullrequest.branch"] = getPrHeadRef(pr);
         sonarProps["sonar.pullrequest.base"] = pr.base.ref;
     } else {
-        sonarProps["sonar.branch.name"] = context.ci.branch as string;
+        sonarProps["sonar.branch.name"] = github.context.payload.workflow_run?.head_branch ??
+            context.ci.branch as string;
     }
 
     // Convert properties to argument string and store it in output
