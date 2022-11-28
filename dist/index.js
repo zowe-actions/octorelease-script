@@ -27407,13 +27407,13 @@ function downloadArtifact(runId, artifactName, extractPath) {
     yield (0, import_util.promisify)(import_stream.pipeline)(import_stream.Readable.from(artifactRaw), require_unzip().Extract({ path: extractPath != null ? extractPath : process.cwd() }));
   });
 }
-function findCurrentPr() {
+function findCurrentPr(state = "open") {
   return __async(this, null, function* () {
     const octokit = github.getOctokit(core2.getInput("github-token") || process.env.GITHUB_TOKEN);
     if (github.context.payload.workflow_run == null) {
       const prs = (yield octokit.rest.repos.listPullRequestsAssociatedWithCommit(__spreadProps(__spreadValues({}, github.context.repo), {
         commit_sha: github.context.sha
-      }))).data;
+      }))).data.filter((pr) => !state || pr.state === state);
       return prs.find((pr) => github.context.payload.ref === `refs/heads/${pr.head.ref}`) || prs[0];
     } else {
       const [owner, repo] = github.context.payload.workflow_run.head_repository.full_name.split("/", 2);
@@ -27421,7 +27421,7 @@ function findCurrentPr() {
         owner,
         repo,
         commit_sha: github.context.payload.workflow_run.head_sha
-      })).data.filter((pr) => pr.base.repo.full_name === github.context.payload.workflow_run.repository.full_name);
+      })).data.filter((pr) => (!state || pr.state === state) && pr.base.repo.full_name === github.context.payload.workflow_run.repository.full_name);
       return prs.find((pr) => pr.head.ref === github.context.payload.workflow_run.head_branch) || prs[0];
     }
   });
