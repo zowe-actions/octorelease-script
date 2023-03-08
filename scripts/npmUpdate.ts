@@ -30,6 +30,7 @@ interface IProtectedBranchWithDeps extends IProtectedBranch {
 }
 
 function getDependencies(branch: IProtectedBranchWithDeps, dev: boolean) {
+    core.debug(`Gathering ${dev ? "devD" : "d"}ependency information for branch: ${branch.name}`);
     const dependencies = dev ? branch.devDependencies : branch.dependencies;
     if (!Array.isArray(dependencies)) {
         return dependencies || {};
@@ -44,10 +45,12 @@ function getDependencies(branch: IProtectedBranchWithDeps, dev: boolean) {
 }
 
 async function updateDependency(pkgName: string, pkgTag: string, dev: boolean): Promise<void> {
+    core.debug(`Updating ${dev ? "devD" : "d"}ependency for: ${pkgName}@${pkgTag}`);
     const lockfile = JSON.parse(fs.readFileSync(lockfilePath, "utf-8"));
     const currentVersion = lockfile.dependencies[pkgName].version;
 
     if (resolutions[pkgName] == null) {
+        core.debug(`Gathering version information for: ${pkgName}@${pkgTag}`);
         resolutions[pkgName] = (await exec.getExecOutput("npm",
             ["view", `${pkgName}@${pkgTag}`, "version"])).stdout.trim();
     }
@@ -55,8 +58,10 @@ async function updateDependency(pkgName: string, pkgTag: string, dev: boolean): 
 
     if (currentVersion !== latestVersion) {
         const npmArgs = dev ? ["--save-dev"] : ["--save-prod", "--save-exact"];
+        const newUpdate = `${pkgName}: ${currentVersion} -> ${latestVersion}`;
+        core.debug(`Updating ${newUpdate}`);
         await exec.exec("npm", ["install", `${pkgName}@${latestVersion}`, ...npmArgs]);
-        updateDetails.push(`${pkgName}: ${currentVersion} -> ${latestVersion}`);
+        updateDetails.push(newUpdate);
     }
 }
 
@@ -76,6 +81,7 @@ export default async function (context: IContext): Promise<void> {
     if (context.env.NPM_RESOLUTIONS) {
         resolutions = JSON.parse(context.env.NPM_RESOLUTIONS);
         if (Object.keys(resolutions).length === 0) {
+            context.logger.debug("No NPM resolutions found, exiting now");
             return;
         }
     }

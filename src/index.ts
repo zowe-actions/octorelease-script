@@ -26,6 +26,7 @@ async function run(): Promise<void> {
     try {
         const workingDir = core.getInput("working-dir");
         if (workingDir) {
+            core.debug(`Changing working directory to '${workingDir}'`);
             process.chdir(path.resolve(workingDir));
         }
 
@@ -35,7 +36,7 @@ async function run(): Promise<void> {
             force: !RELEASE_SCRIPTS.includes(core.getInput("script"))
         });
         if (context == null) {
-            core.info("Current branch is not targeting a release branch, exiting now");
+            core.warning("Current branch is not targeting a release branch, exiting now");
             process.exit();
         }
 
