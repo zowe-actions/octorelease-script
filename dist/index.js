@@ -27561,6 +27561,7 @@ function run() {
   return __async(this, null, function* () {
     var _a;
     try {
+      const scriptName = core3.getInput("script");
       const workingDir = core3.getInput("working-dir");
       if (workingDir) {
         core3.debug(`Changing working directory to '${workingDir}'`);
@@ -27569,13 +27570,14 @@ function run() {
       const prBranch = (_a = yield findCurrentPr()) == null ? void 0 : _a.base.ref;
       const context3 = yield import_core.utils.buildContext({
         branch: prBranch,
-        force: !RELEASE_SCRIPTS.includes(core3.getInput("script"))
+        force: !RELEASE_SCRIPTS.includes(scriptName)
       });
       if (context3 == null) {
         core3.warning("Current branch is not targeting a release branch, exiting now");
         process.exit();
       }
-      yield loadScript(core3.getInput("script"))(context3);
+      context3.logger.pluginName = scriptName;
+      yield loadScript(scriptName)(context3);
     } catch (error2) {
       if (error2 instanceof Error) {
         core3.error(error2.stack || error2.message);
